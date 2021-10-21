@@ -24,8 +24,10 @@ async function createWindow() {
     }
   })
 
+  require('./menu.js')
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
+    console.log(process.env.WEBPACK_DEV_SERVER_URL)
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: rgb(240, 240, 240);">
+    <div id="container">
+        <h3>HTML5的表单是有自动不全功能的，（所以可以只做输入和数据对比过滤就可以）<h3>
+        <h3>这里我们先把补齐更能关闭了用autocomplete属性来实现</h3>
+        <form autocomplete="off" action="https://www.baidu.com/s?"  id>
+   
+             <div  >
+                   <input id="search" name="search" placeholder="输入国家或者地区的英文名">
+                   <button type="submit" >提交</button>
+             </div>
+   
+        </form>
+        </div>
+        <script>
+           //筛选函数
+           function search(arr){
+            //将数据传入，预处理一下
+   
+            var currentFocus;//用来计算输入几个
+            var inp=document.getElementById("search");
+            //当输入时，开始筛选,注册一个输入
+            inp.addEventListener("input",function(event){
+             var a,b,i,val=this.value;
+             //当失去焦点后关闭下拉列表
+             
+             closeAll();
+             if(!val){return false;}
+             currentFocus=-1;
+             //把数据例表搞出来
+             a=document.createElement("div");
+             a.setAttribute("id",this.id+"list");
+             a.setAttribute("class","listclass");
+             //添加这个div
+             inp.parentNode.appendChild(a);
+             //开始循环匹配数据
+             for(i=0;i<arr.length;i++){
+               //这个只能顺序匹配，匹配第一个后第二个有效继续，无效为空，
+               if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                 b = document.createElement("div");
+                 b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                 b.innerHTML += arr[i].substr(val.length);
+                 b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                 b.addEventListener("click", function(e) {
+   
+                 inp.value = this.getElementsByTagName("input")[0].value;
+                 console.log(this)
+                 closeAll();
+             });
+            a.appendChild(b);
+       }
+     }
+   });
+        //按键按下时将数据放到输入框
+          inp.addEventListener("keydown", function(e) {
+             var x = document.getElementById(this.id + "list");
+             if (x) x = x.getElementsByTagName("div");
+             if (e.keyCode == 40) {
+             currentFocus++;
+             addActive(x);
+         } else if (e.keyCode == 38) {
+            currentFocus--;
+            addActive(x);
+         } else if (e.keyCode == 13) {
+            e.preventDefault();
+           if (currentFocus > -1) {
+   
+             if (x) x[currentFocus].click();
+           }
+         }
+     });
+         function addActive(x) {
+   
+       if (!x) return false;
+   
+       removeActive(x);
+       if (currentFocus >= x.length) currentFocus = 0;
+       if (currentFocus < 0) currentFocus = (x.length - 1);
+   
+       x[currentFocus].classList.add("listactive");
+     }
+   //输入框删除已经输入的字符，往后匹配
+     function removeActive(x) {
+   
+       for (var i = 0; i < x.length; i++) {
+         x[i].classList.remove("listactive");
+       }
+     }
+    //失去焦点就关闭列表
+     function closeAll(elmnt) {
+       //全部删去
+       var x = document.getElementsByClassName("listclass");
+       for (var i = 0; i < x.length; i++) {
+         if (elmnt != x[i] && elmnt != inp) {
+           x[i].parentNode.removeChild(x[i]);
+         }
+       }
+     }
+     //点击列表外也删除
+     document.addEventListener("click", function (e) {
+         closeAll(e.target);
+         });
+   
+   
+         }
+   
+   //数据,如果要动态数据，要求使用后端数据，ajax
+    var countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua"]
+   
+   /*运行一下函数*/
+   search(countries);
+        </script>
+</body>
+</html>
