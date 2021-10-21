@@ -1,7 +1,7 @@
 <template>
-  <div class="hello">
-    <h1>{{ name }}</h1>  
+  <div class="hello"> 
     <h1>{{ msg }}</h1>
+    <button @click="addNum">+++++++</button>
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
@@ -40,9 +40,15 @@ export default {
   },
   data(){
     return {
-      name:'Hello World!'
+      name:'Hello World!',
+      num:this.GLOBAL.num
     }
-  }
+  },
+  methods: {
+    addNum(){
+      this.GLOBAL.num++
+    }
+  },
 }
 </script>
 
