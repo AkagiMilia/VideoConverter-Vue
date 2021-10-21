@@ -11,7 +11,6 @@ module.exports = {
         "es6": true
     },
     rules: {
-
-    },
-    "indent": 1
+        "indent": 0
+    }
 };
