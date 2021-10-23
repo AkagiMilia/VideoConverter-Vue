@@ -20,8 +20,8 @@ export default {
   name:'LowerCodeDisplay',
   data() {
     return {
-      cmdStringDis:'哈哈',
-      result:'嘿嘿'
+      cmdStringDis:'ffmpeg........',
+      result:'........'
     }
   },
   methods: {

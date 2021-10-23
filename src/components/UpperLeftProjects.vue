@@ -1,20 +1,37 @@
 <template>
   <div class="col myDivStyles" id="divInputFiles">
-    <!-- <div class='row ms-3' v-for='(file, index) in inputs' :key="index">
-      {{file[file.length-1]}}
-    </div> -->
-    <div class='row ms-3'>FileNames</div>
+    <div class="container" v-for="project in projects" :key="project.projectId">
+      <div class="row" v-for="file in project.inputFiles" :key="file.fileId">
+        {{file.fileName}}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-export default {
 
+export default {
+  name:'UpperLeftProjects',
+  data() {
+    return {
+      projects:[]
+    }
+  },
+  methods: {
+    getProjects(projects){
+      console.log(projects);
+      this.projects = projects
+    }
+  },
+  mounted() {
+    this.$bus.$on('transProjects', this.getProjects)
+  },
 }
 </script>
 
 <style>
   #divInputFiles{
     height: 60%;
+    padding: 5%;
   }
 </style>
