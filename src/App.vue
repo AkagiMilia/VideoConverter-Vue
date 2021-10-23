@@ -1,22 +1,45 @@
 <template>
   <div class="col-12" id="divAll" v-cloak>
-    <Upper></Upper>
-    <Lower/>
+    <div class="row" id="divUpper">
+      <div class="col-6" id="divUpperLeft">
+        <UpperLeftProjects/>
+        <UpperLeftGuide/>
+      </div>
+      <div class="col" id="divUpperRight">
+        <div class="row" id="divUpperRightRow">
+          <UpperRightSelect/>
+          <UpperRightParams/>
+        </div>
+      </div>
+    </div>
+    <div class="row" id="divLower">
+      <LowerCodeArea/>
+      <LowerCodeDisplay/>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import Upper from './components/Upper.vue'
-import Lower from './components/Lower.vue'
+// import HelloWorld from './components/HelloWorld.vue'
+import UpperLeftProjects from './components/UpperLeftProjects.vue'
+import UpperLeftGuide from './components/UpperLeftGuide.vue'
+import UpperRightSelect from './components/UpperRightSelect.vue'
+import UpperRightParams from './components/UpperRightParams.vue'
+
+import LowerCodeArea from './components/LowerCodeArea.vue'
+import LowerCodeDisplay from './components/LowerCodeDisplay.vue'
+
 import { nanoid } from 'nanoid'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
-    Upper,
-    Lower
+    UpperLeftProjects,
+    UpperLeftGuide,
+    UpperRightSelect,
+    UpperRightParams,
+    LowerCodeArea,
+    LowerCodeDisplay
   },
   data() {
     return {
@@ -85,38 +108,54 @@ export default {
       this.parameters[i].projectId = element.projectId
       i += 1
     })
-    this.$bus.$emit('transProjects', this.projects)
+    // this.$bus.$emit('transProjects', this.projects)
     
   },
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+  }
 
-html,body{
+  html,body{
     background-color: rgb(238, 238, 238);
     height: 77%;
     width: 99%;
-}
+  }
 
-[v-cloak]{
+  [v-cloak]{
     display: none;
-}
+  }
 
-#divAll{
+  #divAll{
     padding-left: 2%;
     height: 100%;
-}
+  }
 
-.myDivStyles{
+  #divUpper{
+    height: 80%;
+  }
+
+  #divUpperRight{
+    height:92.5%
+  }
+  #divUpperRightRow{
+    height: 100%;
+  }
+
+  #divLower{
+    height: auto;
+    margin-top: 1%;
+  }
+
+  .myDivStyles{
     margin-top: 2%;
     background-color: white;
     border-width: 3px;

@@ -1,6 +1,6 @@
 <template>
   <div class="row" id="divUpper">
-    <UpperLeft></UpperLeft>
+    <UpperLeft/>
     <UPperRight/>
   </div>
 </template>
