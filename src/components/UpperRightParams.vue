@@ -1,5 +1,5 @@
 <template>
-  <div class="col myDivStyles" id="divParamLists">
+  <div class="col shadow-sm bg-body rounded mt-3 ms-3" id="divParamLists">
     <p>divParamLists</p>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-7 myDivStyles" id="divParamPicked">
+  <div class="col shadow-sm bg-body rounded mt-3" id="divParamPicked">
     <p>divParamPicked</p>
   </div>
 </template>

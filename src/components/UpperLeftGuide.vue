@@ -1,5 +1,5 @@
 <template>
-  <div class="col myDivStyles" id="divGuidiance">This is divGuidiance</div>
+  <div class="col shadow-sm bg-body rounded mt-3" id="divGuidiance">This is divGuidiance</div>
 </template>
 
 <script>

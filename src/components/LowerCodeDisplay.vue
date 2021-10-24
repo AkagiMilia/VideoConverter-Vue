@@ -16,18 +16,42 @@
 </template>
 
 <script>
+const { spawn } = require('child_process')
+console.log('spawn is ', spawn);
 export default {
   name:'LowerCodeDisplay',
+  props:['command'],
   data() {
     return {
-      cmdStringDis:'ffmpeg........',
-      result:'........'
+      result:''
     }
   },
   methods: {
-    runFFmpeg(){
-      return
+    runFFmpeg(){                            // runFFmpeg
+      const head = this.command[0]
+      const commandList = this.command.slice(1, this.command.length)
+      console.log('head:',head);
+      console.log('paras:', commandList)
+      // const { spawn } = require('electron')
+      const ffmpeg = spawn(head, commandList)
+  
+      ffmpeg.stdout.on('data', (data)=>{
+        console.log(data.toString());
+        this.result = data.toString()
+      });
+    
+      ffmpeg.stderr.on('data', (data)=>{
+        console.log(data.toString());
+        this.result = data.toString()
+      });   
     }
+  },
+  computed:{
+    cmdStringDis(){
+      return this.command.join(' ')
+    }
+  },
+  mounted() {
   },
 }
 </script>

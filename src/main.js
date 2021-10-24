@@ -11,6 +11,6 @@ const vm = new Vue({
   render: create => create(App),
   beforeCreate(){
     Vue.prototype.$bus = this
-  }
+  },
 })
 console.log(vm);
