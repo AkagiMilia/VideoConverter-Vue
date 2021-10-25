@@ -56,7 +56,7 @@ export default {
           [
             {
               fileId:nanoid(),
-              filePath:'/Users/xyang/Documents/Developing/ElectronDev/Elerye_-_Edera.mp4',
+              filePath:'Elerye_-_Edera.mp4',
               fileName:'Elerye_-_Edera.mp4',
               streams:[
                 {index:0, code_name:'h264', code_type:'video'},
@@ -66,8 +66,8 @@ export default {
               fileParams:['-itsoffset', '35ms']
             },
           ],
-          outputFilePath:'/Users/xyang/Documents/Developing/ElectronDev/Elerye_-_Edera-fast-264.mp4',
-          outputFileName:'Elerye_-_Edera-fast-264.mp4',
+          outputFilePath:'Elerye_-_Edera-fast-265.mp4',
+          outputFileName:'Elerye_-_Edera-fast-265.mp4',
           outputParas:['-y']
         },
         // example.project2
@@ -77,7 +77,7 @@ export default {
           [
             {
               fileId:nanoid(),
-              filePath:'/Users/xyang/Documents/UmaLive02.mkv',
+              filePath:'UmaLive02.mkv',
               fileName:'UmaLive02.mkv',
               streams:[
                 {index:0, code_name:'hevc', code_type:'video'},
@@ -87,7 +87,7 @@ export default {
               fileParams:[]
             },
           ],
-          outputFilePath:'/Users/xyang/Documents/UmaLive02.mp4',
+          outputFilePath:'UmaLive02.mp4',
           outputFileName:'UmaLive02.mp4',
           outputParas:['-y']
         }
@@ -95,13 +95,13 @@ export default {
       parameters:[
         {
           maping:['-map', '0:v', '-map', '0:a'],
-          video:['-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '24', '-pix_fmt', 'yuv420p'],
-          audio:['-c:v', 'copy']
+          video:['-c:v', 'libx265', '-preset', 'ultrafast', '-crf', '24', '-pix_fmt', 'yuv420p'],
+          audio:['-c:a', 'copy']
         },
         {
           maping:['-map', '0:v', '-map', '0:a'],
           video:['-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '24', '-pix_fmt', 'yuv420p'],
-          audio:['-c:v', 'copy']
+          audio:['-c:a', 'copy']
         }
       ],
       currentProjectId:''
