@@ -1,13 +1,13 @@
 <template>
-  <div class="row align-items-center mt-5">
-    <div class="col-11" id="divDisArea">
+  <div class="row align-items-center mt-4 ms-1">
+    <div class="col-10" id="divDisArea">
       <!-- <input name="codeArea" class="form-control" id="codeArea" v-model="cmdStringDis"/> -->
       <div class="row align-self-center">
         <p id="codeArea" class="align-self-center mt-2">{{cmdStringDis}}</p>
       </div>
     </div>
     <div class="col">
-      <input type="button" id="btnStart" value="START" class="btn btn-primary" @click.stop="runFFmpeg"/>
+      <input type="button" id="btnStart" value="START" class="btn btn-primary ms-5" @click.stop="runFFmpeg"/>
     </div>
     <div class="row" id="divLogProcess">
       <p id="pLogProcess">{{result}}</p>

@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="row" id="divLower">
-      <LowerCodeArea/>
+      <LowerCodeArea :parameters="parameters" :currentProjectId="currentProjectId"/>
       <LowerCodeDisplay :command="cmdLine"/>
     </div>
   </div>
@@ -173,7 +173,7 @@ export default {
   }
 
   #divUpperRight{
-    height:92.5%
+    height:95%
   }
   #divUpperRightRow{
     height: 100%;
@@ -181,7 +181,7 @@ export default {
 
   #divLower{
     height: auto;
-    margin-top: 1%;
+    margin-top: 3%;
   }
 
   .myDivStyles{

@@ -24,7 +24,7 @@ export default {
       this.projects = projects
     },
     selectProject(project){
-      console.log(project);
+      console.log(project.projectId);
     }
   },
   mounted() {
