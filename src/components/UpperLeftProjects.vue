@@ -25,6 +25,7 @@ export default {
     },
     selectProject(project){
       console.log(project.projectId);
+      this.$bus.$emit('changeProject', project.projectId)
     }
   },
   mounted() {

@@ -96,12 +96,14 @@ export default {
         {
           maping:['-map', '0:v', '-map', '0:a'],
           video:['-c:v', 'libx265', '-preset', 'ultrafast', '-crf', '24', '-pix_fmt', 'yuv420p'],
-          audio:['-c:a', 'copy']
+          audio:['-c:a', 'copy'],
+          projectId:''
         },
         {
           maping:['-map', '0:v', '-map', '0:a'],
           video:['-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '24', '-pix_fmt', 'yuv420p'],
-          audio:['-c:a', 'copy']
+          audio:['-c:a', 'copy'],
+          projectId:""
         }
       ],
       currentProjectId:''
@@ -130,6 +132,19 @@ export default {
       return cmd
     }
   },
+  methods:{
+    getParams(projectId, value, type){
+      this.parameters.forEach((target)=>{
+        if (target.projectId == projectId){
+          this.$set(target, type, value)
+          return
+        }
+      })
+    },
+    getProject(projectId){
+      this.currentProjectId = projectId
+    }
+  },
   beforeMount(){
     var i = 0
     this.projects.forEach(element => {
@@ -137,8 +152,10 @@ export default {
       i += 1
     })
     this.currentProjectId = this.parameters[0].projectId
+
     // this.$bus.$emit('transProjects', this.projects)
-    
+    this.$bus.$on('updateParams', this.getParams)
+    this.$bus.$on('changeProject', this.getProject)
   },
 }
 </script>

@@ -52,7 +52,10 @@ export default {
   },
   methods: {
     updateParams(projectId, value, type){
-      console.log(projectId, value, type);
+      // console.log(projectId, value, type)
+      value = value.split(' ')
+      value = value.filter(param => param != '')
+      this.$bus.$emit('updateParams', projectId, value, type)
     }
   },
   mounted() {

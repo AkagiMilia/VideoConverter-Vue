@@ -1,0 +1,5 @@
+﻿name,streamType
+libx264,video
+libx265,video
+aac,audio
+flac,audio

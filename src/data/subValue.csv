@@ -1,0 +1,22 @@
+﻿name,fromat,paraName,hasValue,valueType,valueMax,valueMin,explanation
+ssim,libx265,-x265-param,1,bool,,,xxx
+ref,libx265,-x265-param,1,int,1,16,xxx
+rd,libx265,-x265-param,1,int,1,6,xxx
+me,libx265,-x265-param,1,int,0,5,"0.dia
+1.hex (default)
+2.umh
+3.star
+4.sea
+5.full"
+ultrafast,libx265,-preset,0,,,,xxx
+fast,libx265,-preset,0,,,,xxx
+medium,libx265,-preset,0,,,,xxx
+slow,libx265,-preset,0,,,,xxx
+slower,libx265,-preset,0,,,,xxx
+veryslow,libx265,-preset,0,,,,xxx
+ultrafast,libx264,-preset,0,,,,xxx
+fast,libx264,-preset,0,,,,xxx
+medium,libx264,-preset,0,,,,xxx
+slow,libx264,-preset,0,,,,xxx
+slower,libx264,-preset,0,,,,xxx
+veryslow,libx264,-preset,0,,,,xxx

@@ -1,0 +1,4 @@
+name,valueType,valueMax,valueMin,hasChild,multiChild,explanation
+-crf,int,0,50,0,0,xxx
+-preset,string,,,1,0,xxx
+-x265-param,dictionary,,,1,1,xxx
