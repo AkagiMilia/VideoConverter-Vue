@@ -35,6 +35,12 @@ const isMac = navigator.platform === 'MacIntel'
 const ffmpegWin = 'ffmpeg'
 const ffmpegMac = '/opt/homebrew/bin/ffmpeg'
 
+
+// db.each('select * from SQLite_master', function(err,row){
+//   console.log(row)
+// })
+
+
 export default {
   name: 'App',
   components: {
@@ -63,7 +69,7 @@ export default {
                 {index:1, code_name:'aac', code_type:'audio'}
               ],
               streamsUsed:{0:true, 1:true},
-              fileParams:['-itsoffset', '35ms']
+              fileParams:['-itsoffset', '0ms']
             },
           ],
           outputFilePath:'Elerye_-_Edera-fast-265.mp4',
@@ -94,15 +100,36 @@ export default {
       ],
       parameters:[
         {
-          maping:['-map', '0:v', '-map', '0:a'],
-          video:['-c:v', 'libx265', '-preset', 'ultrafast', '-crf', '24', '-pix_fmt', 'yuv420p'],
-          audio:['-c:a', 'copy'],
+          maping:{
+            '-map':'0:a',
+            '-map':'0:v'
+          },
+          video:{
+            '-c:v':'libx265',
+            '-crf':'24',
+            '-preset':'ultrafast',
+            '-pix_fmt':'yuv420p',
+            '-x265-params':'ssim=1'
+          },
+          audio:{
+            '-c:a':'copy'
+          },
           projectId:''
         },
         {
-          maping:['-map', '0:v', '-map', '0:a'],
-          video:['-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '24', '-pix_fmt', 'yuv420p'],
-          audio:['-c:a', 'copy'],
+          maping:{
+            '-map':'0:a',
+            '-map':'0:v'
+          },
+          video:{
+            '-c:v':'libx264',
+            '-crf':'24',
+            '-preset':'ultrafast',
+            '-pix_fmt':'yuv420p'
+          },
+          audio:{
+            '-c:a':'copy'
+          },
           projectId:""
         }
       ],
@@ -113,22 +140,40 @@ export default {
     cmdLine(){
       var currentProjectParams = this.parameters.filter(project => project.projectId == this.currentProjectId)[0]
       var currentProject = this.projects.filter(project => project.projectId == this.currentProjectId)[0]
-      console.log('currentProject@',currentProject);
-      console.log('currentID@', this.currentProjectId)
+      // console.log('currentProject@',currentProject);
+      // console.log('currentID@', this.currentProjectId)
       var cmd = [this.FFmpegPath]
       currentProject.inputFiles.forEach((file)=>{
         cmd = cmd.concat(file.fileParams)
         cmd.push('-i')
         cmd.push(file.filePath)
       })
-      
+
+      var cmdBlock = []
+      Object.keys(currentProjectParams.maping).forEach((key)=>{
+        cmdBlock.push(key)
+        cmdBlock.push(currentProjectParams.maping[key])
+      })
+      cmd = cmd.concat(cmdBlock)
+
+      cmdBlock = []
+      Object.keys(currentProjectParams.video).forEach((key)=>{
+        cmdBlock.push(key)
+        cmdBlock.push(currentProjectParams.video[key])
+      })
+      cmd = cmd.concat(cmdBlock)
+
+      cmdBlock = []
+      Object.keys(currentProjectParams.audio).forEach((key)=>{
+        cmdBlock.push(key)
+        cmdBlock.push(currentProjectParams.audio[key])
+      })
+      cmd = cmd.concat(cmdBlock)
+
       cmd = cmd.concat(
-        currentProjectParams.maping,
-        currentProjectParams.video,
-        currentProjectParams.audio,
         currentProject.outputParas,
-        currentProject.outputFilePath
-        )
+        currentProject.outputFilePath)
+
       return cmd
     }
   },
@@ -157,6 +202,11 @@ export default {
     this.$bus.$on('updateParams', this.getParams)
     this.$bus.$on('changeProject', this.getProject)
   },
+  mounted(){
+    this.$dataBase.each('select * from libx265', function(err,row){
+      console.log(row)
+    })
+  }
 }
 </script>
 

@@ -27,7 +27,12 @@ export default {
     },
     maping:{
       get(){
-        return this.currentParameter.maping.join(' ')
+        var line = ''
+        Object.keys(this.currentParameter.maping).forEach((key)=>{
+          line += key + ' '
+          line += this.currentParameter.maping[key] + ' '
+        })
+        return line
       },
       set(value){
         this.updateParams(this.currentProjectId, value, 'maping')
@@ -35,7 +40,12 @@ export default {
     },
     video:{
       get(){
-        return this.currentParameter.video.join(' ')
+        var line = ''
+        Object.keys(this.currentParameter.video).forEach((key)=>{
+          line += key + ' '
+          line += this.currentParameter.video[key] + ' '
+        })
+        return line
       },
       set(value){
         this.updateParams(this.currentProjectId, value, 'video')
@@ -43,7 +53,12 @@ export default {
     },
     audio:{
       get(){
-        return this.currentParameter.audio.join(' ')
+        var line = ''
+        Object.keys(this.currentParameter.audio).forEach((key)=>{
+          line += key + ' '
+          line += this.currentParameter.audio[key] + ' '
+        })
+        return line
       },
       set(value){
         this.updateParams(this.currentProjectId, value, 'audio')
@@ -55,7 +70,23 @@ export default {
       // console.log(projectId, value, type)
       value = value.split(' ')
       value = value.filter(param => param != '')
-      this.$bus.$emit('updateParams', projectId, value, type)
+      var index = 0
+      const len = value.length - 1
+      var newObject = {}
+      while(index <= len){
+        if (value[index].startsWith('-')){
+          if (index+1<=len && !value[index+1].startsWith('-')){
+            newObject[value[index]] = value[index+1]
+            index += 2
+          }
+          else{
+            newObject[value[index]] = 1
+            index += 1
+          }
+        }
+        else index +=1
+      }
+      this.$bus.$emit('updateParams', projectId, newObject, type)
     }
   },
   mounted() {
