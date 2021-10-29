@@ -1,8 +1,8 @@
-﻿name,fromat,paraName,hasValue,valueType,valueMax,valueMin,explanation
-ssim,libx265,-x265-param,1,bool,,,xxx
-ref,libx265,-x265-param,1,int,1,16,xxx
-rd,libx265,-x265-param,1,int,1,6,xxx
-me,libx265,-x265-param,1,int,0,5,"0.dia
+name,fromat,paraName,hasValue,valueType,valueMax,valueMin,explanation
+ssim,libx265,-x265-params,1,bool,,,xxx
+ref,libx265,-x265-params,1,int,1,16,xxx
+rd,libx265,-x265-params,1,int,1,6,xxx
+me,libx265,-x265-params,1,int,0,5,"0.dia
 1.hex (default)
 2.umh
 3.star

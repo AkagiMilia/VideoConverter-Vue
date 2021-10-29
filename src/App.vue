@@ -7,7 +7,11 @@
       </div>
       <div class="col" id="divUpperRight">
         <div class="row" id="divUpperRightRow">
-          <UpperRightSelect/>
+          <UpperRightSelect 
+            :parameters="parameters" 
+            :currentProjectId="currentProjectId" 
+            :showingParams="showingParams"
+          />
           <UpperRightParams/>
         </div>
       </div>
@@ -133,7 +137,11 @@ export default {
           projectId:""
         }
       ],
-      currentProjectId:''
+      currentProjectId:'',
+      currentVideo:'',
+      currentAudio:'',
+      currentSearch:'',
+      showingParams:''
     }
   },
   computed:{
@@ -190,6 +198,13 @@ export default {
       this.currentProjectId = projectId
     }
   },
+  watch:{
+    currentSearch(val, oldVal){
+      this.$dataBase.all('select * from '+val, (err, rows)=>{
+        this.showingParams = rows
+      })
+    }
+  },
   beforeMount(){
     var i = 0
     this.projects.forEach(element => {
@@ -202,11 +217,6 @@ export default {
     this.$bus.$on('updateParams', this.getParams)
     this.$bus.$on('changeProject', this.getProject)
   },
-  mounted(){
-    this.$dataBase.each('select * from libx265', function(err,row){
-      console.log(row)
-    })
-  }
 }
 </script>
 
