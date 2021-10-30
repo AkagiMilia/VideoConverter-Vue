@@ -1,9 +1,30 @@
 <template>
   <div class="col shadow-sm bg-body rounded mt-3" id="divParamPicked">
     <ul class="list-group"  @click="checkForm('video')">
-      <li class="list-group-item" v-for="(value, param) in currentParameter.video" :key="param">
+      <li class="list-group-item" v-for="(value, param) in videoSelected" :key="param" @click="paramClick(param)">
         <span>{{param}}</span>
-        <span v-if="typeof videoSelected[param] == 'object'">  {{value}}</span>
+        <span v-if="typeof videoSelected[param] == 'string'" v-show="param!=nowFocus">  {{value}}</span>
+        <input 
+          type="text" 
+          v-if="typeof videoSelected[param] == 'string'"
+          v-model.trim.lazy="videoSelected[param]"
+          v-show="param==nowFocus"
+          @blur="paramExit(param, null, $event)"
+          :ref="'input'+param"
+          />
+        <ul class="list-group" v-if="typeof videoSelected[param] == 'object'">
+          <li class="list-group-item" v-for="(subVal, subParam) in videoSelected[param]" :key="subParam" @click.stop="paramClick(subParam)">
+            <span>{{subParam}}</span>
+            <span v-show="subParam!=nowFocus">  {{subVal}}</span>
+            <input 
+              type="text" 
+              v-model.trim.lazy="videoSelected[param][subParam]"
+              v-show="subParam==nowFocus"
+              @blur="paramExit(param, subParam, $event)"
+              :ref="'input'+subParam"
+              />
+          </li>
+        </ul>
       </li>
     </ul>
   </div>
@@ -12,21 +33,23 @@
 <script>
 export default {
   name:'UpperRightSelect',
-  props:['parameters','currentProjectId','showingParams','currentVideo', 'currentAudio'],
+  props:['currentParameter','currentProjectId','showingParams','currentVideo', 'currentAudio'],
   data() {
     return {
       currentForm:'',
       selectedParam:'',
       hasMultiChild:{},
-      objectName:'object'
+      objectName:'object',
+      nowFocus:'',
     }
   },
   computed:{
-    currentParameter:{
+    /* currentParameter:{
       get(){
         return this.parameters.filter(project => project.projectId == this.currentProjectId)[0]
       }
-    },
+    }, */
+
     videoSelected:{
       get(){
         var obj = {}
@@ -44,20 +67,12 @@ export default {
             obj[key] = objSub
           }
         }
-        return obj
+        return {...obj}
       }
     }
   },
   watch:{
-    currentVideo:{
-      // immediate:true,
-      handler(val,oldVal){
-          var paramList = this.showingParams[val]
-          paramList.forEach((param)=>{
-            this.hasMultiChild[param.name] = param.multiChild
-          })
-      }
-    }
+ 
   },
   methods: {
     checkForm(type){
@@ -78,6 +93,42 @@ export default {
         show = true
       this.theRow = {}
       return true
+    },
+    paramClick(param){
+      this.nowFocus = param
+      this.$nextTick(function(){
+        var refName = 'input'+param
+        this.$refs[refName][0].focus()
+        // console.log(this.$refs[refName]);
+      })
+    },
+    paramExit(param,subParam,event){
+      console.log('param:',param);
+      console.log('subParam:',subParam);
+      if (!event.target.value.trim()){
+        if (subParam)
+          this.videoSelected[param][subParam] = '1'
+        else
+          this.videoSelected[param] = '1'
+      }
+      this.nowFocus = ''
+      this.sendParam({...this.videoSelected})
+    },
+    sendParam(curVal){
+      var newObj = {}
+        for (let [key, value] of Object.entries(curVal)){
+          if (typeof value != 'object')
+            newObj[key] = value
+          else{
+            var valueString = ''
+            for (let [subKey, subVal] of Object.entries(value)){
+              valueString += subKey+'='+subVal+':'
+            }
+            valueString = valueString.substr(0, valueString.length-1)
+            newObj[key] = valueString
+          }
+        }
+        this.$bus.$emit('updateParams', this.currentProjectId, newObj, 'video')
     }
   },
   beforeMount() {

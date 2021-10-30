@@ -8,7 +8,7 @@
       <div class="col" id="divUpperRight">
         <div class="row" id="divUpperRightRow">
           <UpperRightSelect 
-            :parameters="parameters" 
+            :currentParameter="currentParameter" 
             :currentProjectId="currentProjectId" 
             :showingParams="showingParams"
             :currentAudio="currentAudio"
