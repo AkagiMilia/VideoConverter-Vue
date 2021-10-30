@@ -44,12 +44,6 @@ export default {
     }
   },
   computed:{
-    /* currentParameter:{
-      get(){
-        return this.parameters.filter(project => project.projectId == this.currentProjectId)[0]
-      }
-    }, */
-
     videoSelected:{
       get(){
         var obj = {}
@@ -75,25 +69,22 @@ export default {
  
   },
   methods: {
-    checkForm(type){
-
-    },
-    checkSub(param){
-      var show = true
-      this.$dataBase.get("select * from "+this.currentForm+" where name='"+param+"'", (err,row)=>{
-        console.log('this parameter is: ', param)
-        this.theRow = {...row}
-      })
-      console.log('the result is: ',this.theRow)
-      if (!this.theRow) 
-        show = true
-      else if (this.theRow.multiChild == '1') 
-        show = false
-      else
-        show = true
-      this.theRow = {}
-      return true
-    },
+    // checkSub(param){
+    //   var show = true
+    //   this.$dataBase.get("select * from "+this.currentForm+" where name='"+param+"'", (err,row)=>{
+    //     console.log('this parameter is: ', param)
+    //     this.theRow = {...row}
+    //   })
+    //   console.log('the result is: ',this.theRow)
+    //   if (!this.theRow) 
+    //     show = true
+    //   else if (this.theRow.multiChild == '1') 
+    //     show = false
+    //   else
+    //     show = true
+    //   this.theRow = {}
+    //   return true
+    // },
     paramClick(param){
       this.nowFocus = param
       this.$nextTick(function(){
