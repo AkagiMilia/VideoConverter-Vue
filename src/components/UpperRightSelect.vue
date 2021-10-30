@@ -3,7 +3,7 @@
     <ul class="list-group"  @click="checkForm('video')">
       <li class="list-group-item" v-for="(value, param) in currentParameter.video" :key="param">
         <span>{{param}}</span>
-        <span v-if="checkSub(param)">  {{value}}</span>
+        <span v-if="typeof videoSelected[param] == 'object'">  {{value}}</span>
       </li>
     </ul>
   </div>
@@ -12,12 +12,13 @@
 <script>
 export default {
   name:'UpperRightSelect',
-  props:['parameters','currentProjectId','showingParams'],
+  props:['parameters','currentProjectId','showingParams','currentVideo', 'currentAudio'],
   data() {
     return {
       currentForm:'',
       selectedParam:'',
-      show:true
+      hasMultiChild:{},
+      objectName:'object'
     }
   },
   computed:{
@@ -26,41 +27,68 @@ export default {
         return this.parameters.filter(project => project.projectId == this.currentProjectId)[0]
       }
     },
+    videoSelected:{
+      get(){
+        var obj = {}
+        for (let [key, value] of Object.entries(this.currentParameter['video'])){
+          if (!value.includes('=')){
+            obj[key]=value
+          }   
+          else{
+            var objSub = {}
+            value = value.split(':')
+            for (let val of value){
+              val = val.split('=')
+              objSub[val[0]] = val[1]
+            }
+            obj[key] = objSub
+          }
+        }
+        return obj
+      }
+    }
+  },
+  watch:{
+    currentVideo:{
+      // immediate:true,
+      handler(val,oldVal){
+          var paramList = this.showingParams[val]
+          paramList.forEach((param)=>{
+            this.hasMultiChild[param.name] = param.multiChild
+          })
+      }
+    }
   },
   methods: {
     checkForm(type){
-      Object.keys(this.currentParameter[type]).forEach((key)=>{
-        if (key.startsWith('-c:')){
-          this.currentForm = this.currentParameter[type][key]
-          console.log('this for is:', this.currentForm);
-          return
-        }
-      })
-      
+
     },
     checkSub(param){
-      
+      var show = true
       this.$dataBase.get("select * from "+this.currentForm+" where name='"+param+"'", (err,row)=>{
         console.log('this parameter is: ', param)
-        console.log('the result is: ',row)
-        if (!row) 
-          this.show = true
-        else if (row.multiChild == '1') 
-          this.show = false
-        else
-          this.show = true
+        this.theRow = {...row}
       })
+      console.log('the result is: ',this.theRow)
+      if (!this.theRow) 
+        show = true
+      else if (this.theRow.multiChild == '1') 
+        show = false
+      else
+        show = true
+      this.theRow = {}
       return true
     }
   },
   beforeMount() {
     Object.keys(this.currentParameter['video']).forEach((key)=>{
-      if (key.startsWith('-c:')){
+      if (key.includes('-c:')){
         this.currentForm = this.currentParameter['video'][key]
         console.log('this for is:', this.currentForm);
         return
       }
     })
+    console.log(typeof this.videoSelected['-crf'] == 'object')
   },
 }
 </script>

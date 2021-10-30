@@ -18,13 +18,8 @@
 <script>
 export default {
   name:'LowerCodeArea',
-  props:['parameters', 'currentProjectId'],
+  props:['parameters', 'currentParameter', 'currentProjectId'],
   computed:{
-    currentParameter:{
-      get(){
-        return this.parameters.filter(project => project.projectId == this.currentProjectId)[0]
-      }
-    },
     maping:{
       get(){
         var line = ''
@@ -72,6 +67,7 @@ export default {
       value = value.filter(param => param != '')
       var index = 0
       const len = value.length - 1
+      // translated object send to App
       var newObject = {}
       while(index <= len){
         if (value[index].startsWith('-')){

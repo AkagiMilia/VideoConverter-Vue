@@ -11,13 +11,19 @@
             :parameters="parameters" 
             :currentProjectId="currentProjectId" 
             :showingParams="showingParams"
+            :currentAudio="currentAudio"
+            :currentVideo="currentVideo"
           />
           <UpperRightParams/>
         </div>
       </div>
     </div>
     <div class="row" id="divLower">
-      <LowerCodeArea :parameters="parameters" :currentProjectId="currentProjectId"/>
+      <LowerCodeArea 
+        :parameters="parameters" 
+        :currentParameter="currentParameter" 
+        :currentProjectId="currentProjectId"
+      />
       <LowerCodeDisplay :command="cmdLine"/>
     </div>
   </div>
@@ -138,10 +144,7 @@ export default {
         }
       ],
       currentProjectId:'',
-      currentVideo:'',
-      currentAudio:'',
-      currentSearch:'',
-      showingParams:''
+      showingParams:{}
     }
   },
   computed:{
@@ -183,7 +186,67 @@ export default {
         currentProject.outputFilePath)
 
       return cmd
-    }
+    },
+    currentParameter:{
+      get(){
+        return this.parameters.filter(project => project.projectId == this.currentProjectId)[0]
+      }
+    },
+    currentVideo(){
+      // load the current video format from input parameters
+      var curV = ''
+      Object.keys(this.currentParameter['video']).forEach((key)=>{
+        if (key.startsWith('-c:')){
+          curV = this.currentParameter['video'][key]
+          return
+        }
+      })
+
+      // if there is no parameter dictionary for this format:
+      //    search the database and save one for it
+      // else
+      //    just return the new format name
+      var hascurV = false
+      Object.keys(this.showingParams).forEach((key)=>{
+        if (key == curV)
+          hascurV = true
+          return
+      })
+      if (hascurV){
+        return curV
+      }
+      else{
+        this.$dataBase.all('select * from '+curV, (err, rows)=>{
+          this.showingParams[curV] = rows
+        })
+        return curV
+      }
+    },
+    currentAudio(){
+      var curA = ''
+      Object.keys(this.currentParameter['audio']).forEach((key)=>{
+        if (key.startsWith('-c:')){
+          curA = this.currentParameter['audio'][key]
+          return
+        }
+      })
+      var hascurA = false
+      Object.keys(this.showingParams).forEach((key)=>{
+        if (key == curA)
+          hascurA = true
+          return
+      })
+      if (hascurA){
+        return curA
+      }      
+      else{
+        this.$dataBase.all('select * from '+curA, (err, rows)=>{
+          this.showingParams[curA] = rows
+        })
+        return curA
+      }
+      
+    },
   },
   methods:{
     getParams(projectId, value, type){
@@ -196,12 +259,10 @@ export default {
     },
     getProject(projectId){
       this.currentProjectId = projectId
-    }
-  },
-  watch:{
-    currentSearch(val, oldVal){
-      this.$dataBase.all('select * from '+val, (err, rows)=>{
-        this.showingParams = rows
+    },
+    updateShowingParams(table){
+      this.$dataBase.all('select * from '+table, (err, rows)=>{
+        this.showingParams[table] = rows
       })
     }
   },
@@ -216,6 +277,7 @@ export default {
     // this.$bus.$emit('transProjects', this.projects)
     this.$bus.$on('updateParams', this.getParams)
     this.$bus.$on('changeProject', this.getProject)
+
   },
 }
 </script>
