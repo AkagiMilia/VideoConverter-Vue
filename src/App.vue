@@ -14,7 +14,11 @@
             :currentAudio="currentAudio"
             :currentVideo="currentVideo"
           />
-          <UpperRightParams/>
+          <UpperRightParams 
+          :showingParams="showingParams"
+          :currentVideo="currentVideo"
+          :currentAudio="currentAudio"
+          />
         </div>
       </div>
     </div>
@@ -260,7 +264,7 @@ export default {
     getProject(projectId){
       this.currentProjectId = projectId
     },
-    updateShowingParams(table){
+    updateShowingParams(param, type){
       this.$dataBase.all('select * from '+table, (err, rows)=>{
         this.showingParams[table] = rows
       })

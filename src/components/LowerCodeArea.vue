@@ -6,10 +6,10 @@
           <div class="col"><textarea class="form-control" rows="6" id="codeVideo" v-model.trim.lazy="cmdStringVideo"></textarea></div>
           <div class="col"><textarea class="form-control" rows="6" id="codeAudio" v-model.trim.lazy="cmdStringAudio"></textarea></div>
           <div class="col"><textarea class="form-control" rows="6" id="codeOups" v-model.trim.lazy="cmdStringOups"></textarea></div> -->
-          <div class="col"><textarea class="form-control" rows="6" id="codeInps" v-model.trim.lazy="maping"></textarea></div>
+          <!-- <div class="col"><textarea class="form-control" rows="6" id="codeInps" v-model.trim.lazy="maping"></textarea></div> -->
           <div class="col"><textarea class="form-control" rows="6" id="codeVideo" v-model.trim.lazy="video"></textarea></div>
           <div class="col"><textarea class="form-control" rows="6" id="codeAudio" v-model.trim.lazy="audio"></textarea></div>
-          <div class="col"><textarea class="form-control" rows="6" id="codeOups" ></textarea></div>
+          <!-- <div class="col"><textarea class="form-control" rows="6" id="codeOups" ></textarea></div> -->
         </div>
       </form>
     </div>

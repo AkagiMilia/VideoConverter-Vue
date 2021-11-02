@@ -1,4 +1,4 @@
-name,fromat,paraName,hasValue,valueType,valueMax,valueMin,explanation
+name,format,paraName,hasValue,valueType,valueMax,valueMin,explanation
 ssim,libx265,-x265-params,1,bool,,,xxx
 ref,libx265,-x265-params,1,int,1,16,xxx
 rd,libx265,-x265-params,1,int,1,6,xxx

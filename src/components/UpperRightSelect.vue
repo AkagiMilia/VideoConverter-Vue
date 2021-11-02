@@ -1,7 +1,7 @@
 <template>
   <div class="col shadow-sm bg-body rounded mt-3" id="divParamPicked">
-    <ul class="list-group"  @click="checkForm('video')">
-      <li class="list-group-item" v-for="(value, param) in videoSelected" :key="param" @click="paramClick(param)">
+    <ul class="list-group">
+      <li class="list-group-item" v-for="(value, param) in videoSelected" :key="param" @click="paramClick(param, 'video')">
         <span>{{param}}</span>
         <span v-if="typeof videoSelected[param] == 'string'" v-show="param!=nowFocus">  {{value}}</span>
         <input 
@@ -13,7 +13,7 @@
           :ref="'input'+param"
           />
         <ul class="list-group" v-if="typeof videoSelected[param] == 'object'">
-          <li class="list-group-item" v-for="(subVal, subParam) in videoSelected[param]" :key="subParam" @click.stop="paramClick(subParam)">
+          <li class="list-group-item" v-for="(subVal, subParam) in videoSelected[param]" :key="subParam" @click.stop="paramClick(subParam, 'video')">
             <span>{{subParam}}</span>
             <span v-show="subParam!=nowFocus">  {{subVal}}</span>
             <input 
@@ -69,29 +69,15 @@ export default {
  
   },
   methods: {
-    // checkSub(param){
-    //   var show = true
-    //   this.$dataBase.get("select * from "+this.currentForm+" where name='"+param+"'", (err,row)=>{
-    //     console.log('this parameter is: ', param)
-    //     this.theRow = {...row}
-    //   })
-    //   console.log('the result is: ',this.theRow)
-    //   if (!this.theRow) 
-    //     show = true
-    //   else if (this.theRow.multiChild == '1') 
-    //     show = false
-    //   else
-    //     show = true
-    //   this.theRow = {}
-    //   return true
-    // },
-    paramClick(param){
+    paramClick(param, type){
       this.nowFocus = param
       this.$nextTick(function(){
         var refName = 'input'+param
-        this.$refs[refName][0].focus()
+        if (refName in this.$refs)
+          this.$refs[refName][0].focus()
         // console.log(this.$refs[refName]);
       })
+      this.$bus.$emit('searchParameter', param, type)
     },
     paramExit(param,subParam,event){
       console.log('param:',param);
@@ -123,14 +109,14 @@ export default {
     }
   },
   beforeMount() {
-    Object.keys(this.currentParameter['video']).forEach((key)=>{
-      if (key.includes('-c:')){
-        this.currentForm = this.currentParameter['video'][key]
-        console.log('this for is:', this.currentForm);
-        return
-      }
-    })
-    console.log(typeof this.videoSelected['-crf'] == 'object')
+    // Object.keys(this.currentParameter['video']).forEach((key)=>{
+    //   if (key.includes('-c:')){
+    //     this.currentForm = this.currentParameter['video'][key]
+    //     console.log('this for is:', this.currentForm);
+    //     return
+    //   }
+    // })
+    // console.log(typeof this.videoSelected['-crf'] == 'object')
   },
 }
 </script>
