@@ -76,7 +76,7 @@ export default {
             index += 2
           }
           else{
-            newObject[value[index]] = 1
+            newObject[value[index]] = '1'
             index += 1
           }
         }

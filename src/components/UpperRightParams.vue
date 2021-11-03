@@ -3,7 +3,7 @@
     <ul class="list-group">
       <li class="list-group-item" v-for="(param) in parameterObject" :key='param.name'>
         <span>{{param.name}}</span>
-        <span></span>
+        <span> {{param.valueType}}</span>
       </li>
     </ul>
   </div>
@@ -16,12 +16,13 @@ export default {
   data(){
     return{
       parameterObject:{},
-      parameterList:[]
+      parameterList:[],
+      isSubParam:false
     }
   },
   methods: {
     displayParameter(param, type){
-      if (type == 'video'){
+      if (type == 'video' && this.showingParams[this.currentVideo]){
         for(let value of this.showingParams[this.currentVideo]){
           if (value.name == param){
             if (value.multiChild == '1'){
@@ -33,9 +34,11 @@ export default {
                 console.log(`rows:`, rows)
                 this.parameterObject = rows
               })
+              this.isSubParam = true
               break
             }
             else
+              this.isSubParam = false
               this.parameterObject = this.showingParams[this.currentVideo]
             break
           }
@@ -43,10 +46,19 @@ export default {
         // this.parameterObject = this.showingParams[this.currentVideo]
       }
       console.log('current parameter list is:\n', this.parameterObject)
+    },
+    refreshParameter(curV){
+      console.log(`refesh:`, curV)
+      this.parameterObject = this.showingParams[curV]
+    },
+    empitParameter(){
+      this.parameterObject = {}
     }
   },
   beforeMount() {
     this.$bus.$on('searchParameter', this.displayParameter)
+    this.$bus.$on('refreshParameter', this.refreshParameter)
+    this.$bus.$on('empitParameter', this.empitParameter)
   },
   mounted(){
     

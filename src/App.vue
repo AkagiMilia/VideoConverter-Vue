@@ -217,11 +217,17 @@ export default {
           return
       })
       if (hascurV){
+        this.$bus.$emit('refreshParameter', curV)
         return curV
       }
       else{
         this.$dataBase.all('select * from '+curV, (err, rows)=>{
-          this.showingParams[curV] = rows
+          if (rows){
+            this.showingParams[curV] = rows
+            this.$bus.$emit('refreshParameter', curV)
+          }
+          else
+            this.$bus.$emit('empitParameter')
         })
         return curV
       }
