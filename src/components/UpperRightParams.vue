@@ -12,7 +12,7 @@
 <script>
 export default {
   name:'UpperRightParams',
-  props:['showingParams', 'currentAudio', 'currentVideo'],
+  props:['showingParams', 'currentAudio', 'currentVideo','currentFormat'],
   data(){
     return{
       parameterObject:{},
@@ -22,18 +22,21 @@ export default {
   },
   methods: {
     displayParameter(param, type){
+      if (type == 'video')
+        var searchType = this.currentVideo
+      else if (type == 'audio')
+        var searchType = this.currentAudio
       console.log('searching param:', param);
-      console.log('searching type:',type);
-      if (type == 'video' && this.showingParams[this.currentVideo]){
-        for(let value of this.showingParams[this.currentVideo]){
+      console.log('searching type:',searchType);
+      if (this.showingParams[searchType]){
+        for(let value of this.showingParams[searchType]){
           if (value.name == param){
             if (value.multiChild == '1'){
               var sql = "select * from subValue "
-              sql += "where format = '"+this.currentVideo+"' "
+              sql += "where format = '"+searchType+"' "
               sql += "and paraName = '"+param+"'"
               console.log(`sql:`, sql)
               this.$dataBase.all(sql, (err, rows)=>{
-                console.log(`rows:`, rows)
                 this.parameterObject = rows
               })
               this.isSubParam = true
@@ -41,7 +44,7 @@ export default {
             }
             else
               this.isSubParam = false
-              this.parameterObject = this.showingParams[this.currentVideo]
+              this.parameterObject = this.showingParams[searchType]
             break
           }
         }

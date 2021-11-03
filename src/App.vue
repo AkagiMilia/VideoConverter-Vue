@@ -18,6 +18,7 @@
           :showingParams="showingParams"
           :currentVideo="currentVideo"
           :currentAudio="currentAudio"
+          :currentFormat="currentFormat"
           />
         </div>
       </div>
@@ -151,6 +152,7 @@ export default {
         }
       ],
       currentProjectId:'',
+      currentFormat:'',
       showingParams:{}
     }
   },
@@ -210,7 +212,7 @@ export default {
     },
     currentVideo(){
       // load the current video format from input parameters
-      console.log('current video has been triggered')
+      console.log('current Video has been triggered')
       var curV = ''
       Object.keys(this.currentParameter['video']).forEach((key)=>{
         if (key.startsWith('-c:')){
@@ -218,9 +220,12 @@ export default {
           return
         }
       })
+      this.currentFormat = curV
       return curV
     },
     currentAudio(){
+      // load the current video format from input parameters
+      console.log('current Audio has been triggered')
       var curA = ''
       Object.keys(this.currentParameter['audio']).forEach((key)=>{
         if (key.startsWith('-c:')){
@@ -228,22 +233,8 @@ export default {
           return
         }
       })
-      var hascurA = false
-      Object.keys(this.showingParams).forEach((key)=>{
-        if (key == curA)
-          hascurA = true
-          return
-      })
-      if (hascurA){
-        return curA
-      }      
-      else{
-        this.$dataBase.all('select * from '+curA, (err, rows)=>{
-          this.showingParams[curA] = rows
-        })
-        return curA
-      }
-      
+      this.currentFormat = curA
+      return curA
     },
   },
   methods:{
@@ -280,10 +271,17 @@ export default {
       this.$dataBase.all('select * from '+table, (err, rows)=>{
         this.showingParams[table] = rows
       })
+    },
+    updateFormat(type){
+      console.log('Now we changeing format:', type);
+      if (type=='video')
+        this.currentFormat = this.currentVideo
+      else if (type=='audio')
+        this.currentFormat = this.currentAudio
     }
   },
   watch:{
-    currentVideo:{
+    /* currentVideo:{
       immediate:true,
       handler(curVal, oldVal){
         {
@@ -314,6 +312,66 @@ export default {
         this.$bus.$emit('refreshParameter', curVal)
     }
       }
+    },
+    currentAudio:{
+      immediate:true,
+      handler(curVal, oldVal){
+        // if there is no parameter dictionary for this format:
+        //    search the database and save one for it
+        // else
+        //    just return the new format name
+        console.log('yes we changed');
+        if (curVal == oldVal)
+          return
+        var hascurV = false
+        Object.keys(this.showingParams).forEach((key)=>{
+          if (key == curVal)
+            hascurV = true
+            return
+        })
+        if(!hascurV){
+          this.$dataBase.all('select * from '+curVal, (err, rows)=>{
+            if (rows){
+              this.showingParams[curVal] = rows
+              this.$bus.$emit('refreshParameter', curVal)
+            }
+            else
+              this.$bus.$emit('empitParameter')
+          })
+        }
+        else
+          this.$bus.$emit('refreshParameter', curVal)
+      }
+    }, */
+    currentFormat:{
+      immediate:true,
+      handler(curVal, oldVal){
+        // if there is no parameter dictionary for this format:
+        //    search the database and save one for it
+        // else
+        //    just return the new format name
+        console.log('yes we changed');
+        if (curVal == oldVal)
+          return
+        var hascurV = false
+        Object.keys(this.showingParams).forEach((key)=>{
+          if (key == curVal)
+            hascurV = true
+            return
+        })
+        if(!hascurV){
+          this.$dataBase.all('select * from '+curVal, (err, rows)=>{
+            if (rows){
+              this.showingParams[curVal] = rows
+              this.$bus.$emit('refreshParameter', curVal)
+            }
+            else
+              this.$bus.$emit('empitParameter')
+          })
+        }
+        else
+          this.$bus.$emit('refreshParameter', curVal)
+      }
     }
   },
   beforeMount(){
@@ -328,6 +386,7 @@ export default {
     this.$bus.$on('updateParams', this.getParams)
     this.$bus.$on('changeProject', this.getProject)
     this.$bus.$on('addParam', this.addParam)
+    this.$bus.$on('updateFormat', this.updateFormat)
 
   },
 }
