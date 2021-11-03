@@ -123,7 +123,10 @@ export default {
             '-crf':'24',
             '-preset':'ultrafast',
             '-pix_fmt':'yuv420p',
-            '-x265-params':'ssim=1'
+            '-x265-params':{
+              'ssim':'true',
+              'rd':'5'
+            }
           },
           audio:{
             '-c:a':'copy'
@@ -139,7 +142,7 @@ export default {
             '-c:v':'libx264',
             '-crf':'24',
             '-preset':'ultrafast',
-            '-pix_fmt':'yuv420p'
+            '-pix_fmt':'yuv420p',
           },
           audio:{
             '-c:a':'copy'
@@ -174,7 +177,16 @@ export default {
       cmdBlock = []
       Object.keys(currentProjectParams.video).forEach((key)=>{
         cmdBlock.push(key)
-        cmdBlock.push(currentProjectParams.video[key])
+        if (typeof currentProjectParams.video[key] == 'object'){
+          var valLine = ''
+          for (let [key, value] of Object.entries(currentProjectParams.video[key])){
+            valLine += key+'='+value+':'
+          }
+          valLine = valLine.substr(0, valLine.length-1)
+          cmdBlock.push(valLine)
+        }
+        else
+          cmdBlock.push(currentProjectParams.video[key])
       })
       cmd = cmd.concat(cmdBlock)
 
@@ -198,6 +210,7 @@ export default {
     },
     currentVideo(){
       // load the current video format from input parameters
+      console.log('current video has been triggered')
       var curV = ''
       Object.keys(this.currentParameter['video']).forEach((key)=>{
         if (key.startsWith('-c:')){
@@ -205,32 +218,7 @@ export default {
           return
         }
       })
-
-      // if there is no parameter dictionary for this format:
-      //    search the database and save one for it
-      // else
-      //    just return the new format name
-      var hascurV = false
-      Object.keys(this.showingParams).forEach((key)=>{
-        if (key == curV)
-          hascurV = true
-          return
-      })
-      if (hascurV){
-        this.$bus.$emit('refreshParameter', curV)
-        return curV
-      }
-      else{
-        this.$dataBase.all('select * from '+curV, (err, rows)=>{
-          if (rows){
-            this.showingParams[curV] = rows
-            this.$bus.$emit('refreshParameter', curV)
-          }
-          else
-            this.$bus.$emit('empitParameter')
-        })
-        return curV
-      }
+      return curV
     },
     currentAudio(){
       var curA = ''
@@ -259,13 +247,31 @@ export default {
     },
   },
   methods:{
-    getParams(projectId, value, type){
+    getParams(value, type){
       this.parameters.forEach((target)=>{
-        if (target.projectId == projectId){
+        if (target.projectId == this.currentProjectId){
           this.$set(target, type, value)
           return
         }
       })
+    },
+    addParam(type, param, father=null){
+      if (father){
+        this.parameters.forEach((target)=>{
+          if (target.projectId == this.currentProjectId){
+            this.$set(target[type][father], param, '1')
+            return
+          }
+        })
+      }
+      else{
+        this.parameters.forEach((target)=>{
+          if (target.projectId == this.currentProjectId){
+            this.$set(target[type], param, '1')
+            return
+          }
+        })
+      }
     },
     getProject(projectId){
       this.currentProjectId = projectId
@@ -274,6 +280,40 @@ export default {
       this.$dataBase.all('select * from '+table, (err, rows)=>{
         this.showingParams[table] = rows
       })
+    }
+  },
+  watch:{
+    currentVideo:{
+      immediate:true,
+      handler(curVal, oldVal){
+        {
+      // if there is no parameter dictionary for this format:
+      //    search the database and save one for it
+      // else
+      //    just return the new format name
+      console.log('yes we changed');
+      if (curVal == oldVal)
+        return
+      var hascurV = false
+      Object.keys(this.showingParams).forEach((key)=>{
+        if (key == curVal)
+          hascurV = true
+          return
+      })
+      if(!hascurV){
+        this.$dataBase.all('select * from '+curVal, (err, rows)=>{
+          if (rows){
+            this.showingParams[curVal] = rows
+            this.$bus.$emit('refreshParameter', curVal)
+          }
+          else
+            this.$bus.$emit('empitParameter')
+        })
+      }
+      else
+        this.$bus.$emit('refreshParameter', curVal)
+    }
+      }
     }
   },
   beforeMount(){
@@ -287,6 +327,7 @@ export default {
     // this.$bus.$emit('transProjects', this.projects)
     this.$bus.$on('updateParams', this.getParams)
     this.$bus.$on('changeProject', this.getProject)
+    this.$bus.$on('addParam', this.addParam)
 
   },
 }

@@ -30,7 +30,7 @@ export default {
         return line
       },
       set(value){
-        this.updateParams(this.currentProjectId, value, 'maping')
+        this.updateParams(value, 'maping')
       }
     },
     video:{
@@ -38,12 +38,21 @@ export default {
         var line = ''
         Object.keys(this.currentParameter.video).forEach((key)=>{
           line += key + ' '
-          line += this.currentParameter.video[key] + ' '
+          if (typeof this.currentParameter.video[key] == 'object'){
+            var valLine = ''
+            for (let [key, value] of Object.entries(this.currentParameter.video[key])){
+              valLine += key+'='+value+':'
+            }
+            valLine = valLine.substr(0, valLine.length-1)
+            line += valLine + ' '
+          }
+          else
+            line += this.currentParameter.video[key] + ' '
         })
         return line
       },
       set(value){
-        this.updateParams(this.currentProjectId, value, 'video')
+        this.updateParams(value, 'video')
       }
     },
     audio:{
@@ -56,12 +65,12 @@ export default {
         return line
       },
       set(value){
-        this.updateParams(this.currentProjectId, value, 'audio')
+        this.updateParams(value, 'audio')
       }
     },
   },
   methods: {
-    updateParams(projectId, value, type){
+    updateParams(value, type){
       // console.log(projectId, value, type)
       value = value.split(' ')
       value = value.filter(param => param != '')
@@ -72,7 +81,17 @@ export default {
       while(index <= len){
         if (value[index].startsWith('-')){
           if (index+1<=len && !value[index+1].startsWith('-')){
-            newObject[value[index]] = value[index+1]
+            if (value[index+1].indexOf('=')>-1){
+              var newSubObject = {}
+              var valList = value[index+1].split(':')
+              for (let val of valList){
+                val = val.split('=')
+                newSubObject[val[0]] = val[1]
+              }
+              newObject[value[index]] = newSubObject
+            }
+            else
+              newObject[value[index]] = value[index+1]
             index += 2
           }
           else{
@@ -82,7 +101,7 @@ export default {
         }
         else index +=1
       }
-      this.$bus.$emit('updateParams', projectId, newObject, type)
+      this.$bus.$emit('updateParams', newObject, type)
     }
   },
   mounted() {

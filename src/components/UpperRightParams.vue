@@ -1,7 +1,7 @@
 <template>
   <div class="col shadow-sm bg-body rounded mt-3 ms-3" id="divParamLists">
     <ul class="list-group">
-      <li class="list-group-item" v-for="(param) in parameterObject" :key='param.name'>
+      <li class="list-group-item" v-for="(param) in parameterObject" :key='param.name' @click="addParam(param)">
         <span>{{param.name}}</span>
         <span> {{param.valueType}}</span>
       </li>
@@ -22,6 +22,8 @@ export default {
   },
   methods: {
     displayParameter(param, type){
+      console.log('searching param:', param);
+      console.log('searching type:',type);
       if (type == 'video' && this.showingParams[this.currentVideo]){
         for(let value of this.showingParams[this.currentVideo]){
           if (value.name == param){
@@ -46,6 +48,15 @@ export default {
         // this.parameterObject = this.showingParams[this.currentVideo]
       }
       console.log('current parameter list is:\n', this.parameterObject)
+    },
+    addParam(param){
+      if (param.paraName){
+        console.log('I am a subParam')
+        this.$bus.$emit('addParam', 'video', param.name, param.paraName)
+      }
+      else{
+        this.$bus.$emit('addParam', 'video', param.name, null)
+      }
     },
     refreshParameter(curV){
       console.log(`refesh:`, curV)

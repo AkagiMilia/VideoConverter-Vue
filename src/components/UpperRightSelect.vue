@@ -1,7 +1,7 @@
 <template>
   <div class="col shadow-sm bg-body rounded mt-3" id="divParamPicked">
     <ul class="list-group">
-      <li class="list-group-item" v-for="(value, param) in videoSelected" :key="param" @click="paramClick(param, 'video')">
+      <li class="list-group-item" v-for="(value, param) in videoSelected" :key="param" @click.stop="paramClick(param, 'video')">
         <span>{{param}}</span>
         <span v-if="typeof videoSelected[param] == 'string'" v-show="param!=nowFocus">  {{value}}</span>
         <input 
@@ -13,7 +13,7 @@
           :ref="'input'+param"
           />
         <ul class="list-group" v-if="typeof videoSelected[param] == 'object'">
-          <li class="list-group-item" v-for="(subVal, subParam) in videoSelected[param]" :key="subParam" @click.stop="paramClick(subParam, 'video')">
+          <li class="list-group-item" v-for="(subVal, subParam) in videoSelected[param]" :key="subParam" @click.stop="paramClick(subParam, 'video', param)">
             <span>{{subParam}}</span>
             <span v-show="subParam!=nowFocus">  {{subVal}}</span>
             <input 
@@ -44,32 +44,15 @@ export default {
     }
   },
   computed:{
-    videoSelected:{
-      get(){
-        var obj = {}
-        for (let [key, value] of Object.entries(this.currentParameter['video'])){
-          if (!value.includes('=')){
-            obj[key]=value
-          }   
-          else{
-            var objSub = {}
-            value = value.split(':')
-            for (let val of value){
-              val = val.split('=')
-              objSub[val[0]] = val[1]
-            }
-            obj[key] = objSub
-          }
-        }
-        return {...obj}
-      }
+    videoSelected(){
+      return this.currentParameter['video']
     }
   },
   watch:{
  
   },
   methods: {
-    paramClick(param, type){
+    paramClick(param, type, father=null){
       this.nowFocus = param
       this.$nextTick(function(){
         var refName = 'input'+param
@@ -77,7 +60,10 @@ export default {
           this.$refs[refName][0].focus()
         // console.log(this.$refs[refName]);
       })
-      this.$bus.$emit('searchParameter', param, type)
+      if (father)
+        this.$bus.$emit('searchParameter', father, type)
+      else
+        this.$bus.$emit('searchParameter', param, type)
     },
     paramExit(param,subParam,event){
       console.log('param:',param);
@@ -94,18 +80,9 @@ export default {
     sendParam(curVal){
       var newObj = {}
         for (let [key, value] of Object.entries(curVal)){
-          if (typeof value != 'object')
-            newObj[key] = value
-          else{
-            var valueString = ''
-            for (let [subKey, subVal] of Object.entries(value)){
-              valueString += subKey+'='+subVal+':'
-            }
-            valueString = valueString.substr(0, valueString.length-1)
-            newObj[key] = valueString
-          }
+          newObj[key] = value
         }
-        this.$bus.$emit('updateParams', this.currentProjectId, newObj, 'video')
+        this.$bus.$emit('updateParams', newObj, 'video')
     }
   },
   beforeMount() {
