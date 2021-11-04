@@ -28,6 +28,8 @@
         :parameters="parameters" 
         :currentParameter="currentParameter" 
         :currentProjectId="currentProjectId"
+        :currentFormat="currentFormat"
+        :showingParams="showingParams"
       />
       <LowerCodeDisplay :command="cmdLine"/>
     </div>

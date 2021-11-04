@@ -1,7 +1,7 @@
 <template>
   <div class="col shadow-sm bg-body rounded mt-3 ms-3" id="divParamLists">
     <ul class="list-group">
-      <li class="list-group-item" v-for="(param) in parameterObject" :key='param.name' @click="addParam(param)">
+      <li class="list-group-item" v-for="(param) in parameterObject" :key='param.name' @click="addParam(param)" @mouseenter="showGuidance(param)">
         <span>{{param.name}}</span>
         <span> {{param.valueType}}</span>
       </li>
@@ -67,6 +67,10 @@ export default {
     },
     empitParameter(){
       this.parameterObject = {}
+    },
+    showGuidance(param){
+      console.log('Now showing Guidance')
+      console.log(param.explanation);
     }
   },
   beforeMount() {

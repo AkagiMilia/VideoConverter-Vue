@@ -18,7 +18,7 @@
 <script>
 export default {
   name:'LowerCodeArea',
-  props:['parameters', 'currentParameter', 'currentProjectId'],
+  props:['parameters', 'currentParameter', 'currentProjectId', 'currentFormat', 'showingParams'],
   computed:{
     maping:{
       get(){
@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     updateParams(value, type){
-      // console.log(projectId, value, type)
+      // transfer the string cmd line to a list
       value = value.split(' ')
       value = value.filter(param => param != '')
       var index = 0
@@ -80,11 +80,18 @@ export default {
       var newObject = {}
       while(index <= len){
         if (value[index].startsWith('-')){
+          var paramInfo = null
+          // read parameter info
+          if (this.showingParams[this.currentFormat])
+            paramInfo = this.showingParams[this.currentFormat].filter( param => param.name == value[index])[0]
+          console.log('paramInfo:',paramInfo);
           if (index+1<=len && !value[index+1].startsWith('-')){
-            if (value[index+1].indexOf('=')>-1){
+            if (paramInfo && paramInfo['multiChild'] == '1'){
               var newSubObject = {}
               var valList = value[index+1].split(':')
               for (let val of valList){
+                if (val.indexOf('=')<0)
+                  val += '=value'
                 val = val.split('=')
                 newSubObject[val[0]] = val[1]
               }
@@ -95,7 +102,11 @@ export default {
             index += 2
           }
           else{
-            newObject[value[index]] = '1'
+            if (paramInfo && paramInfo['multiChild'] == '1'){
+              newObject[value[index]] = {'param':'value'}
+            }  
+            else
+              newObject[value[index]] = '1'
             index += 1
           }
         }
