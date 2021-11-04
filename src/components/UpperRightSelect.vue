@@ -23,6 +23,7 @@ export default {
   props:['currentParameter','currentProjectId','showingParams','currentVideo', 'currentAudio'],
   data() {
     return {
+      thereIsNothingHere:null
     }
   },
 }
