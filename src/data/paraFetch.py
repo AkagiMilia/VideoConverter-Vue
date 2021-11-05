@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import sqlite3
+import os
 
 con = sqlite3.connect('src/data/database.db')
 cur = con.cursor()
@@ -14,10 +15,11 @@ def toDB(csvPath, tableName, con):
     df.to_sql(tableName, con, if_exists='replace')
 
 if __name__ == '__main__':
-    toDB('src/data/libx265.csv', 'libx265', con)
-    toDB('src/data/subValue.csv', 'subValue', con)
-    toDB('src/data/libx264.csv', 'libx264', con)
-    toDB('src/data/formats.csv', 'formats', con)
+    # toDB('src/data/libx265.csv', 'libx265', con)
+    # toDB('src/data/subValue.csv', 'subValue', con)
+    # toDB('src/data/libx264.csv', 'libx264', con)
+    # toDB('src/data/formats.csv', 'formats', con)
+
     # df = pd.read_sql_query("SELECT * FROM libx265", con)
     # print(df)
 
@@ -28,6 +30,8 @@ if __name__ == '__main__':
     # cur.execute(sql)
     # print(cur.fetchall()[0][0])
 
-    cur.execute("select * from SQLite_master")
-    for line in cur.fetchall():
-        print(line)
+    # cur.execute("select * from SQLite_master")
+    # for line in cur.fetchall():
+    #     print(line)
+    result = os.system('ffmpeg -h')
+    print(result)

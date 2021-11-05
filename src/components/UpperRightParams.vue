@@ -71,6 +71,7 @@ export default {
     showGuidance(param){
       console.log('Now showing Guidance')
       console.log(param.explanation);
+      this.$bus.$emit('showGuidance', param)
     }
   },
   beforeMount() {
