@@ -1,6 +1,6 @@
 <template>
   <div class="col shadow-sm bg-body rounded mt-3" id="divGuidiance">
-    <h1>{{paramGuidance.title}}</h1>
+    <h3>{{paramGuidance.title}}</h3>
     <p>{{paramGuidance.info}}</p>
   </div>
 </template>
@@ -17,9 +17,9 @@ export default {
     }
   },
   methods: {
-    updatGuidance(param){
+    updatGuidance(key, param){
       console.log('got you!');
-      this.paramGuidance['title'] = param.name
+      this.paramGuidance['title'] = key
       this.paramGuidance['info'] = param.explanation
     }
   },

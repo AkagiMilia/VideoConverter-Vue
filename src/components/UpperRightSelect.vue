@@ -2,12 +2,12 @@
   <div class="col shadow-sm bg-body rounded mt-3" id="divParamPicked">
     <UpperRightSelectList
       :currentParameter="currentParameter"
-      :showingParams="showingParams"
+      :currentFormat="currentVideo"
       type="video"
     />
     <UpperRightSelectList
       :currentParameter="currentParameter"
-      :showingParams="showingParams"
+      :currentFormat="currentAudio"
       type="audio"
     />
   </div>
@@ -20,7 +20,7 @@ export default {
   components:{
     UpperRightSelectList,
   },
-  props:['currentParameter','currentProjectId','showingParams','currentVideo', 'currentAudio'],
+  props:['currentParameter','currentProjectId','currentVideo', 'currentAudio'],
   data() {
     return {
       thereIsNothingHere:null

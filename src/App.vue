@@ -10,15 +10,15 @@
           <UpperRightSelect 
             :currentParameter="currentParameter" 
             :currentProjectId="currentProjectId" 
-            :showingParams="showingParams"
             :currentAudio="currentAudio"
             :currentVideo="currentVideo"
           />
           <UpperRightParams 
-          :showingParams="showingParams"
           :currentVideo="currentVideo"
           :currentAudio="currentAudio"
           :currentFormat="currentFormat"
+          :currentType="currentType"
+          :currentParameter="currentParameter"
           />
         </div>
       </div>
@@ -29,7 +29,6 @@
         :currentParameter="currentParameter" 
         :currentProjectId="currentProjectId"
         :currentFormat="currentFormat"
-        :showingParams="showingParams"
       />
       <LowerCodeDisplay :command="cmdLine"/>
     </div>
@@ -47,7 +46,7 @@ import LowerCodeArea from './components/LowerCodeArea.vue'
 import LowerCodeDisplay from './components/LowerCodeDisplay.vue'
 
 import { nanoid } from 'nanoid'
-
+import { mapGetters, mapMutations, mapState } from 'vuex'
 const isMac = navigator.platform === 'MacIntel'
 const ffmpegWin = 'ffmpeg'
 const ffmpegMac = '/opt/homebrew/bin/ffmpeg'
@@ -155,7 +154,7 @@ export default {
       ],
       currentProjectId:'',
       currentFormat:'',
-      showingParams:{}
+      currentType:''
     }
   },
   computed:{
@@ -223,6 +222,7 @@ export default {
         }
       })
       this.currentFormat = curV
+      this.currentType = 'video'
       return curV
     },
     currentAudio(){
@@ -236,8 +236,10 @@ export default {
         }
       })
       this.currentFormat = curA
+      this.currentType = 'audio'
       return curA
     },
+    ...mapState('indexData',['showingParams'])
   },
   methods:{
     getParams(value, type){
@@ -269,82 +271,16 @@ export default {
     getProject(projectId){
       this.currentProjectId = projectId
     },
-    updateShowingParams(param, type){
-      this.$dataBase.all('select * from '+table, (err, rows)=>{
-        this.showingParams[table] = rows
-      })
-    },
     updateFormat(type){
       console.log('Now we changeing format:', type);
       if (type=='video')
         this.currentFormat = this.currentVideo
       else if (type=='audio')
         this.currentFormat = this.currentAudio
-    }
+    },
+    ...mapMutations('indexData', ['loadGuidance'])
   },
   watch:{
-    /* currentVideo:{
-      immediate:true,
-      handler(curVal, oldVal){
-        {
-      // if there is no parameter dictionary for this format:
-      //    search the database and save one for it
-      // else
-      //    just return the new format name
-      console.log('yes we changed');
-      if (curVal == oldVal)
-        return
-      var hascurV = false
-      Object.keys(this.showingParams).forEach((key)=>{
-        if (key == curVal)
-          hascurV = true
-          return
-      })
-      if(!hascurV){
-        this.$dataBase.all('select * from '+curVal, (err, rows)=>{
-          if (rows){
-            this.showingParams[curVal] = rows
-            this.$bus.$emit('refreshParameter', curVal)
-          }
-          else
-            this.$bus.$emit('empitParameter')
-        })
-      }
-      else
-        this.$bus.$emit('refreshParameter', curVal)
-    }
-      }
-    },
-    currentAudio:{
-      immediate:true,
-      handler(curVal, oldVal){
-        // if there is no parameter dictionary for this format:
-        //    search the database and save one for it
-        // else
-        //    just return the new format name
-        console.log('yes we changed');
-        if (curVal == oldVal)
-          return
-        var hascurV = false
-        Object.keys(this.showingParams).forEach((key)=>{
-          if (key == curVal)
-            hascurV = true
-            return
-        })
-        if(!hascurV){
-          this.$dataBase.all('select * from '+curVal, (err, rows)=>{
-            if (rows){
-              this.showingParams[curVal] = rows
-              this.$bus.$emit('refreshParameter', curVal)
-            }
-            else
-              this.$bus.$emit('empitParameter')
-          })
-        }
-        else
-          this.$bus.$emit('refreshParameter', curVal)
-      }
-    }, */
     currentFormat:{
       immediate:true,
       handler(curVal, oldVal){
@@ -359,20 +295,11 @@ export default {
         Object.keys(this.showingParams).forEach((key)=>{
           if (key == curVal)
             hascurV = true
+            this.$bus.$emit('refreshParameter', curVal)
             return
         })
-        if(!hascurV){
-          this.$dataBase.all('select * from '+curVal, (err, rows)=>{
-            if (rows){
-              this.showingParams[curVal] = rows
-              this.$bus.$emit('refreshParameter', curVal)
-            }
-            else
-              this.$bus.$emit('empitParameter')
-          })
-        }
-        else
-          this.$bus.$emit('refreshParameter', curVal)
+        if(!hascurV)
+          this.$bus.$emit('empitParameter')
       }
     }
   },
@@ -389,6 +316,8 @@ export default {
     this.$bus.$on('changeProject', this.getProject)
     this.$bus.$on('addParam', this.addParam)
     this.$bus.$on('updateFormat', this.updateFormat)
+
+    this.loadGuidance('./src/data/Guidance.json')
 
   },
 }

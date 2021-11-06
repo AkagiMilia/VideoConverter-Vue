@@ -1,8 +1,8 @@
 <template>
   <div class="col shadow-sm bg-body rounded mt-3 ms-3" id="divParamLists">
     <ul class="list-group">
-      <li class="list-group-item" v-for="(param) in parameterObject" :key='param.name' @click="addParam(param)" @mouseenter="showGuidance(param)">
-        <span>{{param.name}}</span>
+      <li class="list-group-item" :class="selectedStyles[key]" v-for="(param, key) in parameterObject" :key='key' @click="addParam(key, param)" @mouseenter="showGuidance(key, param)">
+        <span>{{key}}</span>
         <span> {{param.valueType}}</span>
       </li>
     </ul>
@@ -10,13 +10,14 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex'
 export default {
   name:'UpperRightParams',
-  props:['showingParams', 'currentAudio', 'currentVideo','currentFormat'],
+  props:['currentAudio', 'currentVideo', 'currentFormat', 'currentType', 'currentParameter'],
   data(){
     return{
       parameterObject:{},
-      parameterList:[],
+      currentDict:'',
       isSubParam:false
     }
   },
@@ -29,20 +30,16 @@ export default {
       console.log('searching param:', param);
       console.log('searching type:',searchType);
       if (this.showingParams[searchType]){
-        for(let value of this.showingParams[searchType]){
-          if (value.name == param){
-            if (value.multiChild == '1'){
-              var sql = "select * from subValue "
-              sql += "where format = '"+searchType+"' "
-              sql += "and paraName = '"+param+"'"
-              console.log(`sql:`, sql)
-              this.$dataBase.all(sql, (err, rows)=>{
-                this.parameterObject = rows
-              })
+        for(let [key, value] of Object.entries(this.showingParams[searchType])){
+          if (key == param || param.startsWith('-c:')){
+            if (value.valueType.startsWith('dic')){
+              this.parameterObject = value.subValues
+              this.currentDict = key
               this.isSubParam = true
               break
             }
             else
+              console.log('set sub False!')
               this.isSubParam = false
               this.parameterObject = this.showingParams[searchType]
             break
@@ -52,13 +49,13 @@ export default {
       }
       console.log('current parameter list is:\n', this.parameterObject)
     },
-    addParam(param){
-      if (param.paraName){
+    addParam(key, param){
+      if (this.isSubParam){
         console.log('I am a subParam')
-        this.$bus.$emit('addParam', 'video', param.name, param.paraName)
+        this.$bus.$emit('addParam', this.currentType, key, this.currentDict)
       }
       else{
-        this.$bus.$emit('addParam', 'video', param.name, null)
+        this.$bus.$emit('addParam', this.currentType, key, null)
       }
     },
     refreshParameter(curV){
@@ -68,10 +65,31 @@ export default {
     empitParameter(){
       this.parameterObject = {}
     },
-    showGuidance(param){
-      console.log('Now showing Guidance')
-      console.log(param.explanation);
-      this.$bus.$emit('showGuidance', param)
+    showGuidance(key, param){
+      this.$bus.$emit('showGuidance', key, param)
+    }
+  },
+  computed:{
+    ...mapState('indexData',['showingParams']),
+    selectedStyles(){
+      var dict = {}
+      if (this.isSubParam){
+        for (let key of Object.keys(this.parameterObject)){
+          if (this.currentParameter[this.currentType][this.currentDict] && key in this.currentParameter[this.currentType][this.currentDict])
+            dict[key] = 'bg-warning'
+          else
+            dict[key] = ''
+        }
+      }
+      else{
+        for (let key of Object.keys(this.parameterObject)){
+          if (this.currentParameter[this.currentType] && key in this.currentParameter[this.currentType])
+            dict[key] = 'bg-warning'
+          else
+            dict[key] = ''
+        }
+      }
+      return dict
     }
   },
   beforeMount() {

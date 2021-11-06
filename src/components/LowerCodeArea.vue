@@ -16,9 +16,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name:'LowerCodeArea',
-  props:['parameters', 'currentParameter', 'currentProjectId', 'currentFormat', 'showingParams'],
+  props:['parameters', 'currentParameter', 'currentProjectId', 'currentFormat'],
   computed:{
     maping:{
       get(){
@@ -68,6 +69,7 @@ export default {
         this.updateParams(value, 'audio')
       }
     },
+    ...mapState('indexData', ['showingParams'])
   },
   methods: {
     updateParams(value, type){
@@ -83,10 +85,10 @@ export default {
           var paramInfo = null
           // read parameter info
           if (this.showingParams[this.currentFormat])
-            paramInfo = this.showingParams[this.currentFormat].filter( param => param.name == value[index])[0]
+            paramInfo = this.showingParams[this.currentFormat][value[index]]
           console.log('paramInfo:',paramInfo);
           if (index+1<=len && !value[index+1].startsWith('-')){
-            if (paramInfo && paramInfo['multiChild'] == '1'){
+            if (paramInfo && paramInfo['valueType'].startsWith('dic')){
               var newSubObject = {}
               var valList = value[index+1].split(':')
               for (let val of valList){
@@ -102,7 +104,7 @@ export default {
             index += 2
           }
           else{
-            if (paramInfo && paramInfo['multiChild'] == '1'){
+            if (paramInfo && paramInfo['valueType'].startsWith('dic')){
               newObject[value[index]] = {'param':'value'}
             }  
             else

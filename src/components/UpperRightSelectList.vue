@@ -1,6 +1,6 @@
 <template>
   <ul class="list-group">
-    <li class="list-group-item" v-for="(value, param) in Selected" :key="param" @click.stop="paramClick(param)">
+    <li class="list-group-item" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click.stop="paramClick(param)">
       <span>{{param}}</span>
       <span v-if="typeof Selected[param] == 'string'" v-show="param!=nowFocus">  {{value}}</span>
       <input 
@@ -12,7 +12,7 @@
         :ref="'input'+param"
         />
       <ul class="list-group" v-if="typeof Selected[param] == 'object'">
-        <li class="list-group-item" v-for="(subVal, subParam) in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
+        <li class="list-group-item" :class="warningStyles[subParam]" v-for="(subVal, subParam) in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
           <span>{{subParam}}</span>
           <span v-show="subParam!=nowFocus">  {{subVal}}</span>
           <input 
@@ -29,9 +29,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name:'UpperRightSelectList',
-  props:['currentParameter','showingParams','currentVideo', 'currentAudio', 'type'],
+  props:['currentParameter', 'type', 'currentFormat'],
   data() {
     return {
       nowFocus:'',
@@ -40,19 +41,36 @@ export default {
   computed:{
     Selected(){
       return this.currentParameter[this.type]
+    },
+    ...mapState('indexData', ['showingParams']),
+    warningStyles(){
+      var dict = {}
+      for (let [key, value] of Object.entries(this.Selected)){
+        if (typeof value == 'object'){
+          for (let subKey of Object.keys(value)){
+            if (subKey in this.showingParams[this.currentFormat][key]['subValues'])
+              dict[subKey] = ''
+            else
+              dict[subKey] = 'bg-warning'
+          }
+        }
+        if (this.currentFormat in this.showingParams && key in this.showingParams[this.currentFormat])
+          dict[key] = ''
+        else if (key.startsWith('-c:'))
+          dict[key] = ''
+        else
+          dict[key] = 'bg-warning'
+      }
+      return dict
     }
-  },
-  watch:{
- 
   },
   methods: {
     paramClick(param, father=null){
       this.nowFocus = param
       this.$nextTick(function(){
         var refName = 'input'+param
-        if (refName in this.$refs)
+        if (refName in this.$refs && this.$refs[refName][0])
           this.$refs[refName][0].focus()
-        // console.log(this.$refs[refName]);
       })
       this.$bus.$emit('updateFormat', this.type)
       if (father)
