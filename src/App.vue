@@ -80,16 +80,16 @@ export default {
               fileId:nanoid(),
               filePath:'Elerye_-_Edera.mp4',
               fileName:'Elerye_-_Edera.mp4',
-              streams:[
-                {index:0, code_name:'h264', code_type:'video'},
-                {index:1, code_name:'aac', code_type:'audio'}
-              ],
+              streams:{
+                0:{code_name:'h264', code_type:'video'},
+                1:{code_name:'aac', code_type:'audio'}
+              },
               streamsUsed:{0:true, 1:true},
-              fileParams:['-itsoffset', '0ms']
+              fileParams:['-itsoffset', `0ms`]
             },
           ],
-          outputFilePath:'Elerye_-_Edera-fast-265.mp4',
-          outputFileName:'Elerye_-_Edera-fast-265.mp4',
+          outputFilePath:'Elerye_-_Edera fast 264.mp4',
+          outputFileName:'Elerye_-_Edera fast 264.mp4',
           outputParas:['-y']
         },
         // example.project2
@@ -116,10 +116,6 @@ export default {
       ],
       parameters:[
         {
-          maping:{
-            '-map':'0:a',
-            '-map':'0:v'
-          },
           video:{
             '-c:v':'libx265',
             '-crf':'24',
@@ -136,10 +132,6 @@ export default {
           projectId:''
         },
         {
-          maping:{
-            '-map':'0:a',
-            '-map':'0:v'
-          },
           video:{
             '-c:v':'libx264',
             '-crf':'24',
@@ -161,23 +153,29 @@ export default {
     cmdLine(){
       var currentProjectParams = this.parameters.filter(project => project.projectId == this.currentProjectId)[0]
       var currentProject = this.projects.filter(project => project.projectId == this.currentProjectId)[0]
-      // console.log('currentProject@',currentProject);
-      // console.log('currentID@', this.currentProjectId)
+      // base address ffmpeg
       var cmd = [this.FFmpegPath]
+      // add input files and their input parameters
       currentProject.inputFiles.forEach((file)=>{
         cmd = cmd.concat(file.fileParams)
         cmd.push('-i')
-        cmd.push(file.filePath)
+        cmd.push(`${file.filePath}`)
       })
 
+      // add map info
+      var fileIndex = 0
+      currentProject.inputFiles.forEach((file)=>{
+        for (let [index, bool] of Object.entries(file.streamsUsed)){
+          if (bool){
+            cmd.push('-map')
+            cmd.push(`${fileIndex}:${index}`)
+          }
+        }
+        fileIndex += 1
+      })
+
+      // add video params
       var cmdBlock = []
-      Object.keys(currentProjectParams.maping).forEach((key)=>{
-        cmdBlock.push(key)
-        cmdBlock.push(currentProjectParams.maping[key])
-      })
-      cmd = cmd.concat(cmdBlock)
-
-      cmdBlock = []
       Object.keys(currentProjectParams.video).forEach((key)=>{
         cmdBlock.push(key)
         if (typeof currentProjectParams.video[key] == 'object'){
@@ -193,16 +191,26 @@ export default {
       })
       cmd = cmd.concat(cmdBlock)
 
+      // add audio params
       cmdBlock = []
       Object.keys(currentProjectParams.audio).forEach((key)=>{
         cmdBlock.push(key)
-        cmdBlock.push(currentProjectParams.audio[key])
+        if (typeof currentProjectParams.audio[key] == 'object'){
+          var valLine = ''
+          for (let [key, value] of Object.entries(currentProjectParams.audio[key])){
+            valLine += key+'='+value+':'
+          }
+          valLine = valLine.substr(0, valLine.length-1)
+          cmdBlock.push(valLine)
+        }
+        else
+          cmdBlock.push(currentProjectParams.audio[key])
       })
       cmd = cmd.concat(cmdBlock)
 
-      cmd = cmd.concat(
-        currentProject.outputParas,
-        currentProject.outputFilePath)
+      // add output params and path
+      cmd = cmd.concat(currentProject.outputParas)
+      cmd.push(`${currentProject.outputFilePath}`)
 
       return cmd
     },
@@ -242,6 +250,7 @@ export default {
     ...mapState('indexData',['showingParams'])
   },
   methods:{
+    // change parameters(by select lists)
     getParams(value, type){
       this.parameters.forEach((target)=>{
         if (target.projectId == this.currentProjectId){
@@ -250,11 +259,22 @@ export default {
         }
       })
     },
-    addParam(type, param, father=null){
+    // add parameters(by parameter candidate)
+    addParam(type, key, value, father=null){
+      var defaultVal = '1'
+      if (value.valueType.startsWith('bool'))
+        defaultVal = 'true'
+      else if(value.valueType.startsWith('str')){
+        if ('subValues' in value)
+         defaultVal = value['subValues'][0]
+        else
+          defaultVal = '1'
+      }        
+
       if (father){
         this.parameters.forEach((target)=>{
           if (target.projectId == this.currentProjectId){
-            this.$set(target[type][father], param, '1')
+            this.$set(target[type][father], key, defaultVal)
             return
           }
         })
@@ -262,15 +282,17 @@ export default {
       else{
         this.parameters.forEach((target)=>{
           if (target.projectId == this.currentProjectId){
-            this.$set(target[type], param, '1')
+            this.$set(target[type], key, defaultVal)
             return
           }
         })
       }
     },
+    // change current project(by project list)
     getProject(projectId){
       this.currentProjectId = projectId
     },
+    // update current format
     updateFormat(type){
       console.log('Now we changeing format:', type);
       if (type=='video')

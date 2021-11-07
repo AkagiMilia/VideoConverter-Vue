@@ -49,13 +49,13 @@ export default {
       }
       console.log('current parameter list is:\n', this.parameterObject)
     },
-    addParam(key, param){
+    addParam(key, value){
       if (this.isSubParam){
         console.log('I am a subParam')
-        this.$bus.$emit('addParam', this.currentType, key, this.currentDict)
+        this.$bus.$emit('addParam', this.currentType, key, value, this.currentDict)
       }
       else{
-        this.$bus.$emit('addParam', this.currentType, key, null)
+        this.$bus.$emit('addParam', this.currentType, key, value, null)
       }
     },
     refreshParameter(curV){

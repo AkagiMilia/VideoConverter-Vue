@@ -48,7 +48,7 @@ export default {
       for (let [key, value] of Object.entries(this.Selected)){
         if (typeof value == 'object'){
           for (let subKey of Object.keys(value)){
-            if (subKey in this.showingParams[this.currentFormat][key]['subValues'])
+            if (this.showingParams[this.currentFormat][key] && this.showingParams[this.currentFormat][key]['subValues'] && subKey in this.showingParams[this.currentFormat][key]['subValues'])
               dict[subKey] = ''
             else
               dict[subKey] = 'bg-warning'
