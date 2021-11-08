@@ -303,13 +303,11 @@ export default {
     ...mapMutations('indexData', ['loadGuidance'])
   },
   watch:{
+    // if the currentFormat changed
+    // let the Param list refreash
     currentFormat:{
       immediate:true,
       handler(curVal, oldVal){
-        // if there is no parameter dictionary for this format:
-        //    search the database and save one for it
-        // else
-        //    just return the new format name
         console.log('yes we changed');
         if (curVal == oldVal)
           return
