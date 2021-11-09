@@ -7,8 +7,16 @@
           <div class="col"><textarea class="form-control" rows="6" id="codeAudio" v-model.trim.lazy="cmdStringAudio"></textarea></div>
           <div class="col"><textarea class="form-control" rows="6" id="codeOups" v-model.trim.lazy="cmdStringOups"></textarea></div> -->
           <!-- <div class="col"><textarea class="form-control" rows="6" id="codeInps" v-model.trim.lazy="maping"></textarea></div> -->
-          <div class="col"><textarea class="form-control" rows="6" id="codeVideo" v-model.trim.lazy="video"></textarea></div>
-          <div class="col"><textarea class="form-control" rows="6" id="codeAudio" v-model.trim.lazy="audio"></textarea></div>
+          <div class="col">
+            <textarea class="form-control" id="codeVideo" rows="6" v-model.trim.lazy="video"></textarea>
+            <!-- <label for="codeVideo">Video Params</label> -->
+          </div>
+          
+          <div class="col">
+            <textarea class="form-control" id="codeAudio" rows="6" v-model.trim.lazy="audio"></textarea>
+            <!-- <label for="codeAudio">Video Params</label> -->
+          </div>
+          
           <!-- <div class="col"><textarea class="form-control" rows="6" id="codeOups" ></textarea></div> -->
         </div>
       </form>
@@ -124,6 +132,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
+  #divCodeArea{
+    height: 100%;
+  }
 </style>

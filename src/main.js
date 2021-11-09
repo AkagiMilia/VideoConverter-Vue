@@ -20,10 +20,10 @@ const vm = new Vue({
     console.log('__dirname:', __dirname);
     console.log('__filename:', __filename);
     console.log('dbPath:',dbPath);
-    Vue.prototype.$dataBase = new sqlite3.Database('./src/data/database.db')
+    // Vue.prototype.$dataBase = new sqlite3.Database('./src/data/database.db')
   },
   beforeDestroy(){
-    this.$dataBase.close()
+    // this.$dataBase.close()
   }
 })
 console.log(vm);

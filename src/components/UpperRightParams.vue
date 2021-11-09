@@ -59,7 +59,6 @@ export default {
       }
     },
     refreshParameter(curV){
-      console.log(`refesh:`, curV)
       this.parameterObject = this.showingParams[curV]
     },
     empitParameter(){
