@@ -308,16 +308,16 @@ export default {
     currentFormat:{
       immediate:true,
       handler(curVal, oldVal){
-        console.log('yes we changed');
-        if (curVal == oldVal)
-          return
+
         var hascurV = false
-        Object.keys(this.showingParams).forEach((key)=>{
-          if (key == curVal)
+        for (let key of Object.keys(this.showingParams)){
+          if (key == curVal){
             hascurV = true
+            console.log(`refesh:`, curVal)
             this.$bus.$emit('refreshParameter', curVal)
-            return
-        })
+            break
+          }
+        }
         if(!hascurV)
           this.$bus.$emit('empitParameter')
       }
@@ -336,8 +336,9 @@ export default {
     this.$bus.$on('changeProject', this.getProject)
     this.$bus.$on('addParam', this.addParam)
     this.$bus.$on('updateFormat', this.updateFormat)
-
-    this.loadGuidance('./src/data/Guidance.json')
+    const path = require('path')
+    const guidancePath = path.join(__static, 'Guidance.json')
+    this.loadGuidance(guidancePath)
 
   },
 }
@@ -380,7 +381,7 @@ export default {
   }
 
   #divLower{
-    height: auto;
+    height: 70%;
     margin-top: 3%;
   }
 
