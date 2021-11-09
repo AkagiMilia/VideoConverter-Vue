@@ -1,0 +1,754 @@
+{
+    "libx264": {
+        "-preset": {
+            "valueType": "string",
+            "explanation": "Set the encoding preset (cf. x264 --fullhelp) (default \"medium\")"
+        },
+        "-tune": {
+            "valueType": "string",
+            "explanation": "Tune the encoding params (cf. x264 --fullhelp)"
+        },
+        "-profile": {
+            "valueType": "string",
+            "explanation": "Set profile restrictions (cf. x264 --fullhelp)"
+        },
+        "-fastfirstpass": {
+            "valueType": "boolean",
+            "explanation": "Use fast settings when encoding first pass (default true)"
+        },
+        "-level": {
+            "valueType": "string",
+            "explanation": "Specify level (as defined by Annex A)"
+        },
+        "-passlogfile": {
+            "valueType": "string",
+            "explanation": "Filename for 2 pass stats"
+        },
+        "-wpredp": {
+            "valueType": "string",
+            "explanation": "Weighted prediction for P-frames"
+        },
+        "-a53cc": {
+            "valueType": "boolean",
+            "explanation": "Use A53 Closed Captions (if available) (default true)"
+        },
+        "-x264opts": {
+            "valueType": "string",
+            "explanation": "x264 options"
+        },
+        "-crf": {
+            "valueType": "float",
+            "explanation": "Select the quality for constant quality mode (from -1 to FLT_MAX) (default -1)"
+        },
+        "-crf_max": {
+            "valueType": "float",
+            "explanation": "In CRF mode, prevents VBV from lowering quality beyond this point. (from -1 to FLT_MAX) (default -1)"
+        },
+        "-qp": {
+            "valueType": "int",
+            "explanation": "Constant quantization parameter rate control method (from -1 to INT_MAX) (default -1)"
+        },
+        "-aq-mode": {
+            "valueType": "int",
+            "explanation": "AQ method (from -1 to INT_MAX) (default -1)",
+            "subValues": {
+                "none": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "variance": {
+                    "value": "1",
+                    "explanation": "Variance AQ (complexity mask)"
+                },
+                "autovariance": {
+                    "value": "2",
+                    "explanation": "Auto-variance AQ"
+                },
+                "autovariance-biased": {
+                    "value": "3",
+                    "explanation": "Auto-variance AQ with bias to dark scenes"
+                }
+            }
+        },
+        "-aq-strength": {
+            "valueType": "float",
+            "explanation": "AQ strength. Reduces blocking and blurring in flat and textured areas. (from -1 to FLT_MAX) (default -1)"
+        },
+        "-psy": {
+            "valueType": "boolean",
+            "explanation": "Use psychovisual optimizations. (default auto)"
+        },
+        "-psy-rd": {
+            "valueType": "string",
+            "explanation": "Strength of psychovisual optimization, in <psy-rd>:<psy-trellis> format."
+        },
+        "-rc-lookahead": {
+            "valueType": "int",
+            "explanation": "Number of frames to look ahead for frametype and ratecontrol (from -1 to INT_MAX) (default -1)"
+        },
+        "-weightb": {
+            "valueType": "boolean",
+            "explanation": "Weighted prediction for B-frames. (default auto)"
+        },
+        "-weightp": {
+            "valueType": "int",
+            "explanation": "Weighted prediction analysis method. (from -1 to INT_MAX) (default -1)",
+            "subValues": {
+                "none": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "simple": {
+                    "value": "1",
+                    "explanation": null
+                },
+                "smart": {
+                    "value": "2",
+                    "explanation": null
+                }
+            }
+        },
+        "-ssim": {
+            "valueType": "boolean",
+            "explanation": "Calculate and print SSIM stats. (default auto)"
+        },
+        "-intra-refresh": {
+            "valueType": "boolean",
+            "explanation": "Use Periodic Intra Refresh instead of IDR frames. (default auto)"
+        },
+        "-bluray-compat": {
+            "valueType": "boolean",
+            "explanation": "Bluray compatibility workarounds. (default auto)"
+        },
+        "-b-bias": {
+            "valueType": "int",
+            "explanation": "Influences how often B-frames are used (from INT_MIN to INT_MAX) (default INT_MIN)"
+        },
+        "-b-pyramid": {
+            "valueType": "int",
+            "explanation": "Keep some B-frames as references. (from -1 to INT_MAX) (default -1)",
+            "subValues": {
+                "none": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "strict": {
+                    "value": "1",
+                    "explanation": "Strictly hierarchical pyramid"
+                },
+                "normal": {
+                    "value": "2",
+                    "explanation": "Non-strict (not Blu-ray compatible)"
+                }
+            }
+        },
+        "-mixed-refs": {
+            "valueType": "boolean",
+            "explanation": "One reference per partition, as opposed to one reference per macroblock (default auto)"
+        },
+        "-8x8dct": {
+            "valueType": "boolean",
+            "explanation": "High profile 8x8 transform. (default auto)"
+        },
+        "-fast-pskip": {
+            "valueType": "boolean",
+            "explanation": "(default auto)"
+        },
+        "-aud": {
+            "valueType": "boolean",
+            "explanation": "Use access unit delimiters. (default auto)"
+        },
+        "-mbtree": {
+            "valueType": "boolean",
+            "explanation": "Use macroblock tree ratecontrol. (default auto)"
+        },
+        "-deblock": {
+            "valueType": "string",
+            "explanation": "Loop filter parameters, in <alpha:beta> form."
+        },
+        "-cplxblur": {
+            "valueType": "float",
+            "explanation": "Reduce fluctuations in QP (before curve compression) (from -1 to FLT_MAX) (default -1)"
+        },
+        "-partitions": {
+            "valueType": "string",
+            "explanation": "A comma-separated list of partitions to consider. Possible values: p8x8, p4x4, b8x8, i8x8, i4x4, none, all"
+        },
+        "-direct-pred": {
+            "valueType": "int",
+            "explanation": "Direct MV prediction mode (from -1 to INT_MAX) (default -1)",
+            "subValues": {
+                "none": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "spatial": {
+                    "value": "1",
+                    "explanation": null
+                },
+                "temporal": {
+                    "value": "2",
+                    "explanation": null
+                },
+                "auto": {
+                    "value": "3",
+                    "explanation": null
+                }
+            }
+        },
+        "-slice-max-size": {
+            "valueType": "int",
+            "explanation": "Limit the size of each slice in bytes (from -1 to INT_MAX) (default -1)"
+        },
+        "-stats": {
+            "valueType": "string",
+            "explanation": "Filename for 2 pass stats"
+        },
+        "-nal-hrd": {
+            "valueType": "int",
+            "explanation": "Signal HRD information (requires vbv-bufsize; cbr not allowed in .mp4) (from -1 to INT_MAX) (default -1)",
+            "subValues": {
+                "none": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "vbr": {
+                    "value": "1",
+                    "explanation": null
+                },
+                "cbr": {
+                    "value": "2",
+                    "explanation": null
+                }
+            }
+        },
+        "-avcintra-class": {
+            "valueType": "int",
+            "explanation": "AVC-Intra class 50/100/200 (from -1 to 200) (default -1)"
+        },
+        "-me_method": {
+            "valueType": "int",
+            "explanation": "Set motion estimation method (from -1 to 4) (default -1)",
+            "subValues": {
+                "dia": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "hex": {
+                    "value": "1",
+                    "explanation": null
+                },
+                "umh": {
+                    "value": "2",
+                    "explanation": null
+                },
+                "esa": {
+                    "value": "3",
+                    "explanation": null
+                },
+                "tesa": {
+                    "value": "4",
+                    "explanation": null
+                }
+            }
+        },
+        "-motion-est": {
+            "valueType": "int",
+            "explanation": "Set motion estimation method (from -1 to 4) (default -1)",
+            "subValues": {
+                "dia": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "hex": {
+                    "value": "1",
+                    "explanation": null
+                },
+                "umh": {
+                    "value": "2",
+                    "explanation": null
+                },
+                "esa": {
+                    "value": "3",
+                    "explanation": null
+                },
+                "tesa": {
+                    "value": "4",
+                    "explanation": null
+                }
+            }
+        },
+        "-forced-idr": {
+            "valueType": "boolean",
+            "explanation": "If forcing keyframes, force them as IDR frames. (default false)"
+        },
+        "-coder": {
+            "valueType": "int",
+            "explanation": "Coder type (from -1 to 1) (default default)",
+            "subValues": {
+                "default": {
+                    "value": "-1",
+                    "explanation": null
+                },
+                "cavlc": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "cabac": {
+                    "value": "1",
+                    "explanation": null
+                },
+                "vlc": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "ac": {
+                    "value": "1",
+                    "explanation": null
+                }
+            }
+        },
+        "-b_strategy": {
+            "valueType": "int",
+            "explanation": "Strategy to choose between I/P/B-frames (from -1 to 2) (default -1)"
+        },
+        "-chromaoffset": {
+            "valueType": "int",
+            "explanation": "QP difference between chroma and luma (from INT_MIN to INT_MAX) (default 0)"
+        },
+        "-sc_threshold": {
+            "valueType": "int",
+            "explanation": "Scene change threshold (from INT_MIN to INT_MAX) (default -1)"
+        },
+        "-noise_reduction": {
+            "valueType": "int",
+            "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default -1)"
+        },
+        "-x264-params": {
+            "valueType": "dictionary",
+            "explanation": "Override the x264 configuration using a :-separated list of key=value parameters"
+        }
+    },
+    "libx265": {
+        "-crf": {
+            "valueType": "float",
+            "explanation": "set the x265 crf (from -1 to FLT_MAX) (default -1)"
+        },
+        "-qp": {
+            "valueType": "int",
+            "explanation": "set the x265 qp (from -1 to INT_MAX) (default -1)"
+        },
+        "-forced-idr": {
+            "valueType": "boolean",
+            "explanation": "if forcing keyframes, force them as IDR frames (default false)"
+        },
+        "-preset": {
+            "valueType": "string",
+            "explanation": "set the x265 preset"
+        },
+        "-tune": {
+            "valueType": "string",
+            "explanation": "set the x265 tune parameter"
+        },
+        "-profile": {
+            "valueType": "string",
+            "explanation": "set the x265 profile"
+        },
+        "-x265-params": {
+            "valueType": "dictionary",
+            "explanation": "set the x265 configuration using a :-separated list of key=value parameters",
+            "subValues": {
+                "ssim":{
+                    "valueType":"boolean",
+                    "explanation":"xxx"
+                },
+                "rd":{
+                    "valueType":"int",
+                    "explanation":"xxx"
+                }
+            }
+        }
+    },
+    "libaom-av1": {
+        "-cpu-used": {
+            "valueType": "int",
+            "explanation": "Quality/Speed ratio modifier (from 0 to 8) (default 1)"
+        },
+        "-auto-alt-ref": {
+            "valueType": "int",
+            "explanation": "Enable use of alternate reference frames (2-pass only) (from -1 to 2) (default -1)"
+        },
+        "-lag-in-frames": {
+            "valueType": "int",
+            "explanation": "Number of frames to look ahead at for alternate reference frame selection (from -1 to INT_MAX) (default -1)"
+        },
+        "-arnr-max-frames": {
+            "valueType": "int",
+            "explanation": "altref noise reduction max frame count (from -1 to INT_MAX) (default -1)"
+        },
+        "-arnr-strength": {
+            "valueType": "int",
+            "explanation": "altref noise reduction filter strength (from -1 to 6) (default -1)"
+        },
+        "-aq-mode": {
+            "valueType": "int",
+            "explanation": "adaptive quantization mode (from -1 to 4) (default -1)",
+            "subValues": {
+                "none": {
+                    "value": "0",
+                    "explanation": "Aq not used"
+                },
+                "variance": {
+                    "value": "1",
+                    "explanation": "Variance based Aq"
+                },
+                "complexity": {
+                    "value": "2",
+                    "explanation": "Complexity based Aq"
+                },
+                "cyclic": {
+                    "value": "3",
+                    "explanation": "Cyclic Refresh Aq"
+                }
+            }
+        },
+        "-error-resilience": {
+            "valueType": "flags",
+            "explanation": "Error resilience configuration (default 0)",
+            "subValues": {
+                "default": {
+                    "value": "E..V.......",
+                    "explanation": "resiliency against losses of whole frames"
+                }
+            }
+        },
+        "-crf": {
+            "valueType": "int",
+            "explanation": "Select the quality for constant quality mode (from -1 to 63) (default -1)"
+        },
+        "-static-thresh": {
+            "valueType": "int",
+            "explanation": "A change threshold on blocks below which they will be skipped by the encoder (from 0 to INT_MAX) (default 0)"
+        },
+        "-drop-threshold": {
+            "valueType": "int",
+            "explanation": "Frame drop threshold (from INT_MIN to INT_MAX) (default 0)"
+        },
+        "-denoise-noise-level": {
+            "valueType": "int",
+            "explanation": "Amount of noise to be removed (from -1 to INT_MAX) (default -1)"
+        },
+        "-denoise-block-size": {
+            "valueType": "int",
+            "explanation": "Denoise block size (from -1 to INT_MAX) (default -1)"
+        },
+        "-undershoot-pct": {
+            "valueType": "int",
+            "explanation": "Datarate undershoot (min) target (%) (from -1 to 100) (default -1)"
+        },
+        "-overshoot-pct": {
+            "valueType": "int",
+            "explanation": "Datarate overshoot (max) target (%) (from -1 to 1000) (default -1)"
+        },
+        "-minsection-pct": {
+            "valueType": "int",
+            "explanation": "GOP min bitrate (% of target) (from -1 to 100) (default -1)"
+        },
+        "-maxsection-pct": {
+            "valueType": "int",
+            "explanation": "GOP max bitrate (% of target) (from -1 to 5000) (default -1)"
+        },
+        "-frame-parallel": {
+            "valueType": "boolean",
+            "explanation": "Enable frame parallel decodability features (default auto)"
+        },
+        "-tiles": {
+            "valueType": "image_size",
+            "explanation": "Tile columns x rows"
+        },
+        "-tile-columns": {
+            "valueType": "int",
+            "explanation": "Log2 of number of tile columns to use (from -1 to 6) (default -1)"
+        },
+        "-tile-rows": {
+            "valueType": "int",
+            "explanation": "Log2 of number of tile rows to use (from -1 to 6) (default -1)"
+        },
+        "-row-mt": {
+            "valueType": "boolean",
+            "explanation": "Enable row based multi-threading (default auto)"
+        },
+        "-enable-cdef": {
+            "valueType": "boolean",
+            "explanation": "Enable CDEF filtering (default auto)"
+        },
+        "-enable-global-motion": {
+            "valueType": "boolean",
+            "explanation": "Enable global motion (default auto)"
+        },
+        "-enable-intrabc": {
+            "valueType": "boolean",
+            "explanation": "Enable intra block copy prediction mode (default auto)"
+        },
+        "-enable-restoration": {
+            "valueType": "boolean",
+            "explanation": "Enable Loop Restoration filtering (default auto)"
+        },
+        "-usage": {
+            "valueType": "int",
+            "explanation": "Quality and compression efficiency vs speed trade-off (from 0 to INT_MAX) (default good)",
+            "subValues": {
+                "good": {
+                    "value": "0",
+                    "explanation": "Good quality"
+                },
+                "realtime": {
+                    "value": "1",
+                    "explanation": "Realtime encoding"
+                }
+            }
+        },
+        "-tune": {
+            "valueType": "int",
+            "explanation": "The metric that the encoder tunes for. Automatically chosen by the encoder by default (from -1 to 1) (default -1)",
+            "subValues": {
+                "psnr": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "ssim": {
+                    "value": "1",
+                    "explanation": null
+                }
+            }
+        },
+        "-enable-rect-partitions": {
+            "valueType": "boolean",
+            "explanation": "Enable rectangular partitions (default auto)"
+        },
+        "-enable-1to4-partitions": {
+            "valueType": "boolean",
+            "explanation": "Enable 1:4/4:1 partitions (default auto)"
+        },
+        "-enable-ab-partitions": {
+            "valueType": "boolean",
+            "explanation": "Enable ab shape partitions (default auto)"
+        },
+        "-enable-angle-delta": {
+            "valueType": "boolean",
+            "explanation": "Enable angle delta intra prediction (default auto)"
+        },
+        "-enable-cfl-intra": {
+            "valueType": "boolean",
+            "explanation": "Enable chroma predicted from luma intra prediction (default auto)"
+        },
+        "-enable-filter-intra": {
+            "valueType": "boolean",
+            "explanation": "Enable filter intra predictor (default auto)"
+        },
+        "-enable-intra-edge-filter": {
+            "valueType": "boolean",
+            "explanation": "Enable intra edge filter (default auto)"
+        },
+        "-enable-smooth-intra": {
+            "valueType": "boolean",
+            "explanation": "Enable smooth intra prediction mode (default auto)"
+        },
+        "-enable-paeth-intra": {
+            "valueType": "boolean",
+            "explanation": "Enable paeth predictor in intra prediction (default auto)"
+        },
+        "-enable-palette": {
+            "valueType": "boolean",
+            "explanation": "Enable palette prediction mode (default auto)"
+        },
+        "-enable-flip-idtx": {
+            "valueType": "boolean",
+            "explanation": "Enable extended transform type (default auto)"
+        },
+        "-enable-tx64": {
+            "valueType": "boolean",
+            "explanation": "Enable 64-pt transform (default auto)"
+        },
+        "-reduced-tx-type-set": {
+            "valueType": "boolean",
+            "explanation": "Use reduced set of transform types (default auto)"
+        },
+        "-use-intra-dct-only": {
+            "valueType": "boolean",
+            "explanation": "Use DCT only for INTRA modes (default auto)"
+        },
+        "-use-inter-dct-only": {
+            "valueType": "boolean",
+            "explanation": "Use DCT only for INTER modes (default auto)"
+        },
+        "-use-intra-default-tx-only": {
+            "valueType": "boolean",
+            "explanation": "Use default-transform only for INTRA modes (default auto)"
+        },
+        "-enable-ref-frame-mvs": {
+            "valueType": "boolean",
+            "explanation": "Enable temporal mv prediction (default auto)"
+        },
+        "-enable-reduced-reference-set": {
+            "valueType": "boolean",
+            "explanation": "Use reduced set of single and compound references (default auto)"
+        },
+        "-enable-obmc": {
+            "valueType": "boolean",
+            "explanation": "Enable obmc (default auto)"
+        },
+        "-enable-dual-filter": {
+            "valueType": "boolean",
+            "explanation": "Enable dual filter (default auto)"
+        },
+        "-enable-diff-wtd-comp": {
+            "valueType": "boolean",
+            "explanation": "Enable difference-weighted compound (default auto)"
+        },
+        "-enable-dist-wtd-comp": {
+            "valueType": "boolean",
+            "explanation": "Enable distance-weighted compound (default auto)"
+        },
+        "-enable-onesided-comp": {
+            "valueType": "boolean",
+            "explanation": "Enable one sided compound (default auto)"
+        },
+        "-enable-interinter-wedge": {
+            "valueType": "boolean",
+            "explanation": "Enable interinter wedge compound (default auto)"
+        },
+        "-enable-interintra-wedge": {
+            "valueType": "boolean",
+            "explanation": "Enable interintra wedge compound (default auto)"
+        },
+        "-enable-masked-comp": {
+            "valueType": "boolean",
+            "explanation": "Enable masked compound (default auto)"
+        },
+        "-enable-interintra-comp": {
+            "valueType": "boolean",
+            "explanation": "Enable interintra compound (default auto)"
+        },
+        "-enable-smooth-interintra": {
+            "valueType": "boolean",
+            "explanation": "Enable smooth interintra mode (default auto)"
+        },
+        "-aom-params": {
+            "valueType": "dictionary",
+            "explanation": "Set libaom options using a :-separated list of key=value pairs"
+        }
+    },
+    "flac": {
+        "-lpc_coeff_precision": {
+            "valueType": "int",
+            "explanation": "LPC coefficient precision (from 0 to 15) (default 15)"
+        },
+        "-lpc_type": {
+            "valueType": "int",
+            "explanation": "LPC algorithm (from -1 to 3) (default -1)",
+            "subValues": {
+                "none": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "fixed": {
+                    "value": "1",
+                    "explanation": null
+                },
+                "levinson": {
+                    "value": "2",
+                    "explanation": null
+                },
+                "cholesky": {
+                    "value": "3",
+                    "explanation": null
+                }
+            }
+        },
+        "-lpc_passes": {
+            "valueType": "int",
+            "explanation": "Number of passes to use for Cholesky factorization during LPC analysis (from 1 to INT_MAX) (default 2)"
+        },
+        "-min_partition_order": {
+            "valueType": "int",
+            "explanation": "(from -1 to 8) (default -1)"
+        },
+        "-max_partition_order": {
+            "valueType": "int",
+            "explanation": "(from -1 to 8) (default -1)"
+        },
+        "-prediction_order_method": {
+            "valueType": "int",
+            "explanation": "Search method for selecting prediction order (from -1 to 5) (default -1)",
+            "subValues": {
+                "estimation": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "2level": {
+                    "value": "1",
+                    "explanation": null
+                },
+                "4level": {
+                    "value": "2",
+                    "explanation": null
+                },
+                "8level": {
+                    "value": "3",
+                    "explanation": null
+                },
+                "search": {
+                    "value": "4",
+                    "explanation": null
+                },
+                "log": {
+                    "value": "5",
+                    "explanation": null
+                }
+            }
+        },
+        "-ch_mode": {
+            "valueType": "int",
+            "explanation": "Stereo decorrelation mode (from -1 to 3) (default auto)",
+            "subValues": {
+                "auto": {
+                    "value": "-1",
+                    "explanation": null
+                },
+                "indep": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "left_side": {
+                    "value": "1",
+                    "explanation": null
+                },
+                "right_side": {
+                    "value": "2",
+                    "explanation": null
+                },
+                "mid_side": {
+                    "value": "3",
+                    "explanation": null
+                }
+            }
+        },
+        "-exact_rice_parameters": {
+            "valueType": "boolean",
+            "explanation": "Calculate rice parameters exactly (default false)"
+        },
+        "-multi_dim_quant": {
+            "valueType": "boolean",
+            "explanation": "Multi-dimensional quantization (default false)"
+        },
+        "-min_prediction_order": {
+            "valueType": "int",
+            "explanation": "(from -1 to 32) (default -1)"
+        },
+        "-max_prediction_order": {
+            "valueType": "int",
+            "explanation": "(from -1 to 32) (default -1)"
+        }
+    }
+}
