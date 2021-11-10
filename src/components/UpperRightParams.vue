@@ -33,9 +33,11 @@ export default {
         for(let [key, value] of Object.entries(this.showingParams[searchType])){
           if (key == param || param.startsWith('-c:')){
             if (value.valueType.startsWith('dic')){
-              this.parameterObject = value.subValues
-              this.currentDict = key
-              this.isSubParam = true
+              this.$nextTick(function(){
+                this.parameterObject = value.subValues
+                this.currentDict = key
+                this.isSubParam = true
+              })
               break
             }
             else

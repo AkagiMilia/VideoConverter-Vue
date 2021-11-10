@@ -223,12 +223,12 @@ export default {
       // load the current video format from input parameters
       console.log('current Video has been triggered')
       var curV = ''
-      Object.keys(this.currentParameter['video']).forEach((key)=>{
+      for (let key of Object.keys(this.currentParameter['video'])){
         if (key.startsWith('-c:')){
           curV = this.currentParameter['video'][key]
-          return
+          break
         }
-      })
+      }
       this.currentFormat = curV
       this.currentType = 'video'
       return curV
@@ -237,12 +237,12 @@ export default {
       // load the current video format from input parameters
       console.log('current Audio has been triggered')
       var curA = ''
-      Object.keys(this.currentParameter['audio']).forEach((key)=>{
+      for (let key of Object.keys(this.currentParameter['audio'])){
         if (key.startsWith('-c:')){
           curA = this.currentParameter['audio'][key]
-          return
+          break
         }
-      })
+      }
       this.currentFormat = curA
       this.currentType = 'audio'
       return curA
@@ -299,6 +299,7 @@ export default {
         this.currentFormat = this.currentVideo
       else if (type=='audio')
         this.currentFormat = this.currentAudio
+      this.currentType = type
     },
     ...mapMutations('indexData', ['loadGuidance'])
   },
@@ -381,7 +382,7 @@ export default {
   }
 
   #divLower{
-    height: 70%;
+    height: auto;
     margin-top: 3%;
   }
 

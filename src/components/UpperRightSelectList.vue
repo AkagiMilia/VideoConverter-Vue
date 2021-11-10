@@ -1,6 +1,6 @@
 <template>
   <ul class="list-group">
-    <li class="list-group-item" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click.stop="paramClick(param)">
+    <li class="list-group-item" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click="paramClick(param)">
       <span>{{param}}</span>
       <span v-if="typeof Selected[param] == 'string'" v-show="param!=nowFocus">  {{value}}</span>
       <input 
