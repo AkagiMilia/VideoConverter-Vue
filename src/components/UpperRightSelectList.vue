@@ -1,25 +1,30 @@
 <template>
-  <ul class="list-group">
+  <ul class="list-group" ref="test">
     <li class="list-group-item" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click="paramClick(param)">
       <span>{{param}}</span>
       <span v-if="typeof Selected[param] == 'string'" v-show="param!=nowFocus">  {{value}}</span>
-      <input 
+      <a-auto-complete
         type="text" 
+        :data-source="dataSource"
         v-if="typeof Selected[param] == 'string'"
-        v-model.trim.lazy="Selected[param]"
+        v-model.trim="Selected[param]"
         v-show="param==nowFocus"
         @blur="paramExit(param, null, $event)"
+        @focus="paramFocus"
+        @search="onSearch"
         :ref="'input'+param"
         />
       <ul class="list-group" v-if="typeof Selected[param] == 'object'">
         <li class="list-group-item" :class="warningStyles[subParam]" v-for="(subVal, subParam) in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
           <span>{{subParam}}</span>
           <span v-show="subParam!=nowFocus">  {{subVal}}</span>
-          <input 
+          <a-auto-complete 
             type="text" 
-            v-model.trim.lazy="Selected[param][subParam]"
+            :data-source="dataSource"
+            v-model.trim="Selected[param][subParam]"
             v-show="subParam==nowFocus"
             @blur="paramExit(param, subParam, $event)"
+            @search="onSearch"
             :ref="'input'+subParam"
             />
         </li>
@@ -36,7 +41,8 @@ export default {
   data() {
     return {
       nowFocus:'',
-      busy:false
+      busy:false,
+      dataSource:[]
     }
   },
   computed:{
@@ -67,22 +73,30 @@ export default {
   },
   methods: {
     paramClick(param, father=null){
-      this.nowFocus = param
-      this.$nextTick(function(){
+      
+      setTimeout(() => {
+        this.nowFocus = param
         var refName = 'input'+param
-        if (refName in this.$refs && this.$refs[refName][0])
+        if (refName in this.$refs && this.$refs[refName][0]){
+          console.log('ref auto-complete:', this.$refs[refName][0]);
           this.$refs[refName][0].focus()
-      })
+        }
+      }, 200);
       this.$bus.$emit('updateFormat', this.type)
-      if (father)
+      
+      if (father){
         this.$bus.$emit('searchParameter', father, this.type)
-      else
+        this.$bus.$emit('showGuidance', param, this.showingParams[this.currentFormat][father]['subValues'][param])
+      }  
+      else{
         this.$bus.$emit('searchParameter', param, this.type)
+        this.$bus.$emit('showGuidance', param, this.showingParams[this.currentFormat][param])
+      }  
     },
-    paramExit(param,subParam,event){
-      console.log('param:',param);
-      console.log('subParam:',subParam);
-      if (!event.target.value.trim()){
+    paramExit(param,subParam,value){
+      console.log('param:',param)
+      console.log('subParam:',subParam)
+      if (!value.trim()){
         if (subParam)
           this.Selected[param][subParam] = '1'
         else
@@ -90,6 +104,7 @@ export default {
       }
       this.nowFocus = ''
       this.sendParam({...this.Selected})
+      this.dataSource = []
     },
     sendParam(curVal){
       var newObj = {}
@@ -98,6 +113,14 @@ export default {
         }
         this.$bus.$emit('updateParams', newObj, this.type)
     },
+    onSearch(){
+      if (this.showingParams[this.currentFormat][this.nowFocus]['subValues']){
+        this.dataSource = Object.keys(this.showingParams[this.currentFormat][this.nowFocus]['subValues'])
+      }
+    },
+    paramFocus(){
+      this.onSearch()
+    }
   },
   beforeMount() {
     // Object.keys(this.currentParameter[this.type]).forEach((key)=>{
