@@ -1,5 +1,6 @@
 <template>
-  <div class="col shadow-sm bg-body rounded mt-3" id="divParamPicked">
+  <a-col :span="12" class="shadow-sm border px-3" id="divParamPicked">
+    <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" class="divSelectList" :style="{height:localHeight+'px'}">
     <UpperRightSelectList
       :currentParameter="currentParameter"
       :currentFormat="currentVideo"
@@ -10,7 +11,8 @@
       :currentFormat="currentAudio"
       type="audio"
     />
-  </div>
+    </div>
+  </a-col>
 </template>
 
 <script>
@@ -20,17 +22,26 @@ export default {
   components:{
     UpperRightSelectList,
   },
-  props:['currentParameter','currentProjectId','currentVideo', 'currentAudio'],
+  props:['currentParameter','currentProjectId','currentVideo', 'currentAudio', 'localHeight'],
   data() {
     return {
-      thereIsNothingHere:null
+      thereIsNothingHere:null,
+      busy:false
     }
   },
+  methods: {
+    loadMore(){
+      this.busy = false
+    }
+  },  
 }
 </script>
 
 <style scoped>
   #divParamPicked{
     height: 100%;
-}
+  }
+  .divSelectList {
+    overflow: auto;
+  }
 </style>

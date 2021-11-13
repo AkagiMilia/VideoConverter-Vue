@@ -1,38 +1,45 @@
 <template>
-  <div class="col-12" id="divAll" v-cloak>
-    <div class="row" id="divUpper">
-      <div class="col-6" id="divUpperLeft">
-        <UpperLeftProjects :projects="projects"/>
-        <UpperLeftGuide/>
-      </div>
-      <div class="col" id="divUpperRight">
-        <div class="row" id="divUpperRightRow">
-          <UpperRightSelect 
-            :currentParameter="currentParameter" 
-            :currentProjectId="currentProjectId" 
-            :currentAudio="currentAudio"
-            :currentVideo="currentVideo"
-          />
-          <UpperRightParams 
-          :currentVideo="currentVideo"
+  <div id="divAll" :style="{height:windowHeight+'px'}">
+    <a-row type="flex" justify="center" align="top" :gutter="[16,16]">
+      <a-col :span="12">
+        <a-space direction="vertical" style="width:100%" >
+          <UpperLeftProjects :projects="projects" :currentProjectId="currentProjectId" :localHeight="windowHeight*0.3"/>
+          <UpperLeftGuide :localHeight="windowHeight*0.2"/> 
+        </a-space>
+      </a-col>
+      <a-col :span="12" :gutter="[16,16]">
+        <UpperRightSelect 
+          :currentParameter="currentParameter" 
+          :currentProjectId="currentProjectId" 
           :currentAudio="currentAudio"
-          :currentFormat="currentFormat"
-          :currentType="currentType"
-          :currentParameter="currentParameter"
-          />
-        </div>
-      </div>
-    </div>
-    <div class="row" id="divLower">
+          :currentVideo="currentVideo"
+          :localHeight="windowHeight*0.5"
+        />
+        <UpperRightParams 
+        :currentVideo="currentVideo"
+        :currentAudio="currentAudio"
+        :currentFormat="currentFormat"
+        :currentType="currentType"
+        :currentParameter="currentParameter"
+        :localHeight="windowHeight*0.5"
+        />
+      </a-col>
+    </a-row>
+
+    
+    <a-row type="flex" justify="center" align="top"> 
       <LowerCodeArea 
         :parameters="parameters" 
         :currentParameter="currentParameter" 
         :currentProjectId="currentProjectId"
         :currentFormat="currentFormat"
       />
-      <LowerCodeDisplay :command="cmdLine"/>
-    </div>
+      <LowerCodeDisplay :command="cmdLine"/>`
+    </a-row>
+    
+
   </div>
+  
 </template>
 
 <script>
@@ -146,7 +153,8 @@ export default {
       ],
       currentProjectId:'',
       currentFormat:'',
-      currentType:''
+      currentType:'',
+      windowHeight:document.body.clientHeight
     }
   },
   computed:{
@@ -341,6 +349,10 @@ export default {
     const guidancePath = path.join(__static, 'Guidance.json')
     this.loadGuidance(guidancePath)
 
+    window.onresize = ()=>{
+      this.windowHeight = document.body.clientHeight
+    }
+
   },
 }
 </script>
@@ -355,19 +367,12 @@ export default {
     margin-top: 60px;
   }
 
-  html,body{
-    background-color: rgb(238, 238, 238);
-    height: 77%;
-    width: 99%;
-  }
-
   [v-cloak]{
     display: none;
   }
 
   #divAll{
-    padding-left: 2%;
-    height: 100%;
+    padding: 2%;
   }
 
   #divUpper{

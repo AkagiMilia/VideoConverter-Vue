@@ -3,12 +3,17 @@ import Antd from 'ant-design-vue'
 import App from './App.vue'
 import 'ant-design-vue/dist/antd.css'
 import store from './store/index'
+import VueVirtualScroller from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import infiniteScroll from 'vue-infinite-scroll'
 Vue.config.productionTip = false
 
 // var sqlite3 = require('sqlite3').verbose();
 import sqlite3 from 'sqlite3'
 // var db = new sqlite3.Database('./src/data/database.db');
 Vue.use(Antd)
+Vue.use(VueVirtualScroller)
+Vue.use(infiniteScroll)
 
 const vm = new Vue({
   el:'#app',

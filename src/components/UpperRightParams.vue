@@ -1,24 +1,33 @@
 <template>
-  <div class="col shadow-sm bg-body rounded mt-3 ms-3" id="divParamLists">
+  <a-col :span="12" class="shadow-sm border px-3" id="divParamLists">
+    <div 
+      v-infinite-scroll="loadMore" 
+      infinite-scroll-disabled="busy" 
+      infinite-scroll-distance="10" 
+      class="divParamList" 
+      :style="{height:localHeight+'px'}"
+    >
     <ul class="list-group">
       <li class="list-group-item" :class="selectedStyles[key]" v-for="(param, key) in parameterObject" :key='key' @click="addParam(key, param)" @mouseenter="showGuidance(key, param)">
         <span>{{key}}</span>
         <span> {{param.valueType}}</span>
       </li>
     </ul>
-  </div>
+    </div>
+  </a-col>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
 export default {
   name:'UpperRightParams',
-  props:['currentAudio', 'currentVideo', 'currentFormat', 'currentType', 'currentParameter'],
+  props:['currentAudio', 'currentVideo', 'currentFormat', 'currentType', 'currentParameter', 'localHeight'],
   data(){
     return{
       parameterObject:{},
       currentDict:'',
-      isSubParam:false
+      isSubParam:false,
+      busy:false
     }
   },
   methods: {
@@ -68,6 +77,9 @@ export default {
     },
     showGuidance(key, param){
       this.$bus.$emit('showGuidance', key, param)
+    },
+    loadMore(){
+      this.busy = false
     }
   },
   computed:{
@@ -107,5 +119,8 @@ export default {
 <style scoped>
   #divParamLists{
     height: 100%;
-}
+  }
+  .divParamList{
+    overflow: auto;
+  }
 </style>

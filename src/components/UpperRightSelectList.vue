@@ -36,6 +36,7 @@ export default {
   data() {
     return {
       nowFocus:'',
+      busy:false
     }
   },
   computed:{
@@ -96,7 +97,7 @@ export default {
           newObj[key] = value
         }
         this.$bus.$emit('updateParams', newObj, this.type)
-    }
+    },
   },
   beforeMount() {
     // Object.keys(this.currentParameter[this.type]).forEach((key)=>{
@@ -114,5 +115,5 @@ export default {
 <style scoped>
   #divParamPicked{
     height: 100%;
-}
+  }
 </style>
