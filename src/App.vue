@@ -87,11 +87,10 @@ export default {
               fileId:nanoid(),
               filePath:'Elerye_-_Edera.mp4',
               fileName:'Elerye_-_Edera.mp4',
-              streams:{
-                0:{code_name:'h264', code_type:'video'},
-                1:{code_name:'aac', code_type:'audio'}
-              },
-              streamsUsed:{0:true, 1:true},
+              streams:[
+                {index:0, code_name:'h264', code_type:'video', used:true},
+                {index:1, code_name:'aac', code_type:'audio', used:true}
+              ],
               fileParams:['-itsoffset', `0ms`]
             },
           ],
@@ -109,10 +108,9 @@ export default {
               filePath:'UmaLive02.mkv',
               fileName:'UmaLive02.mkv',
               streams:[
-                {index:0, code_name:'hevc', code_type:'video'},
-                {index:1, code_name:'flac', code_type:'audio'}
+                {index:0, code_name:'hevc', code_type:'video', used:true},
+                {index:1, code_name:'flac', code_type:'audio', used:true}
               ],
-              streamsUsed:{0:true, 1:true},
               fileParams:[]
             },
           ],
@@ -173,10 +171,10 @@ export default {
       // add map info
       var fileIndex = 0
       currentProject.inputFiles.forEach((file)=>{
-        for (let [index, bool] of Object.entries(file.streamsUsed)){
-          if (bool){
+        for (let stream of file.streams){
+          if (stream.used){
             cmd.push('-map')
-            cmd.push(`${fileIndex}:${index}`)
+            cmd.push(`${fileIndex}:${stream.index}`)
           }
         }
         fileIndex += 1
@@ -309,6 +307,12 @@ export default {
         this.currentFormat = this.currentAudio
       this.currentType = type
     },
+    changeStreamState(fileId, streamId, used){
+      var currentProject = this.projects.filter(project => project.projectId == this.currentProjectId)[0]
+      var currentFile = currentProject.inputFiles.filter(file => file.fileId == fileId)[0]
+      var currentStream = currentFile.streams.filter(stream => stream.index == streamId)[0]
+      currentStream.used = used
+    },
     ...mapMutations('indexData', ['loadGuidance'])
   },
   watch:{
@@ -345,6 +349,7 @@ export default {
     this.$bus.$on('changeProject', this.getProject)
     this.$bus.$on('addParam', this.addParam)
     this.$bus.$on('updateFormat', this.updateFormat)
+    this.$bus.$on('changeStreamState', this.changeStreamState)
     const path = require('path')
     const guidancePath = path.join(__static, 'Guidance.json')
     this.loadGuidance(guidancePath)

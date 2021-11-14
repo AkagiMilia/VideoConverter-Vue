@@ -7,7 +7,7 @@
         type="text" 
         :data-source="dataSource"
         v-if="typeof Selected[param] == 'string'"
-        v-model.trim="Selected[param]"
+        v-model.trim.lazy="Selected[param]"
         v-show="param==nowFocus"
         @blur="paramExit(param, null, $event)"
         @focus="paramFocus"
@@ -21,7 +21,7 @@
           <a-auto-complete 
             type="text" 
             :data-source="dataSource"
-            v-model.trim="Selected[param][subParam]"
+            v-model.trim.lazy="Selected[param][subParam]"
             v-show="subParam==nowFocus"
             @blur="paramExit(param, subParam, $event)"
             @search="onSearch"
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { TouchBarOtherItemsProxy } from 'electron'
 import { mapState } from 'vuex'
 export default {
   name:'UpperRightSelectList',
@@ -90,7 +91,8 @@ export default {
       }  
       else{
         this.$bus.$emit('searchParameter', param, this.type)
-        this.$bus.$emit('showGuidance', param, this.showingParams[this.currentFormat][param])
+        if (!param.startsWith('-c'))
+          this.$bus.$emit('showGuidance', param, this.showingParams[this.currentFormat][param])
       }  
     },
     paramExit(param,subParam,value){
@@ -114,8 +116,12 @@ export default {
         this.$bus.$emit('updateParams', newObj, this.type)
     },
     onSearch(){
-      if (this.showingParams[this.currentFormat][this.nowFocus]['subValues']){
-        this.dataSource = Object.keys(this.showingParams[this.currentFormat][this.nowFocus]['subValues'])
+      try {
+        if (this.showingParams[this.currentFormat][this.nowFocus]['subValues']){
+          this.dataSource = Object.keys(this.showingParams[this.currentFormat][this.nowFocus]['subValues'])
+        }
+      } catch (error) {
+        console.log('%c Object Read Error', 'color:orange');
       }
     },
     paramFocus(){

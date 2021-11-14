@@ -23,6 +23,15 @@
       <a-tab-pane v-for="(project, index) in projects" :key="project.projectId" :tab="`project-${index}`" @click="selectProject(project)">
         <a-card v-for="file in project.inputFiles" :key="file.fileId" size="small" :title="file.fileName" style="width: 100%">
           <p>{{file.filePath}}</p>
+          <a-row>
+            <a-checkbox 
+              v-for="(streamInfo, index) in file.streams" 
+              :key="index" 
+              :defaultChecked="streamInfo.used"
+              @change="onChange(file.fileId, streamInfo.index, $event)">
+                {{index}}:{{streamInfo.code_type}}, {{streamInfo.code_name}}
+            </a-checkbox>
+          </a-row>
         </a-card>
       </a-tab-pane>
     </a-tabs>
@@ -59,6 +68,12 @@ export default {
     },
     onLoad(val){
       this.$bus.$emit('changeProject', val)
+    },
+    onChange(fileId, streamId, event){
+      console.log(`Now get fileId: ${fileId}`)
+      console.log(`Now get streamId: ${streamId}`)
+      console.log(event.target.checked)
+      this.$bus.$emit('changeStreamState', fileId, streamId, event.target.checked)
     }
   },
   mounted() {
