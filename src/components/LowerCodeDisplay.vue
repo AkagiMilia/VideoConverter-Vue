@@ -27,7 +27,7 @@ export default {
     }
   },
   methods: {
-    runFFmpeg(){                            // runFFmpeg
+    runFFmpeg(){
       const head = this.command[0]
       const commandList = this.command.slice(1, this.command.length)
       console.log('head:',head);

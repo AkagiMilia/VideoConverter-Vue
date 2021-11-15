@@ -28,6 +28,7 @@
           :style="{height:localHeight*0.7+'px'}"
         >
           <a-button type="primary" @click="clickAddFile(project)">
+            <a-icon type="plus" class="align-middle mb-1"/>
             Add File
           </a-button>
           <input 
@@ -99,6 +100,7 @@ export default {
       this.$refs[`loadFor${project.projectId}`][0].click()
     },
     addFile(event){
+      console.log('targetInfo', event);
       console.log('file info', event.target.files);
       var newFiles = []
       for (let file of event.target.files){
@@ -121,6 +123,7 @@ export default {
           newFiles.push(newFile)
           console.log(newFiles);
           this.$bus.$emit('addNewFiles', newFiles)
+          event.target.value = ''
         })
       }
     },

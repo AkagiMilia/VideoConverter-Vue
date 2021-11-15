@@ -326,6 +326,11 @@ export default {
       var currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
       currentProject.inputFiles = [...currentProject.inputFiles, ...newFiles]
     },
+    removeFile(fileId){
+      var currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
+      var currentFile = currentProject.inputFiles.filter(file => file.fileId != fileId)
+      currentProject.inputFiles = [...currentFile]
+    },
     ...mapMutations('indexData', ['loadGuidance'])
   },
   watch:{
@@ -364,6 +369,7 @@ export default {
     this.$bus.$on('updateFormat', this.updateFormat)
     this.$bus.$on('changeStreamState', this.changeStreamState)
     this.$bus.$on('addNewFiles', this.addNewFiles)
+    this.$bus.$on('removeFile', this.removeFile)
     const path = require('path')
     const guidancePath = path.join(__static, 'Guidance.json')
     this.loadGuidance(guidancePath)
