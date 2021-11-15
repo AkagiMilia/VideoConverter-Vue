@@ -3,7 +3,11 @@
     <a-row type="flex" justify="center" align="top" :gutter="[16,16]">
       <a-col :span="12">
         <a-space direction="vertical" style="width:100%" >
-          <UpperLeftProjects :projects="projects" :currentProjectId="currentProjectId" :localHeight="windowHeight*0.3"/>
+          <UpperLeftProjects 
+            :projects="projects" 
+            :currentProjectId="currentProjectId" 
+            :FFmpegPath="FFmpegPath"
+            :localHeight="windowHeight*0.3"/>
           <UpperLeftGuide :localHeight="windowHeight*0.2"/> 
         </a-space>
       </a-col>
@@ -88,15 +92,15 @@ export default {
               filePath:'Elerye_-_Edera.mp4',
               fileName:'Elerye_-_Edera.mp4',
               streams:[
-                {index:0, code_name:'h264', code_type:'video', used:true},
-                {index:1, code_name:'aac', code_type:'audio', used:true}
+                {index:0, codec_name:'h264', codec_type:'video', used:true},
+                {index:1, codec_name:'aac', codec_type:'audio', used:true}
               ],
               fileParams:['-itsoffset', `0ms`]
             },
           ],
           outputFilePath:'Elerye_-_Edera fast 264.mp4',
           outputFileName:'Elerye_-_Edera fast 264.mp4',
-          outputParas:['-y']
+          outputParams:['-y']
         },
         // example.project2
         { 
@@ -108,15 +112,15 @@ export default {
               filePath:'UmaLive02.mkv',
               fileName:'UmaLive02.mkv',
               streams:[
-                {index:0, code_name:'hevc', code_type:'video', used:true},
-                {index:1, code_name:'flac', code_type:'audio', used:true}
+                {index:0, codec_name:'hevc', codec_type:'video', used:true},
+                {index:1, codec_name:'flac', codec_type:'audio', used:true}
               ],
               fileParams:[]
             },
           ],
           outputFilePath:'UmaLive02.mp4',
           outputFileName:'UmaLive02.mp4',
-          outputParas:['-y']
+          outputParams:['-y']
         }
       ],
       parameters:[
@@ -157,8 +161,8 @@ export default {
   },
   computed:{
     cmdLine(){
-      var currentProjectParams = this.parameters.filter(project => project.projectId == this.currentProjectId)[0]
-      var currentProject = this.projects.filter(project => project.projectId == this.currentProjectId)[0]
+      var currentProjectParams = this.parameters.find(project => project.projectId == this.currentProjectId)
+      var currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
       // base address ffmpeg
       var cmd = [this.FFmpegPath]
       // add input files and their input parameters
@@ -215,7 +219,7 @@ export default {
       cmd = cmd.concat(cmdBlock)
 
       // add output params and path
-      cmd = cmd.concat(currentProject.outputParas)
+      cmd = cmd.concat(currentProject.outputParams)
       cmd.push(`${currentProject.outputFilePath}`)
 
       return cmd
@@ -308,10 +312,19 @@ export default {
       this.currentType = type
     },
     changeStreamState(fileId, streamId, used){
-      var currentProject = this.projects.filter(project => project.projectId == this.currentProjectId)[0]
-      var currentFile = currentProject.inputFiles.filter(file => file.fileId == fileId)[0]
-      var currentStream = currentFile.streams.filter(stream => stream.index == streamId)[0]
+      console.log('fileId:', fileId)
+      console.log('streamId:', streamId)
+      
+      var currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
+      console.log('currentProject:', currentProject.projectId)
+      var currentFile = currentProject.inputFiles.find(file => file.fileId == fileId)
+      console.log('currentFile:', currentFile.fileId)
+      var currentStream = currentFile.streams.find(stream => stream.index == streamId)
       currentStream.used = used
+    },
+    addNewFiles(newFiles){
+      var currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
+      currentProject.inputFiles = [...currentProject.inputFiles, ...newFiles]
     },
     ...mapMutations('indexData', ['loadGuidance'])
   },
@@ -350,6 +363,7 @@ export default {
     this.$bus.$on('addParam', this.addParam)
     this.$bus.$on('updateFormat', this.updateFormat)
     this.$bus.$on('changeStreamState', this.changeStreamState)
+    this.$bus.$on('addNewFiles', this.addNewFiles)
     const path = require('path')
     const guidancePath = path.join(__static, 'Guidance.json')
     this.loadGuidance(guidancePath)

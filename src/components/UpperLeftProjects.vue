@@ -17,22 +17,43 @@
     <a-tabs
       :default-active-key="currentProjectId"
       tab-position="top"
-      :style="{ height: '200px' }"
-      @tabClick="onLoad"
+      @tabClick="switchProject"
     >
       <a-tab-pane v-for="(project, index) in projects" :key="project.projectId" :tab="`project-${index}`" @click="selectProject(project)">
-        <a-card v-for="file in project.inputFiles" :key="file.fileId" size="small" :title="file.fileName" style="width: 100%">
-          <p>{{file.filePath}}</p>
-          <a-row>
-            <a-checkbox 
-              v-for="(streamInfo, index) in file.streams" 
-              :key="index" 
-              :defaultChecked="streamInfo.used"
-              @change="onChange(file.fileId, streamInfo.index, $event)">
-                {{index}}:{{streamInfo.code_type}}, {{streamInfo.code_name}}
-            </a-checkbox>
-          </a-row>
-        </a-card>
+        <div 
+          v-infinite-scroll="loadMore" 
+          infinite-scroll-disabled="busy" 
+          infinite-scroll-distance="10" 
+          class="divFileCard" 
+          :style="{height:localHeight*0.7+'px'}"
+        >
+          <a-button type="primary" @click="clickAddFile(project)">
+            Add File
+          </a-button>
+          <input 
+            type="file" 
+            placeholder="Basic usage" 
+            style="display:none;" 
+            :ref="`loadFor${project.projectId}`" 
+            @change="addFile"
+          />
+          <a-card v-for="file in project.inputFiles" :key="file.fileId" size="small" :title="file.fileName" style="width: 100%">
+            <a-button type="danger" slot="extra" @click="removeFile(file.fileId)">
+              Delete
+              <a-icon type="delete" class="align-middle mb-1"/>
+            </a-button>
+            <p>{{file.filePath}}</p>
+            <a-row>
+              <a-checkbox 
+                v-for="(streamInfo, index) in file.streams" 
+                :key="index" 
+                :defaultChecked="streamInfo.used"
+                @change="onChangeMap(file.fileId, streamInfo.index, $event)">
+                  {{index}}: {{streamInfo.codec_type}}, {{streamInfo.codec_name}}
+              </a-checkbox>
+            </a-row>
+          </a-card>
+        </div>
       </a-tab-pane>
     </a-tabs>
   </a-row>  
@@ -40,18 +61,17 @@
 
 <script>
 import { mapState } from 'vuex';
-var testProjects = []
-for (var i = 0;i<=100;i++){
-  testProjects.push({projectId:i, inputFile:[i]})
-}
+import { exec } from 'child_process'
+import { nanoid } from 'nanoid'
+
+
 export default {
   name:'UpperLeftProjects',
   props:['projects', 'currentProjectId', 'localHeight'],
   data() {
     return {
       activeKey:[],
-      busy:true,
-      testProjects
+      busy:false,
     }
   },
   computed:{
@@ -66,14 +86,49 @@ export default {
       console.log(project.projectId);
       this.$bus.$emit('changeProject', project.projectId)
     },
-    onLoad(val){
+    switchProject(val){
       this.$bus.$emit('changeProject', val)
     },
-    onChange(fileId, streamId, event){
+    onChangeMap(fileId, streamId, event){
       console.log(`Now get fileId: ${fileId}`)
       console.log(`Now get streamId: ${streamId}`)
       console.log(event.target.checked)
       this.$bus.$emit('changeStreamState', fileId, streamId, event.target.checked)
+    },
+    clickAddFile(project){
+      this.$refs[`loadFor${project.projectId}`][0].click()
+    },
+    addFile(event){
+      console.log('file info', event.target.files);
+      var newFiles = []
+      for (let file of event.target.files){
+        var newFile = {}
+        newFile.fileId = nanoid()
+        newFile.filePath = file.path
+        newFile.fileName = file.name
+        var streams = []
+        exec(`ffprobe -i "${file.path}" -show_streams -of json`, (error, stdout, stderr)=>{
+          if (error){
+            console.log(error)
+          }
+          streams = [...JSON.parse(stdout).streams]
+          newFile.streams = streams
+          console.log(newFile.streams);
+          for (let stream of newFile.streams){
+            stream.used = true
+          }
+          newFile.fileParams = []
+          newFiles.push(newFile)
+          console.log(newFiles);
+          this.$bus.$emit('addNewFiles', newFiles)
+        })
+      }
+    },
+    removeFile(fileId){
+      this.$bus.$emit('removeFile', fileId)
+    },
+    loadMore(){
+      this.busy = false
     }
   },
   mounted() {
@@ -107,5 +162,9 @@ export default {
     padding: 0 12px;
     display: flex;
     align-items: center;
+  }
+
+  .divFileCard{
+    overflow: auto;
   }
 </style>
