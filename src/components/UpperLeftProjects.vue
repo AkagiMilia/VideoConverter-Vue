@@ -19,13 +19,13 @@
       tab-position="top"
       @tabClick="switchProject"
     >
-      <a-tab-pane v-for="(project, index) in projects" :key="project.projectId" :tab="`project-${index}`" @click="selectProject(project)">
+      <a-tab-pane v-for="(project, index) in projects" :key="project.projectId" :tab="`Project-${index+1}`" @click="selectProject(project)">
         <div 
           v-infinite-scroll="loadMore" 
           infinite-scroll-disabled="busy" 
           infinite-scroll-distance="10" 
           class="divFileCard" 
-          :style="{height:localHeight*0.7+'px'}"
+          :style="{height:localHeight-80+'px'}"
         >
           <a-button type="primary" @click="clickAddFile(project)">
             <a-icon type="plus" class="align-middle mb-1"/>
@@ -79,10 +79,6 @@ export default {
     ...mapState('indexData', ['showingParams'])
   },
   methods: {
-    getProjects(projects){
-      console.log(projects);
-      this.projects = projects
-    },
     selectProject(project){
       console.log(project.projectId);
       this.$bus.$emit('changeProject', project.projectId)
@@ -133,10 +129,7 @@ export default {
     loadMore(){
       this.busy = false
     }
-  },
-  mounted() {
-    // this.$bus.$on('transProjects', this.getProjects)
-  },
+  }
 }
 </script>
 

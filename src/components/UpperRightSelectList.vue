@@ -91,7 +91,7 @@ export default {
       }  
       else{
         this.$bus.$emit('searchParameter', param, this.type)
-        if (!param.startsWith('-c'))
+        if (!param.startsWith('-c:'))
           this.$bus.$emit('showGuidance', param, this.showingParams[this.currentFormat][param])
       }  
     },
