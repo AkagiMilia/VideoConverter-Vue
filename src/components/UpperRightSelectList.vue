@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import { TouchBarOtherItemsProxy } from 'electron'
 import { mapState } from 'vuex'
 export default {
   name:'UpperRightSelectList',
@@ -129,14 +128,6 @@ export default {
     }
   },
   beforeMount() {
-    // Object.keys(this.currentParameter[this.type]).forEach((key)=>{
-    //   if (key.includes('-c:')){
-    //     this.currentForm = this.currentParameter[this.type][key]
-    //     console.log('this for is:', this.currentForm);
-    //     return
-    //   }
-    // })
-    // console.log(typeof this.Selected['-crf'] == 'object')
   },
 }
 </script>

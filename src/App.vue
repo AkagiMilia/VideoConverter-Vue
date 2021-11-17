@@ -7,7 +7,10 @@
             :projects="projects" 
             :currentProjectId="currentProjectId" 
             :FFmpegPath="FFmpegPath"
-            :localHeight="windowHeight*0.3"/>
+            :localHeight="windowHeight*0.3"
+            :windowWidth="windowWidth"
+          />
+            
           <UpperLeftGuide :localHeight="windowHeight*0.2"/> 
         </a-space>
       </a-col>
@@ -156,7 +159,8 @@ export default {
       currentProjectId:'',
       currentFormat:'',
       currentType:'',
-      windowHeight:document.body.clientHeight
+      windowHeight:document.body.clientHeight,
+      windowWidth:document.body.clientWidth
     }
   },
   computed:{
@@ -274,28 +278,21 @@ export default {
       var defaultVal = '1'
       if (value.valueType.startsWith('bool'))
         defaultVal = 'true'
-      else if(value.valueType.startsWith('str')){
-        if ('subValues' in value)
-         defaultVal = value['subValues'][0]
+      else if ('subValues' in value){
+        if (value.valueType.startsWith('int'))
+          defaultVal = '1' 
         else
-          defaultVal = '1'
-      }        
-
-      if (father){
-        this.parameters.forEach((target)=>{
-          if (target.projectId == this.currentProjectId){
+          defaultVal = Object.keys(value['subValues'])[0]
+      }   
+        
+      for (let target of this.parameters){
+        if (target.projectId == this.currentProjectId){
+          if (father)
             this.$set(target[type][father], key, defaultVal)
-            return
-          }
-        })
-      }
-      else{
-        this.parameters.forEach((target)=>{
-          if (target.projectId == this.currentProjectId){
+          else
             this.$set(target[type], key, defaultVal)
-            return
-          }
-        })
+          break
+        }
       }
     },
     // change current project(by project list)
@@ -311,14 +308,9 @@ export default {
         this.currentFormat = this.currentAudio
       this.currentType = type
     },
-    changeStreamState(fileId, streamId, used){
-      console.log('fileId:', fileId)
-      console.log('streamId:', streamId)
-      
+    changeStreamState(fileId, streamId, used){     
       var currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
-      console.log('currentProject:', currentProject.projectId)
       var currentFile = currentProject.inputFiles.find(file => file.fileId == fileId)
-      console.log('currentFile:', currentFile.fileId)
       var currentStream = currentFile.streams.find(stream => stream.index == streamId)
       currentStream.used = used
     },
@@ -376,6 +368,7 @@ export default {
 
     window.onresize = ()=>{
       this.windowHeight = document.body.clientHeight
+      this.windowWidth = document.body.clientWidth
     }
 
   },

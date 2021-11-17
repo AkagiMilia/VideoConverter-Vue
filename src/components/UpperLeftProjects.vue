@@ -14,6 +14,10 @@
       </a-collapse>
  -->
   <a-row class="shadow-sm border px-3" :style="{height:localHeight+'px'}">
+    <UpperLeftNewProject 
+      :newProjectVisible="newProjectVisible"
+      :windowWidth="windowWidth"
+      />
     <a-tabs
       :default-active-key="currentProjectId"
       tab-position="top"
@@ -27,10 +31,17 @@
           class="divFileCard" 
           :style="{height:localHeight-80+'px'}"
         >
-          <a-button type="primary" @click="clickAddFile(project)">
-            <a-icon type="plus" class="align-middle mb-1"/>
-            Add File
-          </a-button>
+          <a-space>
+            <a-button type="primary" @click="clickAddFile(project)">
+              <a-icon type="plus" class="align-middle mb-1"/>
+              Add File
+            </a-button>
+            <a-button type="primary" @click="clickNewProject">
+              <a-icon type="plus" class="align-middle mb-1"/>
+              Add Project
+            </a-button>
+          </a-space>
+          
           <input 
             type="file" 
             placeholder="Basic usage" 
@@ -64,15 +75,19 @@
 import { mapState } from 'vuex';
 import { exec } from 'child_process'
 import { nanoid } from 'nanoid'
+import UpperLeftNewProject from './UpperLeftNewProject.vue';
 
 
 export default {
+  components: { UpperLeftNewProject },
   name:'UpperLeftProjects',
-  props:['projects', 'currentProjectId', 'localHeight'],
+  props:['projects', 'currentProjectId', 'localHeight', 'windowWidth'],
+
   data() {
     return {
       activeKey:[],
       busy:false,
+      newProjectVisible:false
     }
   },
   computed:{
@@ -94,6 +109,9 @@ export default {
     },
     clickAddFile(project){
       this.$refs[`loadFor${project.projectId}`][0].click()
+    },
+    clickNewProject(){
+      this.newProjectVisible = true
     },
     addFile(event){
       console.log('targetInfo', event);
@@ -129,7 +147,12 @@ export default {
     loadMore(){
       this.busy = false
     }
-  }
+  },
+  beforeMount() {
+    this.$bus.$on('changeVisible', (visible)=>{
+      this.newProjectVisible = visible
+    })
+  },
 }
 </script>
 
