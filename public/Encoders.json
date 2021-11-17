@@ -1,0 +1,578 @@
+{
+    "videos": {
+        "a64multi": {
+            "explanation": "Multicolor charset for Commodore 64 (codec a64_multi)"
+        },
+        "a64multi5": {
+            "explanation": "Multicolor charset for Commodore 64, extended with 5th color (colram) (codec a64_multi5)"
+        },
+        "alias_pix": {
+            "explanation": "Alias/Wavefront PIX image"
+        },
+        "amv": {
+            "explanation": "AMV Video"
+        },
+        "apng": {
+            "explanation": "APNG (Animated Portable Network Graphics) image"
+        },
+        "asv1": {
+            "explanation": "ASUS V1"
+        },
+        "asv2": {
+            "explanation": "ASUS V2"
+        },
+        "libaom-av1": {
+            "explanation": "libaom AV1 (codec av1)"
+        },
+        "librav1e": {
+            "explanation": "librav1e AV1 (codec av1)"
+        },
+        "avrp": {
+            "explanation": "Avid 1:1 10-bit RGB Packer"
+        },
+        "avui": {
+            "explanation": "Avid Meridien Uncompressed"
+        },
+        "ayuv": {
+            "explanation": "Uncompressed packed MS 4:4:4:4"
+        },
+        "bmp": {
+            "explanation": "BMP (Windows and OS/2 bitmap)"
+        },
+        "cfhd": {
+            "explanation": "GoPro CineForm HD"
+        },
+        "cinepak": {
+            "explanation": "Cinepak"
+        },
+        "cljr": {
+            "explanation": "Cirrus Logic AccuPak"
+        },
+        "vc2": {
+            "explanation": "SMPTE VC-2 (codec dirac)"
+        },
+        "dnxhd": {
+            "explanation": "VC3/DNxHD"
+        },
+        "dpx": {
+            "explanation": "DPX (Digital Picture Exchange) image"
+        },
+        "dvvideo": {
+            "explanation": "DV (Digital Video)"
+        },
+        "exr": {
+            "explanation": "OpenEXR image"
+        },
+        "ffv1": {
+            "explanation": "FFmpeg video codec #1"
+        },
+        "ffvhuff": {
+            "explanation": "Huffyuv FFmpeg variant"
+        },
+        "fits": {
+            "explanation": "Flexible Image Transport System"
+        },
+        "flashsv": {
+            "explanation": "Flash Screen Video"
+        },
+        "flashsv2": {
+            "explanation": "Flash Screen Video Version 2"
+        },
+        "flv": {
+            "explanation": "FLV / Sorenson Spark / Sorenson H.263 (Flash Video) (codec flv1)"
+        },
+        "gif": {
+            "explanation": "GIF (Graphics Interchange Format)"
+        },
+        "h261": {
+            "explanation": "H.261"
+        },
+        "h263": {
+            "explanation": "H.263 / H.263-1996"
+        },
+        "h263p": {
+            "explanation": "H.263+ / H.263-1998 / H.263 version 2"
+        },
+        "libx264": {
+            "explanation": "libx264 H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10 (codec h264)"
+        },
+        "libx264rgb": {
+            "explanation": "libx264 H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10 RGB (codec h264)"
+        },
+        "h264_videotoolbox": {
+            "explanation": "VideoToolbox H.264 Encoder (codec h264)"
+        },
+        "hap": {
+            "explanation": "Vidvox Hap"
+        },
+        "libx265": {
+            "explanation": "libx265 H.265 / HEVC (codec hevc)"
+        },
+        "hevc_videotoolbox": {
+            "explanation": "VideoToolbox H.265 Encoder (codec hevc)"
+        },
+        "huffyuv": {
+            "explanation": "Huffyuv / HuffYUV"
+        },
+        "jpeg2000": {
+            "explanation": "JPEG 2000"
+        },
+        "libopenjpeg": {
+            "explanation": "OpenJPEG JPEG 2000 (codec jpeg2000)"
+        },
+        "jpegls": {
+            "explanation": "JPEG-LS"
+        },
+        "ljpeg": {
+            "explanation": "Lossless JPEG"
+        },
+        "magicyuv": {
+            "explanation": "MagicYUV video"
+        },
+        "mjpeg": {
+            "explanation": "MJPEG (Motion JPEG)"
+        },
+        "mpeg1video": {
+            "explanation": "MPEG-1 video"
+        },
+        "mpeg2video": {
+            "explanation": "MPEG-2 video"
+        },
+        "mpeg4": {
+            "explanation": "MPEG-4 part 2"
+        },
+        "libxvid": {
+            "explanation": "libxvidcore MPEG-4 part 2 (codec mpeg4)"
+        },
+        "msmpeg4v2": {
+            "explanation": "MPEG-4 part 2 Microsoft variant version 2"
+        },
+        "msmpeg4": {
+            "explanation": "MPEG-4 part 2 Microsoft variant version 3 (codec msmpeg4v3)"
+        },
+        "msvideo1": {
+            "explanation": "Microsoft Video-1"
+        },
+        "pam": {
+            "explanation": "PAM (Portable AnyMap) image"
+        },
+        "pbm": {
+            "explanation": "PBM (Portable BitMap) image"
+        },
+        "pcx": {
+            "explanation": "PC Paintbrush PCX image"
+        },
+        "pfm": {
+            "explanation": "PFM (Portable FloatMap) image"
+        },
+        "pgm": {
+            "explanation": "PGM (Portable GrayMap) image"
+        },
+        "pgmyuv": {
+            "explanation": "PGMYUV (Portable GrayMap YUV) image"
+        },
+        "png": {
+            "explanation": "PNG (Portable Network Graphics) image"
+        },
+        "ppm": {
+            "explanation": "PPM (Portable PixelMap) image"
+        },
+        "prores": {
+            "explanation": "Apple ProRes"
+        },
+        "prores_aw": {
+            "explanation": "Apple ProRes (codec prores)"
+        },
+        "prores_ks": {
+            "explanation": "Apple ProRes (iCodec Pro) (codec prores)"
+        },
+        "qtrle": {
+            "explanation": "QuickTime Animation (RLE) video"
+        },
+        "r10k": {
+            "explanation": "AJA Kona 10-bit RGB Codec"
+        },
+        "r210": {
+            "explanation": "Uncompressed RGB 10-bit"
+        },
+        "rawvideo": {
+            "explanation": "raw video"
+        },
+        "roqvideo": {
+            "explanation": "id RoQ video (codec roq)"
+        },
+        "rpza": {
+            "explanation": "QuickTime video (RPZA)"
+        },
+        "rv10": {
+            "explanation": "RealVideo 1.0"
+        },
+        "rv20": {
+            "explanation": "RealVideo 2.0"
+        },
+        "sgi": {
+            "explanation": "SGI image"
+        },
+        "snow": {
+            "explanation": "Snow"
+        },
+        "speedhq": {
+            "explanation": "NewTek SpeedHQ"
+        },
+        "sunrast": {
+            "explanation": "Sun Rasterfile image"
+        },
+        "svq1": {
+            "explanation": "Sorenson Vector Quantizer 1 / Sorenson Video 1 / SVQ1"
+        },
+        "targa": {
+            "explanation": "Truevision Targa image"
+        },
+        "libtheora": {
+            "explanation": "libtheora Theora (codec theora)"
+        },
+        "tiff": {
+            "explanation": "TIFF image"
+        },
+        "utvideo": {
+            "explanation": "Ut Video"
+        },
+        "v210": {
+            "explanation": "Uncompressed 4:2:2 10-bit"
+        },
+        "v308": {
+            "explanation": "Uncompressed packed 4:4:4"
+        },
+        "v408": {
+            "explanation": "Uncompressed packed QT 4:4:4:4"
+        },
+        "v410": {
+            "explanation": "Uncompressed 4:4:4 10-bit"
+        },
+        "libvpx": {
+            "explanation": "libvpx VP8 (codec vp8)"
+        },
+        "libvpx-vp9": {
+            "explanation": "libvpx VP9 (codec vp9)"
+        },
+        "libwebp_anim": {
+            "explanation": "libwebp WebP image (codec webp)"
+        },
+        "libwebp": {
+            "explanation": "libwebp WebP image (codec webp)"
+        },
+        "wmv1": {
+            "explanation": "Windows Media Video 7"
+        },
+        "wmv2": {
+            "explanation": "Windows Media Video 8"
+        },
+        "wrapped_avframe": {
+            "explanation": "AVFrame to AVPacket passthrough"
+        },
+        "xbm": {
+            "explanation": "XBM (X BitMap) image"
+        },
+        "xface": {
+            "explanation": "X-face image"
+        },
+        "xwd": {
+            "explanation": "XWD (X Window Dump) image"
+        },
+        "y41p": {
+            "explanation": "Uncompressed YUV 4:1:1 12-bit"
+        },
+        "yuv4": {
+            "explanation": "Uncompressed packed 4:2:0"
+        },
+        "zlib": {
+            "explanation": "LCL (LossLess Codec Library) ZLIB"
+        },
+        "zmbv": {
+            "explanation": "Zip Motion Blocks Video"
+        }
+    },
+    "audios": {
+        "aac": {
+            "explanation": "AAC (Advanced Audio Coding)"
+        },
+        "aac_at": {
+            "explanation": "aac (AudioToolbox) (codec aac)"
+        },
+        "ac3": {
+            "explanation": "ATSC A/52A (AC-3)"
+        },
+        "ac3_fixed": {
+            "explanation": "ATSC A/52A (AC-3) (codec ac3)"
+        },
+        "adpcm_adx": {
+            "explanation": "SEGA CRI ADX ADPCM"
+        },
+        "adpcm_argo": {
+            "explanation": "ADPCM Argonaut Games"
+        },
+        "g722": {
+            "explanation": "G.722 ADPCM (codec adpcm_g722)"
+        },
+        "g726": {
+            "explanation": "G.726 ADPCM (codec adpcm_g726)"
+        },
+        "g726le": {
+            "explanation": "G.726 little endian ADPCM (\"right-justified\") (codec adpcm_g726le)"
+        },
+        "adpcm_ima_alp": {
+            "explanation": "ADPCM IMA High Voltage Software ALP"
+        },
+        "adpcm_ima_amv": {
+            "explanation": "ADPCM IMA AMV"
+        },
+        "adpcm_ima_apm": {
+            "explanation": "ADPCM IMA Ubisoft APM"
+        },
+        "adpcm_ima_qt": {
+            "explanation": "ADPCM IMA QuickTime"
+        },
+        "adpcm_ima_ssi": {
+            "explanation": "ADPCM IMA Simon & Schuster Interactive"
+        },
+        "adpcm_ima_wav": {
+            "explanation": "ADPCM IMA WAV"
+        },
+        "adpcm_ms": {
+            "explanation": "ADPCM Microsoft"
+        },
+        "adpcm_swf": {
+            "explanation": "ADPCM Shockwave Flash"
+        },
+        "adpcm_yamaha": {
+            "explanation": "ADPCM Yamaha"
+        },
+        "alac": {
+            "explanation": "ALAC (Apple Lossless Audio Codec)"
+        },
+        "alac_at": {
+            "explanation": "alac (AudioToolbox) (codec alac)"
+        },
+        "libopencore_amrnb": {
+            "explanation": "OpenCORE AMR-NB (Adaptive Multi-Rate Narrow-Band) (codec amr_nb)"
+        },
+        "aptx": {
+            "explanation": "aptX (Audio Processing Technology for Bluetooth)"
+        },
+        "aptx_hd": {
+            "explanation": "aptX HD (Audio Processing Technology for Bluetooth)"
+        },
+        "comfortnoise": {
+            "explanation": "RFC 3389 comfort noise generator"
+        },
+        "dca": {
+            "explanation": "DCA (DTS Coherent Acoustics) (codec dts)"
+        },
+        "eac3": {
+            "explanation": "ATSC A/52 E-AC-3"
+        },
+        "flac": {
+            "explanation": "FLAC (Free Lossless Audio Codec)"
+        },
+        "g723_1": {
+            "explanation": "G.723.1"
+        },
+        "ilbc_at": {
+            "explanation": "ilbc (AudioToolbox) (codec ilbc)"
+        },
+        "mlp": {
+            "explanation": "MLP (Meridian Lossless Packing)"
+        },
+        "mp2": {
+            "explanation": "MP2 (MPEG audio layer 2)"
+        },
+        "mp2fixed": {
+            "explanation": "MP2 fixed point (MPEG audio layer 2) (codec mp2)"
+        },
+        "libmp3lame": {
+            "explanation": "libmp3lame MP3 (MPEG audio layer 3) (codec mp3)"
+        },
+        "nellymoser": {
+            "explanation": "Nellymoser Asao"
+        },
+        "opus": {
+            "explanation": "Opus"
+        },
+        "libopus": {
+            "explanation": "libopus Opus (codec opus)"
+        },
+        "pcm_alaw": {
+            "explanation": "PCM A-law / G.711 A-law"
+        },
+        "pcm_alaw_at": {
+            "explanation": "pcm_alaw (AudioToolbox) (codec pcm_alaw)"
+        },
+        "pcm_dvd": {
+            "explanation": "PCM signed 16|20|24-bit big-endian for DVD media"
+        },
+        "pcm_f32be": {
+            "explanation": "PCM 32-bit floating point big-endian"
+        },
+        "pcm_f32le": {
+            "explanation": "PCM 32-bit floating point little-endian"
+        },
+        "pcm_f64be": {
+            "explanation": "PCM 64-bit floating point big-endian"
+        },
+        "pcm_f64le": {
+            "explanation": "PCM 64-bit floating point little-endian"
+        },
+        "pcm_mulaw": {
+            "explanation": "PCM mu-law / G.711 mu-law"
+        },
+        "pcm_mulaw_at": {
+            "explanation": "pcm_mulaw (AudioToolbox) (codec pcm_mulaw)"
+        },
+        "pcm_s16be": {
+            "explanation": "PCM signed 16-bit big-endian"
+        },
+        "pcm_s16be_planar": {
+            "explanation": "PCM signed 16-bit big-endian planar"
+        },
+        "pcm_s16le": {
+            "explanation": "PCM signed 16-bit little-endian"
+        },
+        "pcm_s16le_planar": {
+            "explanation": "PCM signed 16-bit little-endian planar"
+        },
+        "pcm_s24be": {
+            "explanation": "PCM signed 24-bit big-endian"
+        },
+        "pcm_s24daud": {
+            "explanation": "PCM D-Cinema audio signed 24-bit"
+        },
+        "pcm_s24le": {
+            "explanation": "PCM signed 24-bit little-endian"
+        },
+        "pcm_s24le_planar": {
+            "explanation": "PCM signed 24-bit little-endian planar"
+        },
+        "pcm_s32be": {
+            "explanation": "PCM signed 32-bit big-endian"
+        },
+        "pcm_s32le": {
+            "explanation": "PCM signed 32-bit little-endian"
+        },
+        "pcm_s32le_planar": {
+            "explanation": "PCM signed 32-bit little-endian planar"
+        },
+        "pcm_s64be": {
+            "explanation": "PCM signed 64-bit big-endian"
+        },
+        "pcm_s64le": {
+            "explanation": "PCM signed 64-bit little-endian"
+        },
+        "pcm_s8": {
+            "explanation": "PCM signed 8-bit"
+        },
+        "pcm_s8_planar": {
+            "explanation": "PCM signed 8-bit planar"
+        },
+        "pcm_u16be": {
+            "explanation": "PCM unsigned 16-bit big-endian"
+        },
+        "pcm_u16le": {
+            "explanation": "PCM unsigned 16-bit little-endian"
+        },
+        "pcm_u24be": {
+            "explanation": "PCM unsigned 24-bit big-endian"
+        },
+        "pcm_u24le": {
+            "explanation": "PCM unsigned 24-bit little-endian"
+        },
+        "pcm_u32be": {
+            "explanation": "PCM unsigned 32-bit big-endian"
+        },
+        "pcm_u32le": {
+            "explanation": "PCM unsigned 32-bit little-endian"
+        },
+        "pcm_u8": {
+            "explanation": "PCM unsigned 8-bit"
+        },
+        "pcm_vidc": {
+            "explanation": "PCM Archimedes VIDC"
+        },
+        "real_144": {
+            "explanation": "RealAudio 1.0 (14.4K) (codec ra_144)"
+        },
+        "roq_dpcm": {
+            "explanation": "id RoQ DPCM"
+        },
+        "s302m": {
+            "explanation": "SMPTE 302M"
+        },
+        "sbc": {
+            "explanation": "SBC (low-complexity subband codec)"
+        },
+        "sonic": {
+            "explanation": "Sonic"
+        },
+        "sonicls": {
+            "explanation": "Sonic lossless"
+        },
+        "libspeex": {
+            "explanation": "libspeex Speex (codec speex)"
+        },
+        "truehd": {
+            "explanation": "TrueHD"
+        },
+        "tta": {
+            "explanation": "TTA (True Audio)"
+        },
+        "vorbis": {
+            "explanation": "Vorbis"
+        },
+        "libvorbis": {
+            "explanation": "libvorbis (codec vorbis)"
+        },
+        "wavpack": {
+            "explanation": "WavPack"
+        },
+        "wmav1": {
+            "explanation": "Windows Media Audio 1"
+        },
+        "wmav2": {
+            "explanation": "Windows Media Audio 2"
+        }
+    },
+    "subtitles": {
+        "ssa": {
+            "explanation": "ASS (Advanced SubStation Alpha) subtitle (codec ass)"
+        },
+        "ass": {
+            "explanation": "ASS (Advanced SubStation Alpha) subtitle"
+        },
+        "dvbsub": {
+            "explanation": "DVB subtitles (codec dvb_subtitle)"
+        },
+        "dvdsub": {
+            "explanation": "DVD subtitles (codec dvd_subtitle)"
+        },
+        "mov_text": {
+            "explanation": "3GPP Timed Text subtitle"
+        },
+        "srt": {
+            "explanation": "SubRip subtitle (codec subrip)"
+        },
+        "subrip": {
+            "explanation": "SubRip subtitle"
+        },
+        "text": {
+            "explanation": "Raw text subtitle"
+        },
+        "ttml": {
+            "explanation": "TTML subtitle"
+        },
+        "webvtt": {
+            "explanation": "WebVTT subtitle"
+        },
+        "xsub": {
+            "explanation": "DivX subtitles (XSUB)"
+        }
+    }
+}
