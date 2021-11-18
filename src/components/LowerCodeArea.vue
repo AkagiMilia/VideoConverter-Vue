@@ -89,13 +89,13 @@ export default {
       // translated object send to App
       var newObject = {}
       while(index <= len){
-        if (value[index].startsWith('-')){
+        if (value[index].startsWith('-') && !+value[index].substr(1)){
           var paramInfo = null
           // read parameter info
           if (this.showingParams[this.currentFormat])
             paramInfo = this.showingParams[this.currentFormat][value[index]]
           console.log('paramInfo:',paramInfo);
-          if (index+1<=len && !value[index+1].startsWith('-')){
+          if (index+1<=len && (!value[index+1].startsWith('-') || +value[index+1].substr(1))){
             if (paramInfo && paramInfo['valueType'].startsWith('dic')){
               var newSubObject = {}
               var valList = value[index+1].split(':')
