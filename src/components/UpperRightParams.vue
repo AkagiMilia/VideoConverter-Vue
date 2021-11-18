@@ -9,8 +9,17 @@
     >
     <ul class="list-group">
       <li class="list-group-item" :class="selectedStyles[key]" v-for="(param, key) in parameterObject" :key='key' @click="addParam(key, param)" @mouseenter="showGuidance(key, param)">
-        <span>{{key}}</span>
-        <span> {{param.valueType}}</span>
+        <div class="d-flex justify-content-between">
+          <div class="">
+            <span>{{key}}</span>
+          </div>
+          <div class="">
+            <a-tag 
+              :color="ColorValueType[param.valueType] ? ColorValueType[param.valueType] : 'blue'">
+              {{param.valueType}}
+            </a-tag>
+          </div>
+        </div>
       </li>
     </ul>
     </div>
@@ -27,7 +36,15 @@ export default {
       parameterObject:{},
       currentDict:'',
       isSubParam:false,
-      busy:false
+      busy:false,
+      ColorValueType:{
+        string:'orange',
+        int:'blue',
+        float:'blue',
+        boolean:'green',
+        dictionary:'cyan',
+        flags:'pink'
+      }
     }
   },
   methods: {
@@ -89,7 +106,7 @@ export default {
       if (this.isSubParam){
         for (let key of Object.keys(this.parameterObject)){
           if (this.currentParameter[this.currentType][this.currentDict] && key in this.currentParameter[this.currentType][this.currentDict])
-            dict[key] = 'bg-warning'
+            dict[key] = 'bg-primary bg-opacity-25'
           else
             dict[key] = ''
         }
@@ -97,7 +114,7 @@ export default {
       else{
         for (let key of Object.keys(this.parameterObject)){
           if (this.currentParameter[this.currentType] && key in this.currentParameter[this.currentType])
-            dict[key] = 'bg-warning'
+            dict[key] = 'bg-primary bg-opacity-25'
           else
             dict[key] = ''
         }
