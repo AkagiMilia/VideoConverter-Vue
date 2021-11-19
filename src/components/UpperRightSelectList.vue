@@ -13,6 +13,7 @@
         @focus="paramFocus"
         @search="onSearch"
         :ref="'input'+param"
+        spellcheck="false"
         />
       <ul class="list-group" v-if="typeof Selected[param] == 'object'">
         <li class="list-group-item" :class="warningStyles[subParam]" v-for="(subVal, subParam) in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
@@ -26,6 +27,7 @@
             @blur="paramExit(param, subParam, $event)"
             @search="onSearch"
             :ref="'input'+subParam"
+            spellcheck="false"
             />
         </li>
       </ul>
@@ -42,14 +44,15 @@ export default {
     return {
       nowFocus:'',
       busy:false,
-      dataSource:[]
+      dataSource:[],
+      currentParam:''
     }
   },
   computed:{
     Selected(){
       return this.currentParameter[this.type]
     },
-    ...mapState('indexData', ['showingParams']),
+    ...mapState('indexData', ['showingParams', 'markParams', 'encodersInfo']),
     warningStyles(){
       var dict = {}
       for (let [key, value] of Object.entries(this.Selected)){
@@ -73,7 +76,7 @@ export default {
   },
   methods: {
     paramClick(param, father=null){
-      
+      this.currentParam = param
       setTimeout(() => {
         this.nowFocus = param
         var refName = 'input'+param
@@ -116,7 +119,14 @@ export default {
     },
     onSearch(){
       try {
-        if (this.showingParams[this.currentFormat][this.nowFocus]['subValues']){
+        console.log(this.currentParam);
+        if (this.markParams.video.indexOf(this.currentParam) > -1){
+          this.dataSource = Object.keys(this.encodersInfo.videos)
+        }
+        else if (this.markParams.audio.indexOf(this.currentParam) > -1){
+          this.dataSource = Object.keys(this.encodersInfo.audios)
+        }
+        else if (this.showingParams[this.currentFormat][this.nowFocus]['subValues']){
           this.dataSource = Object.keys(this.showingParams[this.currentFormat][this.nowFocus]['subValues'])
         }
       } catch (error) {
