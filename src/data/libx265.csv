@@ -1,4 +1,0 @@
-name,streamFormat,valueType,valueMax,valueMin,hasChild,multiChild,explanation
--crf,libx265,int,0,50,0,0,xxx
--preset,libx265,string,,,1,0,xxx
--x265-params,libx265,dictionary,,,1,1,xxx
