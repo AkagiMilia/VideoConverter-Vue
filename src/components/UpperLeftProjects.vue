@@ -128,6 +128,8 @@ export default {
         exec(`ffprobe -i "${file.path}" -show_streams -of json`, (error, stdout, stderr)=>{
           if (error){
             console.log(error)
+            this.isLoadFile = false
+            return
           }
           streams = [...JSON.parse(stdout).streams]
           newFile.streams = streams

@@ -237,6 +237,8 @@ export default {
       // load the current video format from input parameters
       console.log('current Video has been triggered')
       var curV = ''
+      if (!this.currentParameter['video'])
+        return
       for (let key of Object.keys(this.currentParameter['video'])){
         if (key.startsWith('-c:')){
           curV = this.currentParameter['video'][key]
@@ -251,6 +253,8 @@ export default {
       // load the current video format from input parameters
       console.log('current Audio has been triggered')
       var curA = ''
+      if (!this.currentParameter['audio'])
+        return
       for (let key of Object.keys(this.currentParameter['audio'])){
         if (key.startsWith('-c:')){
           curA = this.currentParameter['audio'][key]
@@ -322,7 +326,7 @@ export default {
       currentStream.used = used
     },
     addNewFiles(newFiles){
-      currentProject.inputFiles = [...this.currentProject.inputFiles, ...newFiles]
+      this.currentProject.inputFiles = [...this.currentProject.inputFiles, ...newFiles]
     },
     removeFile(fileId){
       var currentFile = this.currentProject.inputFiles.filter(file => file.fileId != fileId)

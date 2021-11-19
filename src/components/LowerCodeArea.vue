@@ -55,6 +55,19 @@ export default {
   methods: {
     updateParams(paramLine){
       // transfer the string cmd line to a list
+      if (!paramLine){
+        this.$bus.$emit('updateParams', 
+          {
+            video:{
+              '-c:v':'copy'
+            },
+            audio:{
+              '-c:a':'copy'
+            }
+          }
+        )
+        return
+      }
       paramLine = paramLine.split(' ')
       paramLine = paramLine.filter(param => param != '')
       var markLists = []
