@@ -32,8 +32,8 @@
           :style="{height:localHeight-80+'px'}"
         >
           <a-space>
-            <a-button type="primary" @click="clickAddFile(project)">
-              <a-icon type="plus" class="align-middle mb-1"/>
+            <a-button :loading="isLoadFile" type="primary" @click="clickAddFile(project)">
+              <a-icon v-show="!isLoadFile" type="plus" class="align-middle mb-1"/>
               Add File
             </a-button>
             <a-button type="primary" @click="clickNewProject">
@@ -87,7 +87,8 @@ export default {
     return {
       activeKey:[],
       busy:false,
-      newProjectVisible:false
+      newProjectVisible:false,
+      isLoadFile:false
     }
   },
   computed:{
@@ -116,6 +117,7 @@ export default {
     addFile(event){
       console.log('targetInfo', event);
       console.log('file info', event.target.files);
+      this.isLoadFile = true
       var newFiles = []
       for (let file of event.target.files){
         var newFile = {}
@@ -138,6 +140,7 @@ export default {
           console.log(newFiles);
           this.$bus.$emit('addNewFiles', newFiles)
           event.target.value = ''
+          this.isLoadFile = false
         })
       }
     },
