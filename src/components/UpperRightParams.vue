@@ -40,9 +40,9 @@ export default {
       ColorValueType:{
         string:'orange',
         int:'blue',
-        float:'blue',
+        float:'cyan',
         boolean:'green',
-        dictionary:'cyan',
+        dictionary:'purple',
         flags:'pink'
       }
     }
