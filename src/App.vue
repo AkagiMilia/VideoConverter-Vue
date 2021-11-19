@@ -157,6 +157,7 @@ export default {
         }
       ],
       currentProjectId:'',
+      currentProject:'',
       currentFormat:'',
       currentType:'',
       windowHeight:document.body.clientHeight,
@@ -166,11 +167,10 @@ export default {
   computed:{
     cmdLine(){
       var currentProjectParams = this.parameters.find(project => project.projectId == this.currentProjectId)
-      var currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
       // base address ffmpeg
       var cmd = [this.FFmpegPath]
       // add input files and their input parameters
-      currentProject.inputFiles.forEach((file)=>{
+      this.currentProject.inputFiles.forEach((file)=>{
         cmd = cmd.concat(file.fileParams)
         cmd.push('-i')
         cmd.push(`${file.filePath}`)
@@ -178,7 +178,7 @@ export default {
 
       // add map info
       var fileIndex = 0
-      currentProject.inputFiles.forEach((file)=>{
+      this.currentProject.inputFiles.forEach((file)=>{
         for (let stream of file.streams){
           if (stream.used){
             cmd.push('-map')
@@ -223,8 +223,8 @@ export default {
       cmd = cmd.concat(cmdBlock)
 
       // add output params and path
-      cmd = cmd.concat(currentProject.outputParams)
-      cmd.push(`${currentProject.outputFilePath}`)
+      cmd = cmd.concat(this.currentProject.outputParams)
+      cmd.push(`${this.currentProject.outputFilePath}`)
 
       return cmd
     },
@@ -261,17 +261,25 @@ export default {
       this.currentType = 'audio'
       return curA
     },
-    ...mapState('indexData',['showingParams'])
+    ...mapState('indexData',['showingParams', 'encodersInfo'])
   },
   methods:{
     // change parameters(by select lists)
-    getParams(value, type){
-      this.parameters.forEach((target)=>{
+    getParams(value, type = null){
+      for (let target of this.parameters){
         if (target.projectId == this.currentProjectId){
-          this.$set(target, type, value)
-          return
+          if (!type){
+            for (let subType of ['video', 'audio']){
+              this.$set(target, subType, value[subType])
+            }
+            break
+          }
+          else{
+            this.$set(target, type, value)
+            break
+          }
         }
-      })
+      }
     },
     // add parameters(by parameter candidate)
     addParam(type, key, value, father=null){
@@ -309,21 +317,18 @@ export default {
       this.currentType = type
     },
     changeStreamState(fileId, streamId, used){     
-      var currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
-      var currentFile = currentProject.inputFiles.find(file => file.fileId == fileId)
+      var currentFile = this.currentProject.inputFiles.find(file => file.fileId == fileId)
       var currentStream = currentFile.streams.find(stream => stream.index == streamId)
       currentStream.used = used
     },
     addNewFiles(newFiles){
-      var currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
-      currentProject.inputFiles = [...currentProject.inputFiles, ...newFiles]
+      currentProject.inputFiles = [...this.currentProject.inputFiles, ...newFiles]
     },
     removeFile(fileId){
-      var currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
-      var currentFile = currentProject.inputFiles.filter(file => file.fileId != fileId)
-      currentProject.inputFiles = [...currentFile]
+      var currentFile = this.currentProject.inputFiles.filter(file => file.fileId != fileId)
+      this.currentProject.inputFiles = [...currentFile]
     },
-    ...mapMutations('indexData', ['loadGuidance'])
+    ...mapMutations('indexData', ['loadGuidance', 'loadEncoders'])
   },
   watch:{
     // if the currentFormat changed
@@ -344,6 +349,12 @@ export default {
         if(!hascurV)
           this.$bus.$emit('empitParameter')
       }
+    },
+    currentProjectId:{
+      immediate:true,
+      handler(curVal, oldval){
+         this.currentProject = this.projects.find(project => project.projectId == curVal)
+      }
     }
   },
   beforeMount(){
@@ -353,6 +364,7 @@ export default {
       i += 1
     })
     this.currentProjectId = this.parameters[0].projectId
+    this.currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
 
     // this.$bus.$emit('transProjects', this.projects)
     this.$bus.$on('updateParams', this.getParams)
@@ -364,7 +376,10 @@ export default {
     this.$bus.$on('removeFile', this.removeFile)
     const path = require('path')
     const guidancePath = path.join(__static, 'Guidance.json')
+    const encodersPath = path.join(__static, 'Encoders.json')
     this.loadGuidance(guidancePath)
+    this.loadEncoders(encodersPath)
+    
 
     window.onresize = ()=>{
       this.windowHeight = document.body.clientHeight
