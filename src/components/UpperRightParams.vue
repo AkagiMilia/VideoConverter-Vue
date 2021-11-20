@@ -8,15 +8,15 @@
       :style="{height:localHeight+'px'}"
     >
     <ul class="list-group">
-      <li class="list-group-item" :class="selectedStyles[key]" v-for="(param, key) in parameterObject" :key='key' @click="addParam(key, param)" @mouseenter="showGuidance(key, param)">
+      <li class="list-group-item" :class="selectedStyles[paramName]" v-for="(paramInfo, paramName) in parameterObject" :key='paramName' @click="addParam(paramName, paramInfo)" @mouseenter="showGuidance(paramName, paramInfo)">
         <div class="d-flex justify-content-between">
           <div class="">
-            <span>{{key}}</span>
+            <span>{{paramName}}</span>
           </div>
           <div class="">
             <a-tag 
-              :color="ColorValueType[param.valueType] ? ColorValueType[param.valueType] : 'blue'">
-              {{param.valueType}}
+              :color="ColorValueType[paramInfo.valueType] ? ColorValueType[paramInfo.valueType] : 'blue'">
+              {{paramInfo.valueType}}
             </a-tag>
           </div>
         </div>
@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   name:'UpperRightParams',
-  props:['currentAudio', 'currentVideo', 'currentFormat', 'currentType', 'currentParameter', 'localHeight'],
+  props:['currentFormat', 'currentStreamId', 'currentStream', 'currentType', 'localHeight'],
   data(){
     return{
       parameterObject:{},
@@ -49,16 +49,14 @@ export default {
   },
   methods: {
     displayParameter(param, type){
-      if (type == 'video')
-        var searchType = this.currentVideo
-      else if (type == 'audio')
-        var searchType = this.currentAudio
-      console.log('searching param:', param);
-      console.log('searching type:',searchType);
-      if (this.showingParams[searchType]){
-        for(let [key, value] of Object.entries(this.showingParams[searchType])){
+      console.log('searching param:', param)
+      console.log('searching type:', type);
+      var searchFormat = this.currentStream.format
+      console.log('searching format:',searchFormat);
+      if (this.showingParams[searchFormat]){
+        for(let [key, value] of Object.entries(this.showingParams[searchFormat])){
           if (key == param || param.startsWith('-c:')){
-            if (value.valueType.startsWith('dic')){
+            if (value.valueType.startsWith('dict')){
               this.$nextTick(function(){
                 this.parameterObject = value.subValues
                 this.currentDict = key
@@ -69,7 +67,7 @@ export default {
             else
               console.log('set sub False!')
               this.isSubParam = false
-              this.parameterObject = this.showingParams[searchType]
+              this.parameterObject = this.showingParams[searchFormat]
             break
           }
         }
@@ -77,13 +75,13 @@ export default {
       }
       console.log('current parameter list is:\n', this.parameterObject)
     },
-    addParam(key, value){
+    addParam(paramName, paramInfo){
       if (this.isSubParam){
         console.log('I am a subParam')
-        this.$bus.$emit('addParam', this.currentType, key, value, this.currentDict)
+        this.$bus.$emit('addParam', paramName, paramInfo, this.currentDict)
       }
       else{
-        this.$bus.$emit('addParam', this.currentType, key, value, null)
+        this.$bus.$emit('addParam', paramName, paramInfo, null)
       }
     },
     refreshParameter(curV){
@@ -105,7 +103,7 @@ export default {
       var dict = {}
       if (this.isSubParam){
         for (let key of Object.keys(this.parameterObject)){
-          if (this.currentParameter[this.currentType][this.currentDict] && key in this.currentParameter[this.currentType][this.currentDict])
+          if (this.currentStream.params[this.currentDict] && key in this.currentStream.params[this.currentDict])
             dict[key] = 'bg-primary bg-opacity-25'
           else
             dict[key] = ''
@@ -113,7 +111,7 @@ export default {
       }
       else{
         for (let key of Object.keys(this.parameterObject)){
-          if (this.currentParameter[this.currentType] && key in this.currentParameter[this.currentType])
+          if (this.currentStream.params && key in this.currentStream.params)
             dict[key] = 'bg-primary bg-opacity-25'
           else
             dict[key] = ''

@@ -28,21 +28,23 @@ export default {
       get(){
         var line = ''
         for (let type of Object.keys(this.currentParameter)){
-          if (typeof this.currentParameter[type] != 'object')
-            continue
-          Object.keys(this.currentParameter[type]).forEach((key)=>{
-            line += key + ' '
-            if (typeof this.currentParameter[type][key] == 'object'){
-              var valLine = ''
-              for (let [key, value] of Object.entries(this.currentParameter[type][key])){
-                valLine += key+'='+value+':'
+          for (let stream of this.currentParameter[type]){
+            line += stream.mark + ' '
+            line += stream.format + ' '
+            for (let [key, value] of Object.entries(stream.params)){
+              line += key + ' '
+              if (typeof value == 'object'){
+                var valLine = ''
+                for (let [key, value] of Object.entries(value)){
+                  valLine += key+'='+value+':'
+                }
+                valLine = valLine.substr(0, valLine.length-1)
+                line += valLine + ' '
               }
-              valLine = valLine.substr(0, valLine.length-1)
-              line += valLine + ' '
+              else
+                line += value + ' '
             }
-            else
-              line += this.currentParameter[type][key] + ' '
-          })
+          }  
         }
         return line
       },

@@ -1,5 +1,9 @@
 <template>
   <ul class="list-group" ref="test">
+    <li>
+      <span>{{streamInfo.mark}}</span>
+      <span>{{streamInfo.format}}</span>
+    </li>
     <li class="list-group-item" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click="paramClick(param)">
       <span>{{param}}</span>
       <span v-if="typeof Selected[param] == 'string'" v-show="param!=nowFocus">  {{value}}</span>
@@ -39,7 +43,7 @@
 import { mapState } from 'vuex'
 export default {
   name:'UpperRightSelectList',
-  props:['currentParameter', 'type', 'currentFormat'],
+  props:['streamInfo', 'type'],
   data() {
     return {
       nowFocus:'',
@@ -50,7 +54,12 @@ export default {
   },
   computed:{
     Selected(){
-      return this.currentParameter[this.type]
+      return this.streamInfo.params
+    },
+    currentFormat:{
+      get(){
+        return this.streamInfo.format
+      }
     },
     ...mapState('indexData', ['showingParams', 'markParams', 'encodersInfo']),
     warningStyles(){
@@ -85,14 +94,14 @@ export default {
           this.$refs[refName][0].focus()
         }
       }, 200);
-      this.$bus.$emit('updateFormat', this.type)
+      this.$bus.$emit('switchStream', this.streamInfo.streamId)
       
       if (father){
-        this.$bus.$emit('searchParameter', father, this.type)
+        this.$bus.$emit('searchParameter', father, this.streamInfo.streamType)
         this.$bus.$emit('showGuidance', param, this.showingParams[this.currentFormat][father]['subValues'][param])
       }  
       else{
-        this.$bus.$emit('searchParameter', param, this.type)
+        this.$bus.$emit('searchParameter', param, this.streamInfo.streamType)
         if (!param.startsWith('-c:'))
           this.$bus.$emit('showGuidance', param, this.showingParams[this.currentFormat][param])
       }  
@@ -110,12 +119,8 @@ export default {
       this.sendParam({...this.Selected})
       this.dataSource = []
     },
-    sendParam(curVal){
-      var newObj = {}
-        for (let [key, value] of Object.entries(curVal)){
-          newObj[key] = value
-        }
-        this.$bus.$emit('updateParams', newObj, this.type)
+    sendParam(params){
+      this.$bus.$emit('updateParams', params, this.streamInfo.streamType, this.streamInfo.streamId)
     },
     onSearch(){
       try {
