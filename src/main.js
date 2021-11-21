@@ -13,7 +13,8 @@ import {
   AutoComplete,
   Modal,
   Steps,
-  Space
+  Space,
+  Collapse
 } from 'ant-design-vue'
 import App from './App.vue'
 import 'ant-design-vue/dist/antd.css'
@@ -40,6 +41,7 @@ Vue.use(AutoComplete)
 Vue.use(Modal)
 Vue.use(Steps)
 Vue.use(Space)
+Vue.use(Collapse)
 
 Vue.use(VueVirtualScroller)
 Vue.use(infiniteScroll)
