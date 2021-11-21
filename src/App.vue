@@ -99,37 +99,33 @@ export default {
           outputFilePath:'Elerye_-_Edera fast 264.mp4',
           outputFileName:'Elerye_-_Edera fast 264.mp4',
           outputParams:['-y'],
-          parameters:{
-            video:[
-              {
-                streamId:nanoid(),
-                streamType:'video',
-                mark:'-c:v',
-                format:'libx265',
-                params:{
-                  '-crf':'24',
-                  '-preset':'ultrafast',
-                  '-pix_fmt':'yuv420p',
-                  '-x265-params':{
-                    'ssim':'true',
-                    'rd':'5'
-                  }
+          parameters:[ 
+            {
+              streamId:nanoid(),
+              streamType:'video',
+              mark:'-c:v',
+              format:'libx265',
+              params:{
+                '-crf':'24',
+                '-preset':'ultrafast',
+                '-pix_fmt':'yuv420p',
+                '-x265-params':{
+                  'ssim':'true',
+                  'rd':'5'
                 }
               }
-            ],
-            audio:[
-              {
-                streamId:nanoid(),
-                streamType:'audio',
-                mark:'-c:a',
-                format:'flac',
-                params:{
-                  '-a':'b',
-                  '-c':'d'
-                } 
-              }
-            ]
-          },
+            },
+            {
+              streamId:nanoid(),
+              streamType:'audio',
+              mark:'-c:a',
+              format:'flac',
+              params:{
+                '-a':'b',
+                '-c':'d'
+              } 
+            }
+          ],  
         },
         // example.project2
         { 
@@ -150,37 +146,33 @@ export default {
           outputFilePath:'UmaLive02.mp4',
           outputFileName:'UmaLive02.mp4',
           outputParams:['-y'],
-          parameters:{
-            video:[
-              {
-                streamId:nanoid(),
-                streamType:'video',
-                mark:'-c:v',
-                format:'libx264',
-                params:{
-                  '-crf':'24',
-                  '-preset':'ultrafast',
-                  '-pix_fmt':'yuv420p',
-                }
+          parameters:[
+            {
+              streamId:nanoid(),
+              streamType:'video',
+              mark:'-c:v',
+              format:'libx264',
+              params:{
+                '-crf':'24',
+                '-preset':'ultrafast',
+                '-pix_fmt':'yuv420p',
               }
-            ], 
-            audio:[
-              {
-                streamId:nanoid(),
-                steamType:'audio',
-                mark:'-c:a',
-                format:'copy',
-                params:{
-                  // empty
-                }
+            },
+            {
+              streamId:nanoid(),
+              steamType:'audio',
+              mark:'-c:a',
+              format:'copy',
+              params:{
+                // empty
               }
-            ]
-          }
+            }
+          ]
         }
       ],
       currentProjectId:'',
       currentProject:{},
-      currentParameter:{},
+      currentParameter:[],
       // focused streamType e.g video
       currentStreamId:'',
       currentStream:{},
@@ -216,27 +208,25 @@ export default {
 
       var cmdBlock = []
       // add video and audio params
-      for (let streamType of Object.keys(currentProjectParams)){
-        cmdBlock = []
-        for (let stream of currentProjectParams[streamType]){
-          cmdBlock.push(stream.mark)
-          cmdBlock.push(stream.format)
-          for (let [param, value] of Object.entries(stream.params)){
-            cmdBlock.push(param)
-            if (typeof value == 'object'){
-              var valLine = ''
-              for (let [subParam, subValue] of Object.entries(value)){
-                valLine += subParam+'='+subValue+':'
-              }
-              valLine = valLine.substr(0, valLine.length-1)
-              cmdBlock.push(valLine)
+      cmdBlock = []
+      for (let stream of currentProjectParams){
+        cmdBlock.push(stream.mark)
+        cmdBlock.push(stream.format)
+        for (let [param, value] of Object.entries(stream.params)){
+          cmdBlock.push(param)
+          if (typeof value == 'object'){
+            var valLine = ''
+            for (let [subParam, subValue] of Object.entries(value)){
+              valLine += subParam+'='+subValue+':'
             }
-            else
-              cmdBlock.push(value)
+            valLine = valLine.substr(0, valLine.length-1)
+            cmdBlock.push(valLine)
           }
+          else
+            cmdBlock.push(value)
         }
-        cmd = cmd.concat(cmdBlock)
       }
+      cmd = cmd.concat(cmdBlock)
 
       // add output params and path
       cmd = cmd.concat(this.currentProject.outputParams)
@@ -254,6 +244,33 @@ export default {
       if (type){
         this.currentStream.params = value
       }
+      else{
+        var index = 0
+        var foundCurStreamId = false
+        for (let stream of value){
+          if (this.currentParameter[index]){
+            stream.streamId = this.currentParameter[index].streamId
+            if (stream.streamId == this.currentStreamId){
+              foundCurStreamId = true
+            }       
+          }
+          else{
+            stream.streamId = nanoid()
+          }
+          index += 1
+        }
+        var currentParameter = this.projects.find(project => project.projectId == this.currentProjectId).parameters
+        while(currentParameter.length)
+          currentParameter.pop()
+        for (let stream of value){
+          currentParameter.push(stream)
+        }
+        if (!foundCurStreamId){
+          this.currentStreamId = currentParameter[0].streamId
+        }
+        this.refreshPointers()
+        console.log('this projects', this.projects);
+      }
     },
     // add parameters(by parameter candidate)
     addParam(paramName, paramInfo, father=null){
@@ -267,7 +284,7 @@ export default {
           defaultVal = Object.keys(paramInfo['subValues'])[0]
       }   
       console.log('add param name:', paramName)
-      console.log('add target:',this.currentStream.params);
+      console.log('add target:',this.currentStream);
       if (father && !this.currentStream.params[father][paramName])
         this.$set(this.currentStream.params[father], paramName, defaultVal)
       else if(!this.currentStream.params[paramName])
@@ -293,6 +310,14 @@ export default {
     removeFile(fileId){
       var currentFile = this.currentProject.inputFiles.filter(file => file.fileId != fileId)
       this.currentProject.inputFiles = [...currentFile]
+    },
+    refreshPointers(){
+      this.currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
+      this.currentParameter = this.currentProject.parameters
+      this.currentStream = this.currentParameter.find(stream => stream.streamId = this.currentStreamId)
+      this.currentFormat = this.currentStream.format
+      this.currentType = this.currentStream.streamType
+
     },
     ...mapMutations('indexData', ['loadGuidance', 'loadEncoders'])
   },
@@ -324,7 +349,7 @@ export default {
           return
         this.currentProject = this.projects.find(project => project.projectId == curVal)
         this.currentParameter = this.currentProject.parameters
-        this.currentStreamId = this.currentProject.parameters.video[0].streamId
+        this.currentStreamId = this.currentProject.parameters[0].streamId
         console.log('currentFormat', this.currentFormat)
       }
     },
@@ -334,13 +359,11 @@ export default {
         if (!curVal)
           return
         if (this.currentParameter && this.currentStreamId){
-          for (let streams of Object.values(this.currentParameter)){
-            for (let stream of streams){
-              if (stream.streamId == this.currentStreamId){
-                this.currentStream = stream
-                this.currentFormat = stream.format
-                this.currentType = stream.streamType
-              }
+          for (let stream of this.currentParameter){
+            if (stream.streamId == this.currentStreamId){
+              this.currentStream = stream
+              this.currentFormat = stream.format
+              this.currentType = stream.streamType
             }
           }
         }
@@ -350,7 +373,7 @@ export default {
   beforeMount(){
     this.currentProjectId = this.projects[0].projectId
     this.currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
-    this.currentStreamId = this.currentProject.parameters.video[0].streamId
+    this.currentStreamId = this.currentProject.parameters[0].streamId
 
     // this.$bus.$emit('transProjects', this.projects)
     this.$bus.$on('updateParams', this.getParams)

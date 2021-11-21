@@ -43,7 +43,7 @@
 import { mapState } from 'vuex'
 export default {
   name:'UpperRightSelectList',
-  props:['streamInfo', 'type'],
+  props:['streamInfo'],
   data() {
     return {
       nowFocus:'',

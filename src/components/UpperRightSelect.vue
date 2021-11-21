@@ -2,16 +2,9 @@
   <a-col :span="12" class="shadow-sm border px-3" id="divParamPicked">
     <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" class="divSelectList" :style="{height:localHeight+'px'}">
     <UpperRightSelectList
-      v-for="stream in currentParameter.video"
+      v-for="stream in currentParameter"
       :key="stream.streamId"
       :streamInfo="stream"
-      type="video"
-    />
-    <UpperRightSelectList
-      v-for="stream in currentParameter.audio"
-      :key="stream.streamId"
-      :streamInfo="stream"
-      type="audio"
     />
     </div>
   </a-col>

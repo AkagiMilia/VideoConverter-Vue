@@ -19,33 +19,33 @@
 </template>
 
 <script>
+import { nanoid } from 'nanoid';
 import { mapState } from 'vuex'
 export default {
   name:'LowerCodeArea',
-  props:['parameters', 'currentParameter', 'currentProjectId', 'currentFormat'],
+  props:['currentParameter', 'currentProjectId', 'currentFormat'],
   computed:{
     paramLine:{
       get(){
         var line = ''
-        for (let type of Object.keys(this.currentParameter)){
-          for (let stream of this.currentParameter[type]){
-            line += stream.mark + ' '
-            line += stream.format + ' '
-            for (let [key, value] of Object.entries(stream.params)){
-              line += key + ' '
-              if (typeof value == 'object'){
-                var valLine = ''
-                for (let [key, value] of Object.entries(value)){
-                  valLine += key+'='+value+':'
-                }
-                valLine = valLine.substr(0, valLine.length-1)
-                line += valLine + ' '
+        console.log(`${this.currentParameter}`);
+        for (let stream of this.currentParameter){
+          line += stream.mark + ' '
+          line += stream.format + ' '
+          for (let [key, value] of Object.entries(stream.params)){
+            line += key + ' '
+            if (typeof value == 'object'){
+              var valLine = ''
+              for (let [key, value] of Object.entries(value)){
+                valLine += key+'='+value+':'
               }
-              else
-                line += value + ' '
+              valLine = valLine.substr(0, valLine.length-1)
+              line += valLine + ' '
             }
-          }  
-        }
+            else
+              line += value + ' '
+          }
+        }  
         return line
       },
       set(value){
@@ -58,16 +58,22 @@ export default {
     updateParams(paramLine){
       // transfer the string cmd line to a list
       if (!paramLine){
-        this.$bus.$emit('updateParams', 
+        console.log('empty inputs')
+        var markLists = [
           {
-            video:{
-              '-c:v':'copy'
-            },
-            audio:{
-              '-c:a':'copy'
-            }
+            streamType:'video',
+            mark:'-c:v',
+            format:'copy',
+            params:{}
+          },
+          {
+            streamType:'audio',
+            mark:'-c:a',
+            format:'copy',
+            params:{}
           }
-        )
+        ]
+        this.$bus.$emit('updateParams', markLists)
         return
       }
       paramLine = paramLine.split(' ')
@@ -76,23 +82,24 @@ export default {
       var index = 0
       var cutPoint = 0
       var isStart = true
-      var storeType = ''
+      var streamType = ''
       for (let word of paramLine){
         for (let type of ['video', 'audio']){
           for (let mark of this.markParams[type]){
-            if (mark.startsWith(word)){
+            if (word.startsWith(mark)){
               if (isStart){
                 isStart = false
-                storeType = type
+                streamType = type
                 cutPoint = index
                 break
               }
               markLists.push({
-                type:storeType, 
-                value:paramLine.slice(cutPoint, index),
-                format:paramLine[cutPoint+1]
+                streamType,
+                mark:paramLine[cutPoint],
+                format:!paramLine[cutPoint+1].startsWith('-') ? paramLine[cutPoint+1] : 'copy',
+                params:!paramLine[cutPoint+1].startsWith('-') ? paramLine.slice(cutPoint+2, index) : paramLine.slice(cutPoint+1, index)
                 })
-              storeType = type
+              streamType = type
               cutPoint = index
               break
             }
@@ -100,60 +107,60 @@ export default {
         }
         index += 1
       }
-      markLists.push({type:storeType, 
-        value:paramLine.slice(cutPoint),
-        format:paramLine[cutPoint+1]
+      markLists.push({
+        streamType, 
+        mark:paramLine[cutPoint],
+        params:paramLine[cutPoint+1] && !paramLine[cutPoint+1].startsWith('-') ? paramLine.slice(cutPoint+2) : paramLine.slice(cutPoint+1),
+        format:paramLine[cutPoint+1] && !paramLine[cutPoint+1].startsWith('-') ? paramLine[cutPoint+1] : 'copy',
       })
       // translated object send to App
-      var submitObject = {}
       for (let markList of markLists){
         var newObject = {}
-        var { value } = markList
-        var len = value.length - 1
+        var { params } = markList
+        var len = params.length - 1
         index = 0
         while(index <= len){
-          if (value[index].startsWith('-') && !+value[index].substr(1)){
+          if (params[index].startsWith('-') && !+params[index].substr(1)){
             var paramInfo = null
             // read parameter info
             if (this.showingParams[markList.format])
-              paramInfo = this.showingParams[markList.format][value[index]]
+              paramInfo = this.showingParams[markList.format][params[index]]
             console.log('paramInfo:',paramInfo);
-            if (index+1<=len && (!value[index+1].startsWith('-') || +value[index+1].substr(1))){
+            if (index+1<=len && (!params[index+1].startsWith('-') || +params[index+1].substr(1))){
               if (paramInfo && paramInfo['valueType'].startsWith('dic')){
                 var newSubObject = {}
-                var valList = value[index+1].split(':')
+                var valList = params[index+1].split(':')
                 for (let val of valList){
                   if (val.indexOf('=')<0)
                     val += '=value'
                   val = val.split('=')
                   newSubObject[val[0]] = val[1]
                 }
-                newObject[value[index]] = newSubObject
+                newObject[params[index]] = newSubObject
               }
               else
-                newObject[value[index]] = value[index+1]
+                newObject[params[index]] = params[index+1]
               index += 2
             }
             else{
               if (paramInfo && paramInfo['valueType'].startsWith('dic')){
-                newObject[value[index]] = {'param':'value'}
+                newObject[params[index]] = {'param':'value'}
               }  
               else
-                newObject[value[index]] = '1'
+                newObject[params[index]] = '1'
               index += 1
             }
           }
           else index +=1
         }
-        submitObject[markList.type] = {...submitObject[markList.type], ...newObject}
+        markList.params = newObject
       }
-      console.log('cmdLine -> Object:', submitObject)
-      this.$bus.$emit('updateParams', submitObject)
+      console.log('cmdLine -> Object:', markLists)
+      this.$bus.$emit('updateParams', markLists)
     }
   },
   mounted() {
     console.log(this.currentProjectId);
-    console.log(this.parameters);
   },
 }
 </script>
