@@ -1,36 +1,35 @@
 <template>
   <div id="divAll" :style="{height:windowHeight+'px'}">
-    <a-row type="flex" justify="center" align="top" :gutter="[16,16]">
+    <a-row type="flex" justify="center" align="top">
       <a-col :span="12">
-        <a-space direction="vertical" style="width:100%" >
           <UpperLeftProjects 
             :projects="projects" 
-            :currentProjectId="currentProjectId" 
+            :currentProjectId="currentProjectId"
+            :currentProject="currentProject"
             :FFmpegPath="FFmpegPath"
-            :localHeight="windowHeight*0.3"
+            :localHeight="windowHeight*0.4"
             :windowWidth="windowWidth"
           />
             
           <UpperLeftGuide :localHeight="windowHeight*0.2"/> 
-        </a-space>
       </a-col>
-      <a-col :span="12" :gutter="[16,16]">
+      <a-col :span="12" >
         <UpperRightSelect 
           :currentParameter="currentParameter" 
           :currentProjectId="currentProjectId" 
-          :localHeight="windowHeight*0.5"
+          :localHeight="windowHeight*0.597"
         />
         <UpperRightParams 
           :currentFormat="currentFormat"
           :currentStream="currentStream"
           :currentType="currentType"
-          :localHeight="windowHeight*0.5"
+          :localHeight="windowHeight*0.597"
         />
       </a-col>
     </a-row>
 
     
-    <a-row type="flex" justify="center" align="top"> 
+    <a-row justify="center" align="top" :span="24" class="mt-3"> 
       <LowerCodeArea 
         :currentParameter="currentParameter" 
         :currentProjectId="currentProjectId"

@@ -1,10 +1,10 @@
 <template>
-  <ul class="list-group" ref="test">
+  <ul class="list-group list-group-flush" ref="test">
     <li>
       <span>{{streamInfo.mark}}</span>
       <span>{{streamInfo.format}}</span>
     </li>
-    <li class="list-group-item" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click="paramClick(param)">
+    <li class="list-group-item list-group-item-action" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click="paramClick(param)">
       <span>{{param}}</span>
       <span v-if="typeof Selected[param] == 'string'" v-show="param!=nowFocus">  {{value}}</span>
       <a-auto-complete
@@ -70,7 +70,7 @@ export default {
             if (this.showingParams[this.currentFormat][key] && this.showingParams[this.currentFormat][key]['subValues'] && subKey in this.showingParams[this.currentFormat][key]['subValues'])
               dict[subKey] = ''
             else
-              dict[subKey] = 'bg-warning'
+              dict[subKey] = 'list-group-item-warning'
           }
         }
         if (this.currentFormat in this.showingParams && key in this.showingParams[this.currentFormat])
@@ -78,7 +78,7 @@ export default {
         else if (key.startsWith('-c:'))
           dict[key] = ''
         else
-          dict[key] = 'bg-warning'
+          dict[key] = 'list-group-item-warning'
       }
       return dict
     }

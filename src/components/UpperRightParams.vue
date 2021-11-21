@@ -1,5 +1,5 @@
 <template>
-  <a-col :span="12" class="shadow-sm border px-3" id="divParamLists">
+  <a-col :span="12" class="border" id="divParamLists">
     <div 
       v-infinite-scroll="loadMore" 
       infinite-scroll-disabled="busy" 
@@ -7,8 +7,8 @@
       class="divParamList" 
       :style="{height:localHeight+'px'}"
     >
-    <ul class="list-group">
-      <li class="list-group-item" :class="selectedStyles[paramName]" v-for="(paramInfo, paramName) in parameterObject" :key='paramName' @click="addParam(paramName, paramInfo)" @mouseenter="showGuidance(paramName, paramInfo)">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item list-group-item-action" :class="selectedStyles[paramName]" v-for="(paramInfo, paramName) in parameterObject" :key='paramName' @click="addParam(paramName, paramInfo)" @mouseenter="showGuidance(paramName, paramInfo)">
         <div class="d-flex justify-content-between">
           <div class="">
             <span>{{paramName}}</span>
@@ -104,7 +104,7 @@ export default {
       if (this.isSubParam){
         for (let key of Object.keys(this.parameterObject)){
           if (this.currentStream.params[this.currentDict] && key in this.currentStream.params[this.currentDict])
-            dict[key] = 'bg-primary bg-opacity-25'
+            dict[key] = 'list-group-item-info'
           else
             dict[key] = ''
         }
@@ -112,7 +112,7 @@ export default {
       else{
         for (let key of Object.keys(this.parameterObject)){
           if (this.currentStream.params && key in this.currentStream.params)
-            dict[key] = 'bg-primary bg-opacity-25'
+            dict[key] = 'list-group-item-info'
           else
             dict[key] = ''
         }

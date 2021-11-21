@@ -13,35 +13,41 @@
        
       </a-collapse>
  -->
-  <a-row class="shadow-sm border px-3" :style="{height:localHeight+'px'}">
+  <a-row class="border" :style="{height:localHeight+'px'}">
     <UpperLeftNewProject 
       :newProjectVisible="newProjectVisible"
       :windowWidth="windowWidth"
       />
     <a-tabs
       :default-active-key="currentProjectId"
-      tab-position="top"
+      tab-position="left"
       @tabClick="switchProject"
+      size="small"
     >
-      <a-tab-pane v-for="(project, index) in projects" :key="project.projectId" :tab="`Project-${index+1}`" @click="selectProject(project)">
+      <a-tab-pane 
+        v-for="(project, index) in projects" 
+        :key="project.projectId" :tab="`${index+1}`" 
+        @click="selectProject(project)"
+        class="mt-2 me-3"
+      >
+        <a-space>
+          <a-button :loading="isLoadFile" type="primary" @click="clickAddFile(project)">
+            <a-icon v-show="!isLoadFile" type="plus" class="align-middle mb-1"/>
+            Add File
+          </a-button>
+          <a-button type="primary" @click="clickNewProject">
+            <a-icon type="plus" class="align-middle mb-1"/>
+            Add Project
+          </a-button>
+        </a-space>
+
         <div 
           v-infinite-scroll="loadMore" 
           infinite-scroll-disabled="busy" 
           infinite-scroll-distance="10" 
           class="divFileCard" 
-          :style="{height:localHeight-80+'px'}"
-        >
-          <a-space>
-            <a-button :loading="isLoadFile" type="primary" @click="clickAddFile(project)">
-              <a-icon v-show="!isLoadFile" type="plus" class="align-middle mb-1"/>
-              Add File
-            </a-button>
-            <a-button type="primary" @click="clickNewProject">
-              <a-icon type="plus" class="align-middle mb-1"/>
-              Add Project
-            </a-button>
-          </a-space>
-          
+          :style="{height:localHeight-60+'px'}"
+        > 
           <input 
             type="file" 
             placeholder="Basic usage" 
@@ -49,22 +55,27 @@
             :ref="`loadFor${project.projectId}`" 
             @change="addFile"
           />
-          <a-card v-for="file in project.inputFiles" :key="file.fileId" size="small" :title="file.fileName" style="width: 100%">
-            <a-button type="danger" slot="extra" @click="removeFile(file.fileId)">
-              Delete
-              <a-icon type="delete" class="align-middle mb-1"/>
-            </a-button>
-            <p>{{file.filePath}}</p>
-            <a-row>
-              <a-checkbox 
-                v-for="(streamInfo, index) in file.streams" 
-                :key="index" 
-                :defaultChecked="streamInfo.used"
-                @change="onChangeMap(file.fileId, streamInfo.index, $event)">
-                  {{index}}: {{streamInfo.codec_type}}, {{streamInfo.codec_name}}
-              </a-checkbox>
-            </a-row>
-          </a-card>
+          <a-collapse>
+            <a-collapse-panel v-for="file in project.inputFiles" :key="file.fileId" :header="file.fileName" style="width: 100%">
+              <a-button type="danger" slot="extra" @click="removeFile(file.fileId)">
+                
+                <a-icon type="delete" class="align-middle mb-1"/>
+              </a-button>
+              <p>{{file.filePath}}</p>
+              <a-row>
+                <a-checkbox 
+                  v-for="(streamInfo, index) in file.streams" 
+                  :key="index" 
+                  :defaultChecked="streamInfo.used"
+                  @change="onChangeMap(file.fileId, streamInfo.index, $event)">
+                    {{index}}: {{streamInfo.codec_type}}, {{streamInfo.codec_name}}
+                </a-checkbox>
+              </a-row>
+              <a-row>
+                <a-input v-model="fileParams[file.fileId]" spellcheck="false"/>
+              </a-row>
+            </a-collapse-panel>
+          </a-collapse>
         </div>
       </a-tab-pane>
     </a-tabs>
@@ -81,7 +92,7 @@ import UpperLeftNewProject from './UpperLeftNewProject.vue';
 export default {
   components: { UpperLeftNewProject },
   name:'UpperLeftProjects',
-  props:['projects', 'currentProjectId', 'localHeight', 'windowWidth'],
+  props:['projects', 'currentProjectId', 'localHeight', 'windowWidth', "currentProject"],
 
   data() {
     return {
@@ -92,7 +103,19 @@ export default {
     }
   },
   computed:{
-    ...mapState('indexData', ['showingParams'])
+    ...mapState('indexData', ['showingParams']),
+    fileParams:{
+      get(){
+        var fileParamDict = {}
+        for (let file of this.currentProject.inputFiles){
+          fileParamDict[file.fileId] = file.fileParams.join(' ')
+        }
+        return fileParamDict
+      },
+      set(paramDict){
+        
+      }
+    }
   },
   methods: {
     selectProject(project){

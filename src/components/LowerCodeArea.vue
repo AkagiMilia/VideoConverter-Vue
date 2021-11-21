@@ -1,21 +1,7 @@
 <template>
-  <div class="container" id="divCodeArea">
-      <form id="Codeform" class="form-horizontal">
-        <div class="row">
-          <!-- <div class="col"><textarea class="form-control" rows="6" id="codeInps" v-model.trim.lazy="cmdStringInpts"></textarea></div>
-          <div class="col"><textarea class="form-control" rows="6" id="codeVideo" v-model.trim.lazy="cmdStringVideo"></textarea></div>
-          <div class="col"><textarea class="form-control" rows="6" id="codeAudio" v-model.trim.lazy="cmdStringAudio"></textarea></div>
-          <div class="col"><textarea class="form-control" rows="6" id="codeOups" v-model.trim.lazy="cmdStringOups"></textarea></div> -->
-          <!-- <div class="col"><textarea class="form-control" rows="6" id="codeInps" v-model.trim.lazy="maping"></textarea></div> -->
-          <div class="col">
-            <textarea class="form-control" id="codeVideo" rows="6" v-model.trim.lazy="paramLine" spellcheck="false"></textarea>
-            <!-- <label for="codeVideo">Video Params</label> -->
-          </div>
-          
-          <!-- <div class="col"><textarea class="form-control" rows="6" id="codeOups" ></textarea></div> -->
-        </div>
-      </form>
-    </div>
+  <a-row :span="24">
+    <textarea class="form-control" v-model.trim.lazy="paramLine" spellcheck="false" rows="3"/>
+  </a-row>
 </template>
 
 <script>
