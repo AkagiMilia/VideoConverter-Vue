@@ -4,20 +4,18 @@
 ```
 npm install
 ```
+#### or 
+```
+yarn install
+```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+npm run electron:serve
 ```
-
-### Compiles and minifies for production
+#### or
 ```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
+yarn electron:serve
 ```
 
 ### Customize configuration

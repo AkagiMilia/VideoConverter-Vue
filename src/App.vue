@@ -249,8 +249,8 @@ export default {
         for (let stream of value){
           if (this.currentParameter[index]){
             stream.streamId = this.currentParameter[index].streamId
-            if (stream.streamId == this.currentStreamId){
-              foundCurStreamId = true
+            if (this.currentParameter[index].streamId === this.currentStreamId){
+              var foundCurStreamId = true
             }       
           }
           else{
@@ -258,6 +258,7 @@ export default {
           }
           index += 1
         }
+        console.log('value:', value);
         var currentParameter = this.projects.find(project => project.projectId == this.currentProjectId).parameters
         while(currentParameter.length)
           currentParameter.pop()
@@ -306,6 +307,10 @@ export default {
     addNewFiles(newFiles){
       this.currentProject.inputFiles = [...this.currentProject.inputFiles, ...newFiles]
     },
+    changeFileParams(fileId, fileParams){
+      var targetFile = this.currentProject.inputFiles.find(file => file.fileId == fileId)
+      targetFile.fileParams = fileParams
+    },
     removeFile(fileId){
       var currentFile = this.currentProject.inputFiles.filter(file => file.fileId != fileId)
       this.currentProject.inputFiles = [...currentFile]
@@ -313,10 +318,9 @@ export default {
     refreshPointers(){
       this.currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
       this.currentParameter = this.currentProject.parameters
-      this.currentStream = this.currentParameter.find(stream => stream.streamId = this.currentStreamId)
+      this.currentStream = this.currentParameter.find(stream => stream.streamId == this.currentStreamId)
       this.currentFormat = this.currentStream.format
       this.currentType = this.currentStream.streamType
-
     },
     ...mapMutations('indexData', ['loadGuidance', 'loadEncoders'])
   },
@@ -382,6 +386,7 @@ export default {
     this.$bus.$on('changeStreamState', this.changeStreamState)
     this.$bus.$on('addNewFiles', this.addNewFiles)
     this.$bus.$on('removeFile', this.removeFile)
+    this.$bus.$on('changeFileParams', this.changeFileParams)
     const path = require('path')
     const guidancePath = path.join(__static, 'Guidance.json')
     const encodersPath = path.join(__static, 'Encoders.json')

@@ -13,7 +13,7 @@
        
       </a-collapse>
  -->
-  <a-row class="border" :style="{height:localHeight+'px'}">
+  <a-row class="border border-bottom-0 border-end-0" :style="{height:localHeight+'px'}">
     <UpperLeftNewProject 
       :newProjectVisible="newProjectVisible"
       :windowWidth="windowWidth"
@@ -28,9 +28,9 @@
         v-for="(project, index) in projects" 
         :key="project.projectId" :tab="`${index+1}`" 
         @click="selectProject(project)"
-        class="mt-2 me-3"
+        class="me-3"
       >
-        <a-space>
+        <a-space class="mt-3">
           <a-button :loading="isLoadFile" type="primary" @click="clickAddFile(project)">
             <a-icon v-show="!isLoadFile" type="plus" class="align-middle mb-1"/>
             Add File
@@ -72,7 +72,11 @@
                 </a-checkbox>
               </a-row>
               <a-row>
-                <a-input v-model="fileParams[file.fileId]" spellcheck="false"/>
+                <a-input 
+                  v-model="fileParams[file.fileId]" 
+                  spellcheck="false"
+                  @blur="fileParamExit(file.fileId, $event)"
+                />
               </a-row>
             </a-collapse-panel>
           </a-collapse>
@@ -111,9 +115,6 @@ export default {
           fileParamDict[file.fileId] = file.fileParams.join(' ')
         }
         return fileParamDict
-      },
-      set(paramDict){
-        
       }
     }
   },
@@ -136,6 +137,11 @@ export default {
     },
     clickNewProject(){
       this.newProjectVisible = true
+    },
+    fileParamExit(fileId, event){
+      var fileParams = event.target.value.split(' ')
+      fileParams = fileParams.filter(param => param)
+      this.$bus.$emit('changeFileParams', fileId, fileParams)
     },
     addFile(event){
       console.log('targetInfo', event);

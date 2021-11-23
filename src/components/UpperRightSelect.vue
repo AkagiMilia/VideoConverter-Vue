@@ -1,5 +1,5 @@
 <template>
-  <a-col :span="12" class="border" id="divParamPicked">
+  <a-col :span="12" class="border border-end-0" id="divParamPicked">
     <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" class="divSelectList" :style="{height:localHeight+'px'}">
     <UpperRightSelectList
       v-for="stream in currentParameter"
