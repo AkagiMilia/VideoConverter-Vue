@@ -40,13 +40,12 @@
             Add Project
           </a-button>
         </a-space>
-
         <div 
           v-infinite-scroll="loadMore" 
           infinite-scroll-disabled="busy" 
           infinite-scroll-distance="10" 
           class="divFileCard" 
-          :style="{height:localHeight-60+'px'}"
+          :style="{height:localHeight-100+'px'}"
         > 
           <input 
             type="file" 
@@ -55,32 +54,53 @@
             :ref="`loadFor${project.projectId}`" 
             @change="addFile"
           />
-          <a-collapse>
-            <a-collapse-panel v-for="file in project.inputFiles" :key="file.fileId" :header="file.fileName" style="width: 100%">
-              <a-button type="danger" slot="extra" @click="removeFile(file.fileId)">
-                
-                <a-icon type="delete" class="align-middle mb-1"/>
-              </a-button>
-              <p>{{file.filePath}}</p>
-              <a-row>
-                <a-checkbox 
-                  v-for="(streamInfo, index) in file.streams" 
-                  :key="index" 
-                  :defaultChecked="streamInfo.used"
-                  @change="onChangeMap(file.fileId, streamInfo.index, $event)">
-                    {{index}}: {{streamInfo.codec_type}}, {{streamInfo.codec_name}}
-                </a-checkbox>
-              </a-row>
-              <a-row>
-                <a-input 
-                  v-model="fileParams[file.fileId]" 
-                  spellcheck="false"
-                  @blur="fileParamExit(file.fileId, $event)"
-                />
-              </a-row>
+          <a-collapse :defaultActiveKey="project.inputFiles.length ? project.inputFiles[0].fileId : null">
+            <a-collapse-panel 
+              v-for="file in project.inputFiles" 
+              :key="file.fileId" 
+              :header="file.fileName" style="width: 100%"
+            >
+              <a-icon 
+                type="delete" 
+                class="align-middle mb-1" 
+                theme="twoTone" 
+                two-tone-color="red"
+                slot="extra"
+                style="fontSize:20px"
+                @click="removeFile(file.fileId)"
+              />
+              <a-space direction="vertical">
+                <p>{{file.filePath}}</p>
+                <a-row>
+                  <a-checkbox 
+                    v-for="(streamInfo, index) in file.streams" 
+                    :key="index" 
+                    :defaultChecked="streamInfo.used"
+                    @change="onChangeMap(file.fileId, streamInfo.index, $event)">
+                      {{index}}: {{streamInfo.codec_type}}, {{streamInfo.codec_name}}
+                  </a-checkbox>
+                </a-row>
+                <a-row>
+                  <a-space>
+                    <span>File Params</span>
+                    <a-input 
+                      v-model="fileParams[file.fileId]" 
+                      spellcheck="false"
+                      @blur="fileParamExit(file.fileId, $event)"
+                    />
+                  </a-space>
+                </a-row>
+              </a-space>
             </a-collapse-panel>
           </a-collapse>
         </div>
+        <a-row>
+          <a-space>
+            <a-button>
+              Output Folder
+            </a-button>
+          </a-space>
+        </a-row>
       </a-tab-pane>
     </a-tabs>
   </a-row>  

@@ -17,11 +17,13 @@ import {
   Collapse
 } from 'ant-design-vue'
 import App from './App.vue'
-import 'ant-design-vue/dist/antd.css'
+// import 'ant-design-vue/dist/antd.css'
 import store from './store/index'
 import VueVirtualScroller from 'vue-virtual-scroller'
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import infiniteScroll from 'vue-infinite-scroll'
+import { VueEditor } from "vue2-editor"
+
+
 Vue.config.productionTip = true
 
 // var sqlite3 = require('sqlite3').verbose();
@@ -45,6 +47,8 @@ Vue.use(Collapse)
 
 Vue.use(VueVirtualScroller)
 Vue.use(infiniteScroll)
+
+Vue.component(VueEditor.name, VueEditor)
 
 const vm = new Vue({
   el:'#app',

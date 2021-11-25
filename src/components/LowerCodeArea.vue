@@ -1,15 +1,37 @@
 <template>
   <a-row :span="24">
     <textarea class="form-control" v-model.trim.lazy="paramLine" spellcheck="false" rows="3"/>
+    <!-- <div @="editExit">
+      <highlightable-input
+        highlight-style="background-color:yellow" 
+        :highlight-enabled="true" 
+        :highlight="highlight"
+        v-model.trim.lazy="paramLine"
+        spellcheck="false"
+        ref="inputArea"
+      />
+    </div> -->
   </a-row>
 </template>
 
 <script>
 import { nanoid } from 'nanoid';
 import { mapState } from 'vuex'
+import HighlightableInput from 'vue-highlightable-input'
 export default {
   name:'LowerCodeArea',
+  components:{
+    HighlightableInput
+  },
   props:['currentParameter', 'currentProjectId', 'currentFormat'],
+  data() {
+    return {
+      msg:'',
+      highlight: [
+        {text:'chicken', style:"background-color:#f37373"},
+      ]
+    }
+  },
   computed:{
     paramLine:{
       get(){
@@ -31,7 +53,7 @@ export default {
             else
               line += value + ' '
           }
-        }  
+        }
         return line
       },
       set(value){
@@ -41,6 +63,9 @@ export default {
     ...mapState('indexData', ['showingParams', 'markParams'])
   },
   methods: {
+    editExit(event){
+      console.log(this.$refs.inputArea);
+    },
     updateParams(paramLine){
       // transfer the string cmd line to a list
       if (!paramLine){
