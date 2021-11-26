@@ -96,7 +96,7 @@
         </div>
         <a-row>
           <a-space>
-            <a-button>
+            <a-button @click="setOutput">
               Output Folder
             </a-button>
           </a-space>
@@ -111,6 +111,8 @@ import { mapState } from 'vuex';
 import { exec } from 'child_process'
 import { nanoid } from 'nanoid'
 import UpperLeftNewProject from './UpperLeftNewProject.vue';
+import { ipcRenderer } from 'electron'
+
 
 
 export default {
@@ -198,6 +200,9 @@ export default {
     removeFile(fileId){
       this.$bus.$emit('removeFile', fileId)
     },
+    setOutput(){
+      ipcRenderer.send('OpenFolder')
+    },
     loadMore(){
       this.busy = false
     }
@@ -206,6 +211,10 @@ export default {
     this.$bus.$on('changeVisible', (visible)=>{
       this.newProjectVisible = visible
     })
+    
+    ipcRenderer.on('folderAdress', (event, arg)=>{
+        console.log('arg:', arg);
+      })
   },
 }
 </script>

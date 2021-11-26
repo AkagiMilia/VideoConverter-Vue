@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import { nanoid } from 'nanoid';
 import { mapState } from 'vuex'
 import HighlightableInput from 'vue-highlightable-input'
 export default {
@@ -44,8 +43,8 @@ export default {
             line += key + ' '
             if (typeof value == 'object'){
               var valLine = ''
-              for (let [key, value] of Object.entries(value)){
-                valLine += key+'='+value+':'
+              for (let [subKey, subValue] of Object.entries(value)){
+                valLine += subKey+'='+subValue+':'
               }
               valLine = valLine.substr(0, valLine.length-1)
               line += valLine + ' '
