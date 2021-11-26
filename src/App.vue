@@ -44,7 +44,7 @@
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
+// load sub-components
 import UpperLeftProjects from './components/UpperLeftProjects.vue'
 import UpperLeftGuide from './components/UpperLeftGuide.vue'
 import UpperRightSelect from './components/UpperRightSelect.vue'
@@ -53,21 +53,20 @@ import UpperRightParams from './components/UpperRightParams.vue'
 import LowerCodeArea from './components/LowerCodeArea.vue'
 import LowerCodeDisplay from './components/LowerCodeDisplay.vue'
 
+// random id generator
 import { nanoid } from 'nanoid'
-import { mapGetters, mapMutations, mapState } from 'vuex'
+
+// tool to load data from Vuex
+import { mapMutations, mapState } from 'vuex'
+
+// platform detect
 const isMac = navigator.platform === 'MacIntel'
 const ffmpegWin = 'ffmpeg'
 const ffmpegMac = '/opt/homebrew/bin/ffmpeg'
 
-
-// db.each('select * from SQLite_master', function(err,row){
-//   console.log(row)
-// })
-
-
 export default {
-  name: 'App',
-  components: {
+  name: 'App',            // this component's name
+  components: {           // sub-components
     UpperLeftProjects,
     UpperLeftGuide,
     UpperRightSelect,
@@ -75,11 +74,13 @@ export default {
     LowerCodeArea,
     LowerCodeDisplay
   },
+
   data() {
     return {
       FFmpegPath: isMac ? ffmpegMac : ffmpegWin,
+      // project array e.g [{project1}, {project2}...]
       projects:[
-        // example.project1
+        // project1
         { 
           projectId:nanoid(),
           inputFiles:
@@ -98,6 +99,7 @@ export default {
           outputFilePath:'Elerye_-_Edera fast 264.mp4',
           outputFileName:'Elerye_-_Edera fast 264.mp4',
           outputParams:['-y'],
+          // parameters [{stream1}, {stream2}...]
           parameters:[ 
             {
               streamId:nanoid(),
@@ -120,13 +122,12 @@ export default {
               mark:'-c:a',
               format:'flac',
               params:{
-                '-a':'b',
-                '-c':'d'
+                // empty
               } 
             }
           ],  
         },
-        // example.project2
+        // project2
         { 
           projectId:nanoid(),
           inputFiles:
@@ -170,19 +171,27 @@ export default {
         }
       ],
       currentProjectId:'',
+      // pointer(shallow copy) of focused project
       currentProject:{},
+      // pointer of focused parameter
       currentParameter:[],
-      // focused streamType e.g video
       currentStreamId:'',
+      // pointer of focused Stream
       currentStream:{},
+      // current stream's type e.g video
       currentType:'',
+      // current stream's format e.g libx264
       currentFormat:'',
+      // current window's height and width
       windowHeight:document.body.clientHeight,
       windowWidth:document.body.clientWidth
     }
   },
   computed:{
+    // command parameters to launch ffmpeg e.g ['ffmpeg', '-i', 'a.mp4'...]
     cmdLine(){
+      if (!this.currentProject)
+        return []
       var currentProjectParams = this.projects.find(project => project.projectId == this.currentProjectId).parameters
       // base address ffmpeg
       var cmd = [this.FFmpegPath]
@@ -193,7 +202,7 @@ export default {
         cmd.push(`${file.filePath}`)
       })
 
-      // add map info
+      // add map info(decides which streams join the conversion)
       var fileIndex = 0
       this.currentProject.inputFiles.forEach((file)=>{
         for (let stream of file.streams){
@@ -205,9 +214,8 @@ export default {
         fileIndex += 1
       })
 
-      var cmdBlock = []
       // add video and audio params
-      cmdBlock = []
+      var cmdBlock = []
       for (let stream of currentProjectParams){
         cmdBlock.push(stream.mark)
         cmdBlock.push(stream.format)
@@ -233,16 +241,21 @@ export default {
 
       return cmd
     },
-    // focused format e.g libx264
-    // also changing currentType e.g video
+
+    // load parameters and encoders' info from Vuex
     ...mapState('indexData',['showingParams', 'encodersInfo'])
   },
   methods:{
-    // change parameters(by select lists)
+    // change(replace) parameters
     getParams(value, type = null, streamId = null){
+
+      // if type means that the request is from component Select List
+      // only replace currten stream's parameter
       if (type){
         this.currentStream.params = value
       }
+      // else from Prameter Input
+      // replace all parameters
       else{
         var index = 0
         var foundCurStreamId = false
@@ -272,7 +285,8 @@ export default {
         console.log('this projects', this.projects);
       }
     },
-    // add parameters(by parameter candidate)
+
+    // add single parameter(from Parameter Candidate List)
     addParam(paramName, paramInfo, father=null){
       var defaultVal = '1'
       if (paramInfo.valueType.startsWith('bool'))
@@ -291,30 +305,46 @@ export default {
         this.$set(this.currentStream.params, paramName, defaultVal)
  
     },
-    // change current project(by project list)
+
+    // change current project 
+    // (by switching Project List)
     getProject(projectId){
       this.currentProjectId = projectId
     },
-    // update current format
+
+    // update current format 
+    // (by clicking different stream list in Select List)
     switchStream(streamId){
       this.currentStreamId = streamId
     },
+
+    // change which stream in project will be used to convert 
+    // (by selecting streams from Project List)
     changeStreamState(fileId, streamId, used){     
       var currentFile = this.currentProject.inputFiles.find(file => file.fileId == fileId)
       var currentStream = currentFile.streams.find(stream => stream.index == streamId)
       currentStream.used = used
     },
+
+    // add new file(s)
+    // (from Project List)
     addNewFiles(newFiles){
       this.currentProject.inputFiles = [...this.currentProject.inputFiles, ...newFiles]
     },
+
+    // (from Project List)
     changeFileParams(fileId, fileParams){
       var targetFile = this.currentProject.inputFiles.find(file => file.fileId == fileId)
       targetFile.fileParams = fileParams
     },
+
+    // (from Project List)
     removeFile(fileId){
       var currentFile = this.currentProject.inputFiles.filter(file => file.fileId != fileId)
       this.currentProject.inputFiles = [...currentFile]
     },
+
+    // function to refresh pointers called by some functions after updating informations 
     refreshPointers(){
       this.currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
       this.currentParameter = this.currentProject.parameters
@@ -326,7 +356,7 @@ export default {
   },
   watch:{
     // if the currentFormat changed
-    // let the Param list refreash
+    // let the component Param List refreash
     currentFormat:{
       immediate:true,
       handler(curVal, oldVal){
@@ -345,6 +375,8 @@ export default {
           this.$bus.$emit('empitParameter')
       }
     },
+
+    // if current project ID changed, refresh pointers
     currentProjectId:{
       immediate:true,
       handler(curVal, oldval){
@@ -356,6 +388,8 @@ export default {
         console.log('currentFormat', this.currentFormat)
       }
     },
+
+    // if current stream ID changed, refresh pointers
     currentStreamId:{
       immediate:true,
       handler(curVal, oldval){
@@ -373,12 +407,16 @@ export default {
       }
     }
   },
+
+  // do somthing before components mounting on the page
   beforeMount(){
+
+    // initialize informations
     this.currentProjectId = this.projects[0].projectId
     this.currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
     this.currentStreamId = this.currentProject.parameters[0].streamId
 
-    // this.$bus.$emit('transProjects', this.projects)
+    // listeners of the event bus
     this.$bus.$on('updateParams', this.getParams)
     this.$bus.$on('changeProject', this.getProject)
     this.$bus.$on('addParam', this.addParam)
@@ -387,13 +425,15 @@ export default {
     this.$bus.$on('addNewFiles', this.addNewFiles)
     this.$bus.$on('removeFile', this.removeFile)
     this.$bus.$on('changeFileParams', this.changeFileParams)
+
+    // let the Vuex load parameter, encoder's informations from files
     const path = require('path')
     const guidancePath = path.join(__static, 'Guidance.json')
     const encodersPath = path.join(__static, 'Encoders.json')
     this.loadGuidance(guidancePath)
     this.loadEncoders(encodersPath)
     
-
+    // refresh the data of window's current size
     window.onresize = ()=>{
       this.windowHeight = document.body.clientHeight
       this.windowWidth = document.body.clientWidth
@@ -404,6 +444,7 @@ export default {
 </script>
 
 <style>
+  /* CSS styles */
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
