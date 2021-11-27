@@ -14,7 +14,11 @@ import {
   Modal,
   Steps,
   Space,
-  Collapse
+  Collapse,
+  Popover,
+  Upload,
+  List,
+  message
 } from 'ant-design-vue'
 import App from './App.vue'
 // import 'ant-design-vue/dist/antd.css'
@@ -44,6 +48,9 @@ Vue.use(Modal)
 Vue.use(Steps)
 Vue.use(Space)
 Vue.use(Collapse)
+Vue.use(Popover)
+Vue.use(Upload)
+Vue.use(List)
 
 Vue.use(VueVirtualScroller)
 Vue.use(infiniteScroll)
@@ -57,6 +64,7 @@ const vm = new Vue({
   render: create => create(App),
   beforeCreate(){
     Vue.prototype.$bus = this
+    Vue.prototype.$message = message
     const path = require('path')
     const dbPath = path.join(process.env.BASE_URL, 'data/database.db')
     console.log('__dirname:', __dirname);
