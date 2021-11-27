@@ -1,18 +1,4 @@
 <template>
-    <!-- <div class="row project" v-for="project in projects" :key="project.projectId" @click="selectProject(project)">
-      <div class="row" v-for="file in project.inputFiles" :key="file.fileId">
-        <p class="fileName">{{file.fileName}}</p>
-        <p class="filePath">{{file.filePath}}</p>
-      </div>
-    </div> -->
-      <!-- <a-collapse v-model="activeKey" expand-icon-position="left">
-          <a-collapse-panel :key="item.projectId" header="This is panel header 1">
-            <p>{{ item.projectId }}</p>
-            <a-icon slot="extra" type="setting"/>
-          </a-collapse-panel>
-       
-      </a-collapse>
- -->
   <a-row class="border border-bottom-0 border-end-0" :style="{height:localHeight+'px'}">
     <UpperLeftNewProject 
       :newProjectVisible="newProjectVisible"
@@ -94,30 +80,43 @@
             </a-collapse-panel>
           </a-collapse>
         </div>
-        <a-row>
-          <a-space>
-            <a-button @click="setOutput">
-              Output Folder
-            </a-button>
-          </a-space>
-        </a-row>
+        <a-popover title="Output Info" trigger="hover">
+          <template slot="content">
+            <a-space direction="vertical" :size="0">
+              <span><b>Output Name: </b>{{currentProject.outputFileName}}</span>
+              <span><b>Output Path: </b>{{currentProject.outputFilePath}}</span>
+            </a-space>
+          </template>
+          <a-input-search
+            placeholder="Output Path"
+            v-model="currentOutputPath"
+            enter-button="Output Path"
+            @search="setOutput"
+            spellcheck="false"
+          />
+        </a-popover>
       </a-tab-pane>
     </a-tabs>
   </a-row>  
 </template>
 
 <script>
+
+// method to load data from Vuex
 import { mapState } from 'vuex';
+// method to launch FFprobe
 import { exec } from 'child_process'
+// to generate random ID
 import { nanoid } from 'nanoid'
 import UpperLeftNewProject from './UpperLeftNewProject.vue';
+// object to send message to Electron main process
 import { ipcRenderer } from 'electron'
-
 
 
 export default {
   components: { UpperLeftNewProject },
   name:'UpperLeftProjects',
+  // props data sent from APP
   props:['projects', 'currentProjectId', 'localHeight', 'windowWidth', "currentProject"],
 
   data() {
@@ -137,6 +136,14 @@ export default {
           fileParamDict[file.fileId] = file.fileParams.join(' ')
         }
         return fileParamDict
+      }
+    },
+    currentOutputPath:{
+      get(){
+        return this.currentProject.outputFilePath
+      },
+      set(path){
+        this.changeOutput(path)
       }
     }
   },
@@ -178,7 +185,7 @@ export default {
         var streams = []
         exec(`ffprobe -i "${file.path}" -show_streams -of json`, (error, stdout, stderr)=>{
           if (error){
-            console.log(error)
+            this.$message.error(`File ${file.name} Load Failed!`)
             this.isLoadFile = false
             return
           }
@@ -201,7 +208,19 @@ export default {
       this.$bus.$emit('removeFile', fileId)
     },
     setOutput(){
-      ipcRenderer.send('OpenFolder')
+      var defaultPath = this.currentProject.inputFiles[0].filePath
+      var dotIndex = defaultPath.lastIndexOf('.')
+      defaultPath = defaultPath.slice(0,dotIndex) + '-output' + defaultPath.slice(dotIndex)
+      ipcRenderer.send('OpenFolder', defaultPath)
+    },
+    changeOutput(path){
+      if (path.lastIndexOf('/')>-1)
+        var slashIndex = path.lastIndexOf('/')
+      else 
+        var slashIndex = path.lastIndexOf('\\')
+      var outputFileName = path.slice(slashIndex+1)
+      console.log('outputFileName', outputFileName)
+      this.$bus.$emit('changeOutput', path, outputFileName)
     },
     loadMore(){
       this.busy = false
@@ -212,8 +231,10 @@ export default {
       this.newProjectVisible = visible
     })
     
-    ipcRenderer.on('folderAdress', (event, arg)=>{
-        console.log('arg:', arg);
+    ipcRenderer.on('fileAddress', (event, path)=>{
+        console.log('filePath:', path)
+        if (path)
+          this.changeOutput(path)
       })
   },
 }
