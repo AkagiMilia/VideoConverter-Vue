@@ -75,6 +75,7 @@ export default {
     LowerCodeDisplay
   },
 
+  // data variables
   data() {
     return {
       FFmpegPath: isMac ? ffmpegMac : ffmpegWin,
@@ -187,6 +188,8 @@ export default {
       windowWidth:document.body.clientWidth
     }
   },
+
+  // computed datas
   computed:{
     // command parameters to launch ffmpeg e.g ['ffmpeg', '-i', 'a.mp4'...]
     cmdLine(){
@@ -344,6 +347,10 @@ export default {
       this.currentProject.inputFiles = [...currentFile]
     },
 
+    changeOutput(outputFilePath, outputFileName){
+      this.$set(this.currentProject, 'outputFilePath', outputFilePath)
+      this.$set(this.currentProject, 'outputFileName', outputFileName)
+    },
     // function to refresh pointers called by some functions after updating informations 
     refreshPointers(){
       this.currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
@@ -352,8 +359,12 @@ export default {
       this.currentFormat = this.currentStream.format
       this.currentType = this.currentStream.streamType
     },
+
+    // load Vuex Mutation functions
     ...mapMutations('indexData', ['loadGuidance', 'loadEncoders'])
   },
+
+  // watchers, run something when the watched data changed
   watch:{
     // if the currentFormat changed
     // let the component Param List refreash
@@ -425,6 +436,7 @@ export default {
     this.$bus.$on('addNewFiles', this.addNewFiles)
     this.$bus.$on('removeFile', this.removeFile)
     this.$bus.$on('changeFileParams', this.changeFileParams)
+    this.$bus.$on('changeOutput', this.changeOutput)
 
     // let the Vuex load parameter, encoder's informations from files
     const path = require('path')

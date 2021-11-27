@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain, dialog} from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -67,8 +67,14 @@ app.on('ready', async () => {
   createWindow()
 
   // waiting message from Vue
-  ipcMain.on('OpenFolder', (event, arg)=>{
-    event.reply('folderAdress', 'hahaha')
+  // open dialog 'save file'
+  ipcMain.on('OpenFolder', (event, defaultPath)=>{
+    dialog.showSaveDialog({
+      title:'save file',
+      defaultPath
+    }).then(result=>{
+      event.reply('fileAddress', result.filePath)
+    })
   })
 })
 
