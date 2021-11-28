@@ -1,16 +1,6 @@
 <template>
   <a-row :span="24">
     <textarea class="form-control" v-model.trim.lazy="paramLine" spellcheck="false" rows="3"/>
-    <!-- <div @="editExit">
-      <highlightable-input
-        highlight-style="background-color:yellow" 
-        :highlight-enabled="true" 
-        :highlight="highlight"
-        v-model.trim.lazy="paramLine"
-        spellcheck="false"
-        ref="inputArea"
-      />
-    </div> -->
   </a-row>
 </template>
 
@@ -32,7 +22,10 @@ export default {
     }
   },
   computed:{
+
+    // Current parameter string
     paramLine:{
+      // Translate the parameters to string displaying on the input area
       get(){
         var line = ''
         console.log(`${this.currentParameter}`);
@@ -55,6 +48,7 @@ export default {
         }
         return line
       },
+      // Set the string to parameter objects after the input changing
       set(value){
         this.updateParams(value)
       }
@@ -65,8 +59,10 @@ export default {
     editExit(event){
       console.log(this.$refs.inputArea);
     },
+
+    // Translate parameter sting to an array including streams parameter objects 
+    // and send them to App
     updateParams(paramLine){
-      // transfer the string cmd line to a list
       if (!paramLine){
         console.log('empty inputs')
         var markLists = [
@@ -123,7 +119,7 @@ export default {
         params:paramLine[cutPoint+1] && !paramLine[cutPoint+1].startsWith('-') ? paramLine.slice(cutPoint+2) : paramLine.slice(cutPoint+1),
         format:paramLine[cutPoint+1] && !paramLine[cutPoint+1].startsWith('-') ? paramLine[cutPoint+1] : 'copy',
       })
-      // translated object send to App
+
       for (let markList of markLists){
         var newObject = {}
         var { params } = markList
@@ -132,7 +128,6 @@ export default {
         while(index <= len){
           if (params[index].startsWith('-') && !+params[index].substr(1)){
             var paramInfo = null
-            // read parameter info
             if (this.showingParams[markList.format])
               paramInfo = this.showingParams[markList.format][params[index]]
             console.log('paramInfo:',paramInfo);

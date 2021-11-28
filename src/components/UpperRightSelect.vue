@@ -1,6 +1,7 @@
 <template>
   <a-col :span="12" class="border border-end-0" id="divParamPicked">
     <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" class="divSelectList" :style="{height:localHeight+'px'}">
+    <!-- show lists of stream's parameters-->
     <UpperRightSelectList
       v-for="stream in currentParameter"
       :key="stream.streamId"
@@ -17,10 +18,9 @@ export default {
   components:{
     UpperRightSelectList,
   },
-  props:['currentParameter','currentProjectId','currentVideo', 'currentAudio', 'localHeight'],
+  props:['currentParameter','currentProjectId', 'localHeight'],
   data() {
     return {
-      thereIsNothingHere:null,
       busy:false
     }
   },

@@ -24,6 +24,8 @@ export default {
       this.paramGuidance['info'] = param.explanation
     }
   },
+
+  // update guidance showing after receiving information
   beforeMount() {
     this.$bus.$on('showGuidance', this.updatGuidance)
   },

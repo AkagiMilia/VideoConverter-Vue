@@ -33,11 +33,11 @@ export default {
   props:['currentFormat', 'currentStreamId', 'currentStream', 'currentType', 'localHeight'],
   data(){
     return{
-      parameterObject:{},
-      currentDict:'',
-      isSubParam:false,
+      parameterObject:{},           // Parameter candidates showing on the page
+      currentDict:'',               // save the parameter name if it requires dictionary sub value
+      isSubParam:false,             // wheter the selected candidate is a sub value
       busy:false,
-      ColorValueType:{
+      ColorValueType:{              // value type's showing colors
         string:'orange',
         int:'blue',
         float:'cyan',
@@ -48,6 +48,8 @@ export default {
     }
   },
   methods: {
+
+    // Search the parameter candidate from guidance
     displayParameter(param, type){
       console.log('searching param:', param)
       console.log('searching type:', type);
@@ -71,10 +73,11 @@ export default {
             break
           }
         }
-        // this.parameterObject = this.showingParams[this.currentVideo]
       }
       console.log('current parameter list is:\n', this.parameterObject)
     },
+
+    // send new parameter information to the App after user clicking
     addParam(paramName, paramInfo){
       if (this.isSubParam){
         console.log('I am a subParam')
@@ -84,12 +87,21 @@ export default {
         this.$bus.$emit('addParam', paramName, paramInfo, null)
       }
     },
+
+    // if the project or stream's format changed,
+    // refresh the candidate
     refreshParameter(curV){
       this.parameterObject = this.showingParams[curV]
     },
+
+    // if the new format is not recorded in the guidance
+    // show a blank list
     empitParameter(){
       this.parameterObject = {}
     },
+
+    // if the user hover on the candidate, send it's information
+    // and display its explanation on the component Guidance
     showGuidance(key, param){
       this.$bus.$emit('showGuidance', key, param)
     },
@@ -98,7 +110,11 @@ export default {
     }
   },
   computed:{
+
+    // Parameter guidance load from Vuex
     ...mapState('indexData',['showingParams']),
+
+    // mark which parameter candidate has been selected 
     selectedStyles(){
       var dict = {}
       if (this.isSubParam){
@@ -124,10 +140,7 @@ export default {
     this.$bus.$on('searchParameter', this.displayParameter)
     this.$bus.$on('refreshParameter', this.refreshParameter)
     this.$bus.$on('empitParameter', this.empitParameter)
-  },
-  mounted(){
-    
-}
+  }
 }
 </script>
 

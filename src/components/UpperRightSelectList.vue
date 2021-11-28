@@ -62,13 +62,15 @@ export default {
   props:['streamInfo'],
   data() {
     return {
-      nowFocus:'',
+      nowFocus:'',        // the name of focusing parameter input 
       busy:false,
-      dataSource:[],
-      currentParam:''
+      dataSource:[],      // auto complete's data source
+      currentParam:''     // selected parameter
     }
   },
   computed:{
+
+    // current stream's parameter showing on the list
     Selected(){
       return this.streamInfo.params
     },
@@ -77,7 +79,13 @@ export default {
         return this.streamInfo.format
       }
     },
+
+    // load parameter guidance, 
+    // markers' information(e.g {video:['-c:v'], audio:['-c:a']}), 
+    // and encoders' info
     ...mapState('indexData', ['showingParams', 'markParams', 'encodersInfo']),
+
+    // mark the parameters who are not in the guidance
     warningStyles(){
       var dict = {}
       for (let [key, value] of Object.entries(this.Selected)){
@@ -100,6 +108,8 @@ export default {
     }
   },
   methods: {
+
+    // show the input slot when user clicks certain parameter
     paramClick(param, father=null){
       this.currentParam = param
       setTimeout(() => {
@@ -121,6 +131,8 @@ export default {
           this.$bus.$emit('showGuidance', param, this.showingParams[this.currentFormat][param])
       }  
     },
+
+    // After finishing inputing value, update the parameter value
     paramExit(param,subParam,value){
       console.log('param:',param)
       console.log('subParam:',subParam)
@@ -134,12 +146,19 @@ export default {
       this.sendParam({...this.Selected})
       this.dataSource = []
     },
+
+    // Update the focusing stream
     switchStream(){
       this.$bus.$emit('switchStream', this.streamInfo.streamId)
     },
+
+    // update parameter value to App
     sendParam(params){
       this.$bus.$emit('updateParams', params, this.streamInfo.streamType, this.streamInfo.streamId)
     },
+
+    // gather auto complete's candidate 
+    // when the clicked paramerter has limited or recorded values
     onSearch(){
       try {
         console.log(this.currentParam);

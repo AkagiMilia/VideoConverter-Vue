@@ -1,9 +1,11 @@
 <template>
   <a-row class="border border-bottom-0 border-end-0" :style="{height:localHeight+'px'}">
+    <!-- New project dialog -->
     <UpperLeftNewProject 
       :newProjectVisible="newProjectVisible"
       :windowWidth="windowWidth"
-      />
+    />
+    <!-- Pages of projects -->
     <a-tabs
       :default-active-key="currentProjectId"
       tab-position="left"
@@ -80,6 +82,8 @@
             </a-collapse-panel>
           </a-collapse>
         </div>
+
+        <!-- Output location input-->
         <a-popover title="Output Info" trigger="hover">
           <template slot="content">
             <a-space direction="vertical" :size="0">
@@ -148,6 +152,7 @@ export default {
     }
   },
   methods: {
+    // Switch project when user clicks project tags
     selectProject(project){
       console.log(project.projectId);
       this.$bus.$emit('changeProject', project.projectId)
@@ -155,23 +160,35 @@ export default {
     switchProject(val){
       this.$bus.$emit('changeProject', val)
     },
+
+    // Change selection of streams
     onChangeMap(fileId, streamId, event){
       console.log(`Now get fileId: ${fileId}`)
       console.log(`Now get streamId: ${streamId}`)
       console.log(event.target.checked)
       this.$bus.$emit('changeStreamState', fileId, streamId, event.target.checked)
     },
+
+    // Active open file dialog when click the button
     clickAddFile(project){
       this.$refs[`loadFor${project.projectId}`][0].click()
     },
+
+    // Show create project dialog
     clickNewProject(){
       this.newProjectVisible = true
     },
+
+    // when file parameter input on blur(lose focus), 
+    // submit new file parameter
     fileParamExit(fileId, event){
       var fileParams = event.target.value.split(' ')
       fileParams = fileParams.filter(param => param)
       this.$bus.$emit('changeFileParams', fileId, fileParams)
     },
+
+    // Anylize and send new file information
+    // after loading files from open file dialog
     addFile(event){
       console.log('targetInfo', event);
       console.log('file info', event.target.files);
@@ -204,15 +221,22 @@ export default {
         })
       }
     },
+
     removeFile(fileId){
       this.$bus.$emit('removeFile', fileId)
     },
+
+    // Set the default output path
+    // and send message to the electron main process
+    // to open a save file dialog with the default output path
     setOutput(){
       var defaultPath = this.currentProject.inputFiles[0].filePath
       var dotIndex = defaultPath.lastIndexOf('.')
       defaultPath = defaultPath.slice(0,dotIndex) + '-output' + defaultPath.slice(dotIndex)
       ipcRenderer.send('OpenFolder', defaultPath)
     },
+
+    // Update new output parameter
     changeOutput(path){
       if (path.lastIndexOf('/')>-1)
         var slashIndex = path.lastIndexOf('/')
@@ -227,10 +251,13 @@ export default {
     }
   },
   beforeMount() {
+
+    // Close/open the create new project dialog after receiving a message
     this.$bus.$on('changeVisible', (visible)=>{
       this.newProjectVisible = visible
     })
     
+    // Listen output path from save file dialog
     ipcRenderer.on('fileAddress', (event, path)=>{
         console.log('filePath:', path)
         if (path)
