@@ -68,12 +68,15 @@ app.on('ready', async () => {
 
   // waiting message from Vue
   // open dialog 'save file'
-  ipcMain.on('OpenFolder', (event, defaultPath)=>{
+  ipcMain.on('OpenFolder', (event, defaultPath, sender)=>{
     dialog.showSaveDialog({
       title:'save file',
       defaultPath
     }).then(result=>{
-      event.reply('fileAddress', result.filePath)
+      if (sender == 'Project')
+        event.reply('fileAddressProject', result.filePath)
+      else if (sender == 'newProject')
+        event.reply('fileAddressNewProject', result.filePath)
     })
   })
 })

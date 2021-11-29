@@ -233,7 +233,7 @@ export default {
       var defaultPath = this.currentProject.inputFiles[0].filePath
       var dotIndex = defaultPath.lastIndexOf('.')
       defaultPath = defaultPath.slice(0,dotIndex) + '-output' + defaultPath.slice(dotIndex)
-      ipcRenderer.send('OpenFolder', defaultPath)
+      ipcRenderer.send('OpenFolder', defaultPath, 'Project')
     },
 
     // Update new output parameter
@@ -258,11 +258,11 @@ export default {
     })
     
     // Listen output path from save file dialog
-    ipcRenderer.on('fileAddress', (event, path)=>{
-        console.log('filePath:', path)
-        if (path)
-          this.changeOutput(path)
-      })
+    ipcRenderer.on('fileAddressProject', (event, path)=>{
+      console.log('filePath:', path)
+      if (path)
+        this.changeOutput(path)
+    })
   },
 }
 </script>

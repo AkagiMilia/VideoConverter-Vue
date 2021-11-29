@@ -18,6 +18,9 @@ import {
   Popover,
   Upload,
   List,
+  Radio,
+  Select,
+  InputNumber,
   message
 } from 'ant-design-vue'
 import App from './App.vue'
@@ -30,9 +33,6 @@ import { VueEditor } from "vue2-editor"
 
 Vue.config.productionTip = true
 
-// var sqlite3 = require('sqlite3').verbose();
-import sqlite3 from 'sqlite3'
-// var db = new sqlite3.Database('./src/data/database.db');
 // Vue.use(Antd)
 Vue.use(Button) 
 Vue.use(Card)
@@ -50,6 +50,9 @@ Vue.use(Space)
 Vue.use(Collapse)
 Vue.use(Popover)
 Vue.use(Upload)
+Vue.use(Radio)
+Vue.use(Select)
+Vue.use(InputNumber)
 Vue.use(List)
 
 Vue.use(VueVirtualScroller)

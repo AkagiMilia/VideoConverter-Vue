@@ -347,6 +347,11 @@ export default {
       this.currentProject.inputFiles = [...currentFile]
     },
 
+    addProject(project){
+      console.log('the new Project:',project)
+      this.projects.push(project)
+    },
+
     changeOutput(outputFilePath, outputFileName){
       this.$set(this.currentProject, 'outputFilePath', outputFilePath)
       this.$set(this.currentProject, 'outputFileName', outputFileName)
@@ -437,6 +442,7 @@ export default {
     this.$bus.$on('removeFile', this.removeFile)
     this.$bus.$on('changeFileParams', this.changeFileParams)
     this.$bus.$on('changeOutput', this.changeOutput)
+    this.$bus.$on('addProject', this.addProject)
 
     // let the Vuex load parameter, encoder's informations from files
     const path = require('path')
