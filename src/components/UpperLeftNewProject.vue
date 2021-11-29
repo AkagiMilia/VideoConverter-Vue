@@ -286,7 +286,7 @@ export default {
     videoEncodingExit(value){
       this.videoEncodingType = value
     },
-    
+
     setOutput(){
       if (!this.newProject.inputFiles){
         ipcRenderer.send('OpenFolder', '', 'newProject')
@@ -350,7 +350,7 @@ export default {
         audioStream.format = 'copy'
       }
       else{
-        audioStream.format = this.videoFormat
+        audioStream.format = this.audioFormat
         audioStream.params = {'-b:a':this.audioBitRate+'k'}
       }
       this.newProject.parameters.push(audioStream)

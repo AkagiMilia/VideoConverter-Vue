@@ -10,6 +10,7 @@
       :default-active-key="currentProjectId"
       tab-position="left"
       @tabClick="switchProject"
+      :style="{height:localHeight+'px'}"
       size="small"
     >
       <a-tab-pane 
