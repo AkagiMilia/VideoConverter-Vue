@@ -1,28 +1,13 @@
 import Vue from 'vue'
 // import Antd from 'ant-design-vue'
 import { 
-  Button, 
-  Card,
-  Col,
-  Row,
-  Checkbox,
-  Icon,
-  Input,
-  Tabs,
-  Tag,
-  AutoComplete,
-  Modal,
-  Steps,
-  Space,
-  Collapse,
-  Popover,
-  Upload,
-  List,
-  Radio,
-  Select,
-  InputNumber,
-  message
+  Button, Card, Col, Row,
+  Checkbox, Icon, Input, Tabs,
+  Tag, AutoComplete, Modal, Steps, 
+  Space, Collapse, Popover, Upload,
+  List, Radio, Select, InputNumber, message
 } from 'ant-design-vue'
+
 import App from './App.vue'
 // import 'ant-design-vue/dist/antd.css'
 import store from './store/index'
@@ -60,24 +45,25 @@ Vue.use(infiniteScroll)
 
 Vue.component(VueEditor.name, VueEditor)
 
+// Initialize Vue
 const vm = new Vue({
+
+  // render every thing to the part
+  // whose ID is "app" in index.html
   el:'#app',
-  // render: h => h(App),
+  
+  // Vuex
   store,
+
+  // render Component App
   render: create => create(App),
   beforeCreate(){
+    // Add event bus to Vue
     Vue.prototype.$bus = this
+    // Ant-Design: message handler
     Vue.prototype.$message = message
-    const path = require('path')
-    const dbPath = path.join(process.env.BASE_URL, 'data/database.db')
-    console.log('__dirname:', __dirname);
-    console.log('__filename:', __filename);
-    console.log('dbPath:',dbPath);
-    // Vue.prototype.$dataBase = new sqlite3.Database('./src/data/database.db')
   },
   beforeDestroy(){
-    // this.$dataBase.close()
   }
 })
 console.log(vm);
-// console.log(db)

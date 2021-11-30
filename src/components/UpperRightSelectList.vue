@@ -5,50 +5,85 @@
         <span class="fs-4">{{streamInfo.format}}</span>
         <a-space direction="vertical" :size="0">
           <a-row type="flex" justify="end">
+            <!-- Video Icon -->
             <svg v-if="streamInfo.streamType == 'video'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-film" viewBox="0 0 16 16">
               <path d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V1zm4 0v6h8V1H4zm8 8H4v6h8V9zM1 1v2h2V1H1zm2 3H1v2h2V4zM1 7v2h2V7H1zm2 3H1v2h2v-2zm-2 3v2h2v-2H1zM15 1h-2v2h2V1zm-2 3v2h2V4h-2zm2 3h-2v2h2V7zm-2 3v2h2v-2h-2zm2 3h-2v2h2v-2z"/>
             </svg>
+            <!-- Audio Icon -->
             <svg v-if="streamInfo.streamType == 'audio'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-music-fill" viewBox="0 0 16 16">
               <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-.5 4.11v1.8l-2.5.5v5.09c0 .495-.301.883-.662 1.123C7.974 12.866 7.499 13 7 13c-.5 0-.974-.134-1.338-.377-.36-.24-.662-.628-.662-1.123s.301-.883.662-1.123C6.026 10.134 6.501 10 7 10c.356 0 .7.068 1 .196V4.41a1 1 0 0 1 .804-.98l1.5-.3a1 1 0 0 1 1.196.98z"/>
             </svg>
           </a-row>
           <span style="fontSize:12px">{{streamInfo.mark}}</span>
-        </a-space>
-        
+        </a-space>   
       </div>
     </li>
+
     <li class="list-group-item list-group-item-action disabled" v-if="!Object.keys(Selected).length">
       Empty
     </li>
-    <li class="list-group-item list-group-item-action" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click="paramClick(param)">
-      <span>{{param}}</span>
-      <span v-if="typeof Selected[param] == 'string'" v-show="param!=nowFocus">  {{value}}</span>
-      <a-auto-complete
-        type="text" 
-        :data-source="dataSource"
-        v-if="typeof Selected[param] == 'string'"
-        v-model.trim.lazy="Selected[param]"
-        v-show="param==nowFocus"
-        @blur="paramExit(param, null, $event)"
-        @focus="paramFocus"
-        @search="onSearch"
-        :ref="'input'+param"
-        spellcheck="false"
-        />
-      <ul class="list-group" v-if="typeof Selected[param] == 'object'">
-        <li class="list-group-item" :class="warningStyles[subParam]" v-for="(subVal, subParam) in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
-          <span>{{subParam}}</span>
-          <span v-show="subParam!=nowFocus">  {{subVal}}</span>
-          <a-auto-complete 
+
+    <li class="list-group-item list-group-item-action paramList" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click="paramClick(param)">
+      <a-row>
+        <a-col :span="typeof Selected[param] == 'object' ? 24 : 11">
+          <span><strong>{{param}}</strong></span>
+        </a-col>
+        <a-col :span="11">
+          <span 
+            v-if="typeof Selected[param] == 'string'" 
+            v-show="param!=nowFocus"
+          >
+            {{value}}
+          </span>
+          <a-auto-complete
             type="text" 
             :data-source="dataSource"
-            v-model.trim.lazy="Selected[param][subParam]"
-            v-show="subParam==nowFocus"
-            @blur="paramExit(param, subParam, $event)"
+            v-if="typeof Selected[param] == 'string'"
+            v-model.trim.lazy="Selected[param]"
+            v-show="param==nowFocus"
+            @blur="paramExit(param, null, $event)"
+            @focus="paramFocus"
             @search="onSearch"
-            :ref="'input'+subParam"
+            :ref="'input'+param"
             spellcheck="false"
             />
+        </a-col>
+        <a-icon 
+          class="delete" 
+          type="close-circle" 
+          theme="twoTone" 
+          twoToneColor="red"
+        />
+      </a-row>
+      
+      <!-- If parameter type is an object, -->
+      <!-- show their sub parameters -->
+      <ul class="list-group" v-if="typeof Selected[param] == 'object'">
+        <li class="list-group-item subParamList" :class="warningStyles[subParam]" v-for="(subVal, subParam) in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
+          <a-row>
+            <a-col :span="11">
+              <span><strong>{{subParam}}</strong></span>
+            </a-col>
+            <a-col :span="11">
+              <span v-show="subParam!=nowFocus">  {{subVal}}</span>
+              <a-auto-complete 
+                type="text" 
+                :data-source="dataSource"
+                v-model.trim.lazy="Selected[param][subParam]"
+                v-show="subParam==nowFocus"
+                @blur="paramExit(param, subParam, $event)"
+                @search="onSearch"
+                :ref="'input'+subParam"
+                spellcheck="false"
+              />
+            </a-col>
+            <a-icon 
+              class="subDelete" 
+              type="close-circle" 
+              theme="twoTone" 
+              twoToneColor="red"
+            />
+          </a-row>
         </li>
       </ul>
     </li>
@@ -65,7 +100,15 @@ export default {
       nowFocus:'',        // the name of focusing parameter input 
       busy:false,
       dataSource:[],      // auto complete's data source
-      currentParam:''     // selected parameter
+      currentParam:'',     // selected parameter
+      ColorValueType:{              // value type's showing colors
+        string:'orange',
+        int:'blue',
+        float:'cyan',
+        boolean:'green',
+        dictionary:'purple',
+        flags:'pink'
+      }
     }
   },
   computed:{
@@ -81,7 +124,7 @@ export default {
     },
 
     // load parameter guidance, 
-    // markers' information(e.g {video:['-c:v'], audio:['-c:a']}), 
+    // and markers' information(e.g {video:['-c:v'], audio:['-c:a']}), 
     // and encoders' info
     ...mapState('indexData', ['showingParams', 'markParams', 'encodersInfo']),
 
@@ -110,6 +153,7 @@ export default {
   methods: {
 
     // show the input slot when user clicks certain parameter
+    // and send the parameter info to the parameter candidate list
     paramClick(param, father=null){
       this.currentParam = param
       setTimeout(() => {
@@ -132,7 +176,7 @@ export default {
       }  
     },
 
-    // After finishing inputing value, update the parameter value
+    // After finishing inputing value(lose focus), update the parameter value
     paramExit(param,subParam,value){
       console.log('param:',param)
       console.log('subParam:',subParam)
@@ -148,6 +192,7 @@ export default {
     },
 
     // Update the focusing stream
+    // after user clicking this stream param list
     switchStream(){
       this.$bus.$emit('switchStream', this.streamInfo.streamId)
     },
@@ -187,5 +232,21 @@ export default {
 <style scoped>
   #divParamPicked{
     height: 100%;
+  }
+
+  .delete{
+		float: right;
+		display: none;
+	}
+  .subDelete{
+		float: right;
+		display: none;
+	}
+
+  .subParamList:hover .subDelete{
+		display: block;
+	}
+  .paramList:hover .delete{
+    display: block;
   }
 </style>

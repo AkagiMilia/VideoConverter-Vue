@@ -50,6 +50,7 @@ export default {
   methods: {
 
     // Search the parameter candidate from guidance
+    // and store the results
     displayParameter(param, type){
       console.log('searching param:', param)
       console.log('searching type:', type);
