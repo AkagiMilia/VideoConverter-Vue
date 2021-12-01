@@ -1,0 +1,1047 @@
+{
+    "-frames":{
+        "valueType": "int",
+        "streamSpecifier":true,
+        "explanation": "Set the number of video frames to output."
+    },
+    "-r":{
+        "valueType": "float",
+        "streamSpecifier":true,
+        "explanation": "Set frame rate (Hz value, fraction or abbreviation).\nAs an input option, ignore any timestamps stored in the file and instead generate timestamps assuming constant frame rate fps. This is not the same as the -framerate option used for some input formats like image2 or v4l2 (it used to be the same in older versions of FFmpeg). If in doubt use -framerate instead of the input option -r. As an output option, duplicate or drop input frames to achieve constant output frame rate fps."
+    },
+    "-fpsmax":{
+        "valueType": "float",
+        "streamSpecifier":true,
+        "explanation": "Set maximum frame rate (Hz value, fraction or abbreviation).\nClamps output frame rate when output framerate is auto-set and is higher than this value. Useful in batch processing or when input framerate is wrongly detected as very high. It cannot be set together with -r. It is ignored during streamcopy."
+    },
+    "-s":{
+        "valueType": "string",
+        "streamSpecifier":true,
+        "explanation": "Set frame size. The format is ‘wxh’ (default - same as source). \nAs an input option, this is a shortcut for the video_size private option, recognized by some demuxers for which the frame size is either not stored in the file or is configurable – e.g. raw video or video grabbers. \nAs an output option, this inserts the scale video filter to the end of the corresponding filtergraph. Please use the scale filter directly to insert it at the beginning or some other place.The format is ‘wxh’ (default - same as source)."
+    },
+    "-aspect":{
+        "valueType": "string",
+        "streamSpecifier":true,
+        "explanation": "Set the video display aspect ratio specified by aspect.\naspect can be a floating point number string, or a string of the form num:den, where num and den are the numerator and denominator of the aspect ratio. For example \"4:3\", \"16:9\", \"1.3333\", and \"1.7777\" are valid argument values.\nIf used together with -vcodec copy, it will affect the aspect ratio stored at container level, but not the aspect ratio stored in encoded frames, if it exists."
+    },
+    "-pix_fmt":{
+        "valueType": "string",
+        "streamSpecifier":true,
+        "explanation": "Set pixel format. If the selected pixel format can not be selected, ffmpeg will print a warning and select the best pixel format supported by the encoder. If pix_fmt is prefixed by a +, ffmpeg will exit with an error if the requested pixel format can not be selected, and automatic conversions inside filtergraphs are disabled. If pix_fmt is a single +, ffmpeg selects the same pixel format as the input (or graph output) and automatic conversions are disabled.",
+        "subValues":{
+            "yuv420p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "12"
+            },
+            "yuyv422": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "rgb24": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "bgr24": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "yuv422p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "yuv444p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "yuv410p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "9"
+            },
+            "yuv411p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "12"
+            },
+            "gray": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "8"
+            },
+            "monow": {
+                "FLAGS": "IO..B",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "1"
+            },
+            "monob": {
+                "FLAGS": "IO..B",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "1"
+            },
+            "pal8": {
+                "FLAGS": "I..P.",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "8"
+            },
+            "yuvj420p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "12"
+            },
+            "yuvj422p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "yuvj444p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "uyvy422": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "uyyvyy411": {
+                "FLAGS": ".....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "12"
+            },
+            "bgr8": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "8"
+            },
+            "bgr4": {
+                "FLAGS": ".O..B",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "4"
+            },
+            "bgr4_byte": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "4"
+            },
+            "rgb8": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "8"
+            },
+            "rgb4": {
+                "FLAGS": ".O..B",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "4"
+            },
+            "rgb4_byte": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "4"
+            },
+            "nv12": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "12"
+            },
+            "nv21": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "12"
+            },
+            "argb": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "32"
+            },
+            "rgba": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "32"
+            },
+            "abgr": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "32"
+            },
+            "bgra": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "32"
+            },
+            "gray16be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "16"
+            },
+            "gray16le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "16"
+            },
+            "yuv440p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "yuvj440p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "yuva420p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "20"
+            },
+            "rgb48be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "48"
+            },
+            "rgb48le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "48"
+            },
+            "rgb565be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "rgb565le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "rgb555be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "15"
+            },
+            "rgb555le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "15"
+            },
+            "bgr565be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "bgr565le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "bgr555be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "15"
+            },
+            "bgr555le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "15"
+            },
+            "vaapi_moco": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "vaapi_idct": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "vaapi_vld": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "yuv420p16le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "yuv420p16be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "yuv422p16le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "32"
+            },
+            "yuv422p16be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "32"
+            },
+            "yuv444p16le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "48"
+            },
+            "yuv444p16be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "48"
+            },
+            "dxva2_vld": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "rgb444le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "12"
+            },
+            "rgb444be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "12"
+            },
+            "bgr444le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "12"
+            },
+            "bgr444be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "12"
+            },
+            "ya8": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "2",
+                "BITS_PER_PIXEL": "16"
+            },
+            "bgr48be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "48"
+            },
+            "bgr48le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "48"
+            },
+            "yuv420p9be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "13"
+            },
+            "yuv420p9le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "13"
+            },
+            "yuv420p10be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "15"
+            },
+            "yuv420p10le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "15"
+            },
+            "yuv422p10be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "20"
+            },
+            "yuv422p10le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "20"
+            },
+            "yuv444p9be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "27"
+            },
+            "yuv444p9le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "27"
+            },
+            "yuv444p10be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "30"
+            },
+            "yuv444p10le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "30"
+            },
+            "yuv422p9be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "18"
+            },
+            "yuv422p9le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "18"
+            },
+            "gbrp": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "gbrp9be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "27"
+            },
+            "gbrp9le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "27"
+            },
+            "gbrp10be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "30"
+            },
+            "gbrp10le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "30"
+            },
+            "gbrp16be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "48"
+            },
+            "gbrp16le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "48"
+            },
+            "yuva422p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "24"
+            },
+            "yuva444p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "32"
+            },
+            "yuva420p9be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "22"
+            },
+            "yuva420p9le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "22"
+            },
+            "yuva422p9be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "27"
+            },
+            "yuva422p9le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "27"
+            },
+            "yuva444p9be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "36"
+            },
+            "yuva444p9le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "36"
+            },
+            "yuva420p10be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "25"
+            },
+            "yuva420p10le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "25"
+            },
+            "yuva422p10be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "30"
+            },
+            "yuva422p10le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "30"
+            },
+            "yuva444p10be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "40"
+            },
+            "yuva444p10le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "40"
+            },
+            "yuva420p16be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "40"
+            },
+            "yuva420p16le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "40"
+            },
+            "yuva422p16be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "48"
+            },
+            "yuva422p16le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "48"
+            },
+            "yuva444p16be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "64"
+            },
+            "yuva444p16le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "64"
+            },
+            "vdpau": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "xyz12le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "36"
+            },
+            "xyz12be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "36"
+            },
+            "nv16": {
+                "FLAGS": ".....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "nv20le": {
+                "FLAGS": ".....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "20"
+            },
+            "nv20be": {
+                "FLAGS": ".....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "20"
+            },
+            "rgba64be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "64"
+            },
+            "rgba64le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "64"
+            },
+            "bgra64be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "64"
+            },
+            "bgra64le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "64"
+            },
+            "yvyu422": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "ya16be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "2",
+                "BITS_PER_PIXEL": "32"
+            },
+            "ya16le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "2",
+                "BITS_PER_PIXEL": "32"
+            },
+            "gbrap": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "32"
+            },
+            "gbrap16be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "64"
+            },
+            "gbrap16le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "64"
+            },
+            "qsv": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "mmal": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "d3d11va_vld": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "cuda": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "0rgb": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "rgb0": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "0bgr": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "bgr0": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "yuv420p12be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "18"
+            },
+            "yuv420p12le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "18"
+            },
+            "yuv420p14be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "21"
+            },
+            "yuv420p14le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "21"
+            },
+            "yuv422p12be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "yuv422p12le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "yuv422p14be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "28"
+            },
+            "yuv422p14le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "28"
+            },
+            "yuv444p12be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "36"
+            },
+            "yuv444p12le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "36"
+            },
+            "yuv444p14be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "42"
+            },
+            "yuv444p14le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "42"
+            },
+            "gbrp12be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "36"
+            },
+            "gbrp12le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "36"
+            },
+            "gbrp14be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "42"
+            },
+            "gbrp14le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "42"
+            },
+            "yuvj411p": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "12"
+            },
+            "bayer_bggr8": {
+                "FLAGS": "I....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "8"
+            },
+            "bayer_rggb8": {
+                "FLAGS": "I....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "8"
+            },
+            "bayer_gbrg8": {
+                "FLAGS": "I....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "8"
+            },
+            "bayer_grbg8": {
+                "FLAGS": "I....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "8"
+            },
+            "bayer_bggr16le": {
+                "FLAGS": "I....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "bayer_bggr16be": {
+                "FLAGS": "I....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "bayer_rggb16le": {
+                "FLAGS": "I....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "bayer_rggb16be": {
+                "FLAGS": "I....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "bayer_gbrg16le": {
+                "FLAGS": "I....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "bayer_gbrg16be": {
+                "FLAGS": "I....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "bayer_grbg16le": {
+                "FLAGS": "I....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "bayer_grbg16be": {
+                "FLAGS": "I....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "16"
+            },
+            "xvmc": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "yuv440p10le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "20"
+            },
+            "yuv440p10be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "20"
+            },
+            "yuv440p12le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "yuv440p12be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "ayuv64le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "64"
+            },
+            "ayuv64be": {
+                "FLAGS": ".....",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "64"
+            },
+            "videotoolbox_vld": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "p010le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "15"
+            },
+            "p010be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "15"
+            },
+            "gbrap12be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "48"
+            },
+            "gbrap12le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "48"
+            },
+            "gbrap10be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "40"
+            },
+            "gbrap10le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "40"
+            },
+            "mediacodec": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "gray12be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "12"
+            },
+            "gray12le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "12"
+            },
+            "gray10be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "10"
+            },
+            "gray10le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "10"
+            },
+            "p016le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "p016be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "d3d11": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "gray9be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "9"
+            },
+            "gray9le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "9"
+            },
+            "gbrpf32be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "96"
+            },
+            "gbrpf32le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "96"
+            },
+            "gbrapf32be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "128"
+            },
+            "gbrapf32le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "128"
+            },
+            "drm_prime": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "opencl": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "gray14be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "14"
+            },
+            "gray14le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "14"
+            },
+            "grayf32be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "32"
+            },
+            "grayf32le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "1",
+                "BITS_PER_PIXEL": "32"
+            },
+            "yuva422p12be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "36"
+            },
+            "yuva422p12le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "36"
+            },
+            "yuva444p12be": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "48"
+            },
+            "yuva444p12le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "4",
+                "BITS_PER_PIXEL": "48"
+            },
+            "nv24": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "nv42": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "24"
+            },
+            "vulkan": {
+                "FLAGS": "..H..",
+                "NB_COMPONENTS": "0",
+                "BITS_PER_PIXEL": "0"
+            },
+            "y210be": {
+                "FLAGS": ".....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "20"
+            },
+            "y210le": {
+                "FLAGS": "I....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "20"
+            },
+            "x2rgb10le": {
+                "FLAGS": "IO...",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "30"
+            },
+            "x2rgb10be": {
+                "FLAGS": ".....",
+                "NB_COMPONENTS": "3",
+                "BITS_PER_PIXEL": "30"
+            }
+        }
+    },
+    "-pass":{
+        "valueType": "int",
+        "streamSpecifier":true,
+        "explanation": "Select the pass number (1 or 2). It is used to do two-pass video encoding. The statistics of the video are recorded in the first pass into a log file (see also the option -passlogfile), and in the second pass that log file is used to generate the video at the exact requested bitrate. On pass 1, you may just deactivate audio and set output to null, examples for Windows and Unix:\n Windows: ffmpeg -i foo.mov -c:v libxvid -pass 1 -an -f rawvideo -y NUL \n Linux: ffmpeg -i foo.mov -c:v libxvid -pass 1 -an -f rawvideo -y /dev/null"
+    },
+    "-passlogfile":{
+        "valueType": "string",
+        "streamSpecifier":true,
+        "explanation": "Set two-pass log file name prefix to prefix, the default file name prefix is “ffmpeg2pass”. The complete file name will be PREFIX-N.log, where N is a number specific to the output stream"
+    },
+    "-filter":{
+        "valueType": "string",
+        "streamSpecifier":true,
+        "explanation": "Create the filtergraph specified by filtergraph and use it to filter the stream."
+    },
+    "-autorotate":{
+        "valueType":"none",
+        "explanation":"Automatically rotate the video according to file metadata. Enabled by default, use -noautorotate to disable it."
+    },
+    "-autoscale":{
+        "valueType":"none",
+        "explanation":"Automatically scale the video according to the resolution of first frame. Enabled by default, use -noautoscale to disable it. When autoscale is disabled, all output frames of filter graph might not be in the same resolution and may be inadequate for some encoder/muxer. Therefore, it is not recommended to disable it unless you really know what you are doing. Disable autoscale at your own risk."
+    }
+}

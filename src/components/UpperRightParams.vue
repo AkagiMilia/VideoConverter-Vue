@@ -7,7 +7,41 @@
       class="divParamList" 
       :style="{height:localHeight+'px'}"
     >
+    <ul v-if="currentStream.streamType == 'video'" class="list-group list-group-flush">
+      <li class="list-group-item list-group-item-action active">
+        <div class="d-flex justify-content-between">
+          <span class="fs-4">VideoOptions</span> 
+        </div>
+      </li>
+      
+      <li 
+        class="list-group-item list-group-item-action" 
+        v-for="(paramInfo, paramName) in videoOptions" :key='paramName' 
+        :class="selectedStyles[paramName]" 
+        @click="addParam(paramName, paramInfo)" 
+        @mouseenter="showGuidance(paramName, paramInfo)"
+      >
+        <div class="d-flex justify-content-between">
+          <div class="">
+            <span>{{paramName}}</span>
+          </div>
+          <div class="">
+            <a-tag 
+              :color="ColorValueType[paramInfo.valueType] ? ColorValueType[paramInfo.valueType] : 'blue'">
+              {{paramInfo.valueType}}
+            </a-tag>
+          </div>
+        </div>
+      </li>
+    </ul>
+
     <ul class="list-group list-group-flush">
+      <li class="list-group-item list-group-item-action active">
+        <div class="d-flex justify-content-between">
+          <span class="fs-4">{{currentStream.format}}</span> 
+        </div>
+      </li>
+
       <li class="list-group-item list-group-item-action" :class="selectedStyles[paramName]" v-for="(paramInfo, paramName) in parameterObject" :key='paramName' @click="addParam(paramName, paramInfo)" @mouseenter="showGuidance(paramName, paramInfo)">
         <div class="d-flex justify-content-between">
           <div class="">
@@ -85,6 +119,9 @@ export default {
         this.$bus.$emit('addParam', paramName, paramInfo, this.currentDict)
       }
       else{
+        var mark = this.currentStream.mark
+        if (paramInfo.streamSpecifier)
+          paramName += mark.slice(mark.indexOf(':'))
         this.$bus.$emit('addParam', paramName, paramInfo, null)
       }
     },
@@ -93,6 +130,8 @@ export default {
     // refresh the candidate
     refreshParameter(curV){
       this.parameterObject = this.showingParams[curV]
+      this.isSubParam = false
+
     },
 
     // if the new format is not recorded in the guidance
@@ -113,12 +152,43 @@ export default {
   computed:{
 
     // Parameter guidance load from Vuex
-    ...mapState('indexData',['showingParams']),
+    ...mapState('indexData',['showingParams', 'videoOptions']),
 
     // mark which parameter candidate has been selected 
     selectedStyles(){
       var dict = {}
-      if (this.isSubParam){
+      var mark = this.currentStream.mark
+      var curStreamParam = this.currentStream.params
+      for (let key of Object.keys(this.parameterObject)){
+        if (this.isSubParam){
+          if (curStreamParam[this.currentDict] && key in curStreamParam[this.currentDict])
+            dict[key] = 'list-group-item-info'
+          else
+            dict[key] = ''
+        }
+        else{
+          if (curStreamParam && key in curStreamParam)
+            dict[key] = 'list-group-item-info'
+          else
+            dict[key] = ''
+        }
+      }
+      if (this.currentStream.streamType == 'video'){
+        for (let key of Object.keys(this.videoOptions)){
+          if (this.videoOptions[key].streamSpecifier)
+            var keyWithMark = key + mark.slice(mark.indexOf(':'))
+          else
+            var keyWithMark = key
+          
+          if (curStreamParam && keyWithMark in curStreamParam)
+              dict[key] = 'list-group-item-info'
+            else
+              dict[key] = ''
+        }
+      }
+      return dict
+      
+      /* if (this.isSubParam){
         for (let key of Object.keys(this.parameterObject)){
           if (this.currentStream.params[this.currentDict] && key in this.currentStream.params[this.currentDict])
             dict[key] = 'list-group-item-info'
@@ -133,8 +203,7 @@ export default {
           else
             dict[key] = ''
         }
-      }
-      return dict
+      } */
     }
   },
   beforeMount() {

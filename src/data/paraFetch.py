@@ -79,11 +79,25 @@ def getGuidance(type='encoder', format='libx264'):
     print(parameters) """
     return parameters
 
-        
+def getPixFormats():
+    result = os.popen('ffmpeg -pix_fmts')
+    pixFormats = {}
+    isStart = False
+    for line in result.readlines():
+        line = line.strip('\n')
+        line = line.split(' ')
+        line = list(filter(lambda x : x!='', line))
+        if not isStart or not line:
+            if len(line)>0 and line[0] == '-----':
+                isStart = True
+            continue
+        pixFormats[line[1]] = {'FLAGS':line[0], 'NB_COMPONENTS':line[2], 'BITS_PER_PIXEL':line[3]}
+    return pixFormats   
 
 
 if __name__ == '__main__':
 
+    """ 
     encoders = getEncoders()
     fEncoder = open('public/Encoders.json','x',encoding='utf-8')
     fEncoder.write(json.dumps(encoders, indent=4))
@@ -93,13 +107,13 @@ if __name__ == '__main__':
     for key, value in encoders.items():
         for encoder in value.keys():
             guidance[encoder] = getGuidance(format=encoder)
-    
-    """ 
-    guidance['libx264'] = getGuidance(format='libx264')
-    guidance['libx265'] = getGuidance(format='libx265')
-    guidance['libaom-av1'] = getGuidance(format='libaom-av1')
-    guidance['flac'] = getGuidance(format='flac') 
-    """
     guidance = json.dumps(guidance, indent=4)
     f.write(guidance)
-    f.close() 
+    f.close()  
+    """
+
+    f = open('src/data/pixFormats.json','x',encoding='utf-8')
+    pixFormats = json.dumps(getPixFormats(), indent=4)
+    f.write(pixFormats)
+    f.close()
+

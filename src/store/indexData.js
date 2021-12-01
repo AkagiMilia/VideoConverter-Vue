@@ -10,18 +10,23 @@ export default {
 			var file = fs.readFileSync(path, 'utf8')
 			state.showingParams = JSON.parse(file)
 		},
-    loadEncoders(state, path){
-      var file = fs.readFileSync(path, 'utf8')
+		loadEncoders(state, path){
+			var file = fs.readFileSync(path, 'utf8')
 			state.encodersInfo = JSON.parse(file)
-    }
+		},
+		loadVideoOptions(state, path){
+			var file = fs.readFileSync(path, 'utf8')
+			state.videoOptions = JSON.parse(file)
+		},
 	},
 	state:{
 		showingParams:{},
-    encodersInfo:{},
-    markParams:{
-      video:['-c:v'],
-      audio:['-c:a']
-    }
+		encodersInfo:{},
+		videoOptions:{},
+		markParams:{
+			video:['-c:v'],
+			audio:['-c:a']
+		}
 	},
 	getters:{
 	}

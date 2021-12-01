@@ -25,10 +25,10 @@
 
     <li class="list-group-item list-group-item-action paramList" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click="paramClick(param)">
       <a-row>
-        <a-col :span="typeof Selected[param] == 'object' ? 24 : 11">
+        <a-col :span="typeof Selected[param] == 'object' ? 22 : 12">
           <span><strong>{{param}}</strong></span>
         </a-col>
-        <a-col :span="11">
+        <a-col v-show="typeof Selected[param] == 'string'" :span="11">
           <span 
             v-if="typeof Selected[param] == 'string'" 
             v-show="param!=nowFocus"
@@ -48,12 +48,17 @@
             spellcheck="false"
             />
         </a-col>
-        <a-icon 
-          class="delete" 
-          type="close-circle" 
-          theme="twoTone" 
-          twoToneColor="red"
-        />
+        
+        <a-col :span="1">
+          <a-icon 
+            class="delete mt-1" 
+            type="close-circle" 
+            theme="twoTone" 
+            twoToneColor="red"
+            @click.stop="deleteParam(param, null)"
+          />
+        </a-col>
+        
       </a-row>
       
       <!-- If parameter type is an object, -->
@@ -61,7 +66,7 @@
       <ul class="list-group" v-if="typeof Selected[param] == 'object'">
         <li class="list-group-item subParamList" :class="warningStyles[subParam]" v-for="(subVal, subParam) in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
           <a-row>
-            <a-col :span="11">
+            <a-col :span="12">
               <span><strong>{{subParam}}</strong></span>
             </a-col>
             <a-col :span="11">
@@ -82,6 +87,7 @@
               type="close-circle" 
               theme="twoTone" 
               twoToneColor="red"
+              @click.stop="deleteParam(subParam, param)"
             />
           </a-row>
         </li>
@@ -200,6 +206,10 @@ export default {
     // update parameter value to App
     sendParam(params){
       this.$bus.$emit('updateParams', params, this.streamInfo.streamType, this.streamInfo.streamId)
+    },
+
+    deleteParam(param, father){
+      this.$bus.$emit('deleteParam', this.streamInfo.streamId, param, father)
     },
 
     // gather auto complete's candidate 

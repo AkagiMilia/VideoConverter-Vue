@@ -246,7 +246,7 @@ export default {
     },
 
     // load parameters and encoders' info from Vuex
-    ...mapState('indexData',['showingParams', 'encodersInfo'])
+    ...mapState('indexData',['showingParams', 'encodersInfo','videoOptions'])
   },
   methods:{
     // change(replace) parameters
@@ -304,9 +304,24 @@ export default {
       console.log('add target:',this.currentStream);
       if (father && !this.currentStream.params[father][paramName])
         this.$set(this.currentStream.params[father], paramName, defaultVal)
-      else if(!this.currentStream.params[paramName])
-        this.$set(this.currentStream.params, paramName, defaultVal)
- 
+      else if(!this.currentStream.params[paramName]){
+        console.log('defultVal', defaultVal);
+        if (paramInfo.valueType.startsWith('dict')){
+          this.$set(this.currentStream.params, paramName, {})
+          this.$set(this.currentStream.params[paramName], defaultVal, '1')
+        }
+        else
+          this.$set(this.currentStream.params, paramName, defaultVal)
+      }
+    },
+
+    deleteParam(streamId, param, father){
+      var targetStream = this.currentProject.parameters.find(stream => stream.streamId == streamId)
+      if (father)
+        this.$delete(targetStream.params[father], param)
+      else
+        this.$delete(targetStream.params, param)
+      this.$bus.$emit('refreshParameter', targetStream.format)
     },
 
     // change current project 
@@ -366,7 +381,7 @@ export default {
     },
 
     // load Vuex Mutation functions
-    ...mapMutations('indexData', ['loadGuidance', 'loadEncoders'])
+    ...mapMutations('indexData', ['loadGuidance', 'loadEncoders', 'loadVideoOptions'])
   },
 
   // watchers, run something when the watched data changed
@@ -436,6 +451,7 @@ export default {
     this.$bus.$on('updateParams', this.getParams)
     this.$bus.$on('changeProject', this.getProject)
     this.$bus.$on('addParam', this.addParam)
+    this.$bus.$on('deleteParam', this.deleteParam)
     this.$bus.$on('switchStream', this.switchStream)
     this.$bus.$on('changeStreamState', this.changeStreamState)
     this.$bus.$on('addNewFiles', this.addNewFiles)
@@ -448,8 +464,10 @@ export default {
     const path = require('path')
     const guidancePath = path.join(__static, 'Guidance.json')
     const encodersPath = path.join(__static, 'Encoders.json')
+    const videoOptions = path.join(__static, 'VideoOptions.json')
     this.loadGuidance(guidancePath)
     this.loadEncoders(encodersPath)
+    this.loadVideoOptions(videoOptions)
     
     // refresh the data of window's current size
     window.onresize = ()=>{
