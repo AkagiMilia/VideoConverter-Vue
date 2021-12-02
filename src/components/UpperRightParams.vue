@@ -10,7 +10,7 @@
     <ul v-if="currentStream.streamType == 'video'" class="list-group list-group-flush">
       <li class="list-group-item list-group-item-action titleList" @click="triggerVisible('videoOptions')">
         <div class="d-flex justify-content-between">
-          <span class="fs-4">Video Options</span> 
+          <span class="fs-5">Video Options</span> 
         </div>
       </li>
       <li class="list-group-item list-group-item-action disabled" v-show="!displayList.videoOptions">
@@ -26,7 +26,7 @@
       >
         <div class="d-flex justify-content-between">
           <div class="">
-            <span>{{paramName}}</span>
+            <span><strong>{{paramName}}</strong></span>
           </div>
           <div class="">
             <a-tag 
@@ -41,14 +41,14 @@
     <ul class="list-group list-group-flush">
       <li class="list-group-item list-group-item-action titleList">
         <div class="d-flex justify-content-between">
-          <span class="fs-4">{{currentStream.format}}</span> 
+          <span class="fs-5">{{currentStream.format.replace(/^\S/, s => s.toUpperCase())}}</span> 
         </div>
       </li>
 
       <li class="list-group-item list-group-item-action border-0" :class="selectedStyles[paramName]" v-for="(paramInfo, paramName) in parameterObject" :key='paramName' @click="addParam(paramName, paramInfo)" @mouseenter="showGuidance(paramName, paramInfo)">
         <div class="d-flex justify-content-between">
           <div class="">
-            <span>{{paramName}}</span>
+            <span><strong>{{paramName}}</strong></span>
           </div>
           <div class="">
             <a-tag 
