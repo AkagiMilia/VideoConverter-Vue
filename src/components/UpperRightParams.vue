@@ -8,14 +8,17 @@
       :style="{height:localHeight+'px'}"
     >
     <ul v-if="currentStream.streamType == 'video'" class="list-group list-group-flush">
-      <li class="list-group-item list-group-item-action active">
+      <li class="list-group-item list-group-item-action active" @click="triggerVisible('videoOptions')">
         <div class="d-flex justify-content-between">
-          <span class="fs-4">VideoOptions</span> 
+          <span class="fs-4">Video Options</span> 
         </div>
       </li>
-      
+      <li class="list-group-item list-group-item-action disabled" v-show="!displayList.videoOptions">
+        Hidding
+      </li>
       <li 
         class="list-group-item list-group-item-action" 
+        v-show="displayList.videoOptions"
         v-for="(paramInfo, paramName) in videoOptions" :key='paramName' 
         :class="selectedStyles[paramName]" 
         @click="addParam(paramName, paramInfo)" 
@@ -78,7 +81,8 @@ export default {
         boolean:'green',
         dictionary:'purple',
         flags:'pink'
-      }
+      },
+      displayList:{}
     }
   },
   methods: {
@@ -144,6 +148,11 @@ export default {
     // and display its explanation on the component Guidance
     showGuidance(key, param){
       this.$bus.$emit('showGuidance', key, param)
+    },
+
+    triggerVisible(name){
+      console.log('Give me Change!!!')
+      this.$set(this.displayList, name, !this.displayList[name])
     },
     loadMore(){
       this.busy = false
