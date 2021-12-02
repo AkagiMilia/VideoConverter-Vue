@@ -1,10 +1,17 @@
 <template>
-  <a-row :span="24">
-    <textarea class="form-control" v-model.trim.lazy="paramLine" @keyup.enter="editExit" spellcheck="false" rows="3"/>
+  <a-row class="form-floating">
+    <textarea 
+      class="form-control border-0" id="floatingTextarea2" 
+      v-model.trim.lazy="paramLine" 
+      @keyup.enter="editExit" 
+      spellcheck="false" 
+      :style="{height:localHeight+'px'}"
+    />
+    <label for="floatingTextarea2" >Code Area</label>
   </a-row>
 </template>
 
-<script>
+<script>  
 import { mapState } from 'vuex'
 import HighlightableInput from 'vue-highlightable-input'
 export default {
@@ -12,7 +19,7 @@ export default {
   components:{
     HighlightableInput
   },
-  props:['currentParameter', 'currentProjectId', 'currentFormat'],
+  props:['currentParameter', 'currentProjectId', 'currentFormat', 'localHeight'],
   data() {
     return {
       msg:'',

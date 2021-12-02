@@ -1,5 +1,5 @@
 <template>
-  <a-row class="border border-bottom-0 border-end-0" :style="{height:localHeight+'px'}">
+  <a-row class="border-bottom-0 border-end-0" :style="{height:localHeight+'px'}">
     <!-- New project dialog -->
     <UpperLeftNewProject 
       :newProjectVisible="newProjectVisible"

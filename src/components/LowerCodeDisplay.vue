@@ -1,18 +1,19 @@
 <template>
-  <div class="row align-items-center mt-4 ms-1">
-    <div class="col-10" id="divDisArea">
-      <!-- <input name="codeArea" class="form-control" id="codeArea" v-model="cmdStringDis"/> -->
-      <div class="row align-self-center">
+  <div>
+    <a-row class="border-0 border-bottom row align-items-center bg-light">
+      <a-col :span="18" class="border-0 border-end ps-3">
         <p id="codeArea" class="align-self-center mt-2">{{cmdStringDis}}</p>
-      </div>
-    </div>
-    <div class="col">
-      <input type="button" id="btnStart" value="START" class="btn btn-primary ms-5" @click.stop="runFFmpeg"/>
-    </div>
-    <div class="row" id="divLogProcess">
+      </a-col>
+      <a-col :span="6" align="middle">
+        <a-button type="primary" size="large" @click.stop="runFFmpeg">
+          START
+        </a-button>
+      </a-col>
+    </a-row>
+    <a-row>
       <p id="pLogProcess">{{result}}</p>
-    </div>
-  </div> 
+    </a-row> 
+  </div>
 </template>
 
 <script>
@@ -57,19 +58,5 @@ export default {
 </script>
 
 <style scoped>
-  #divDisArea{
-      height: 60px;
-      border-style: solid;
-      background-color: rgb(255, 255, 255);
-      border-width: 2px;
-      border-radius: 10px;
-      border-color: rgb(49, 197, 255);
-  }
-
-  .divLogProcess{
-    border-width: 3px;
-    border-radius: 20px;
-    border-color: rgb(49, 197, 255);
-    border-style: groove;
-}
+  
 </style>

@@ -1,6 +1,6 @@
 <template>
   <ul class="list-group list-group-flush" ref="test">
-    <li class="list-group-item list-group-item-action active" @click="switchStream">
+    <li class="list-group-item list-group-item-action titleList" @click="switchStream">
       <div class="d-flex justify-content-between">
         <span class="fs-4">{{streamInfo.format}}</span>
         <a-space direction="vertical" :size="0">
@@ -23,7 +23,7 @@
       Empty
     </li>
 
-    <li class="list-group-item list-group-item-action paramList" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click="paramClick(param)">
+    <li class="list-group-item list-group-item-action paramList border-0" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click="paramClick(param)">
       <a-row>
         <a-col :span="typeof Selected[param] == 'object' ? 22 : 12">
           <span><strong>{{param}}</strong></span>
@@ -63,10 +63,10 @@
       
       <!-- If parameter type is an object, -->
       <!-- show their sub parameters -->
-      <ul class="list-group" v-if="typeof Selected[param] == 'object'">
-        <li class="list-group-item subParamList" :class="warningStyles[subParam]" v-for="(subVal, subParam) in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
+      <ul class="list-group mt-2" v-if="typeof Selected[param] == 'object'">
+        <li class="list-group-item list-group-item-action subParamList border-0 border-start rounded-0" :class="warningStyles[subParam]" v-for="(subVal, subParam) in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
           <a-row>
-            <a-col :span="12">
+            <a-col :span="11">
               <span><strong>{{subParam}}</strong></span>
             </a-col>
             <a-col :span="11">
@@ -262,5 +262,9 @@ export default {
 	}
   .paramList:hover .delete{
     display: block;
+  }
+  .titleList{
+    background-color: rgb(55, 165, 255);
+    color:white
   }
 </style>

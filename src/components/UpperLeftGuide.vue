@@ -1,5 +1,5 @@
 <template>
-  <a-row class="border px-3 border-end-0 overflow-auto" :style="{height:localHeight+'px'}">
+  <a-row class="border px-3 border-end-0 border-start-0 overflow-auto" :style="{height:localHeight+'px'}">
     <h3>{{paramGuidance.title}}</h3>
     <p style="whiteSpace: pre-line">{{paramGuidance.info}}</p>
   </a-row>

@@ -1,7 +1,7 @@
 <template>
-  <div id="divAll" :style="{height:windowHeight+'px'}">
+  <div  :style="{height:windowHeight+'px'}">
     <a-row type="flex" justify="center" align="top">
-      <a-col :span="12">
+      <a-col :span="12" >
           <UpperLeftProjects 
             :projects="projects" 
             :currentProjectId="currentProjectId"
@@ -9,33 +9,40 @@
             :FFmpegPath="FFmpegPath"
             :localHeight="windowHeight*0.4"
             :windowWidth="windowWidth"
+            class="bg-light "
           />
-            
-          <UpperLeftGuide :localHeight="windowHeight*0.2"/> 
+          <UpperLeftGuide 
+            :localHeight="windowHeight*0.2"
+            class="bg-light"
+          /> 
       </a-col>
-      <a-col :span="12" >
+      <a-col :span="12" :style="{height:windowHeight*0.6+'px'}" >
         <UpperRightSelect 
           :currentParameter="currentParameter" 
           :currentProjectId="currentProjectId" 
-          :localHeight="windowHeight*0.597"
+          :localHeight="windowHeight*0.6"
         />
         <UpperRightParams 
           :currentFormat="currentFormat"
           :currentStream="currentStream"
           :currentType="currentType"
-          :localHeight="windowHeight*0.597"
+          :localHeight="windowHeight*0.6"
         />
       </a-col>
     </a-row>
 
     
-    <a-row justify="center" align="top" :span="24" class="mt-3"> 
+    <a-row justify="center" align="top" :span="24"> 
       <LowerCodeArea 
         :currentParameter="currentParameter" 
         :currentProjectId="currentProjectId"
         :currentFormat="currentFormat"
+        :localHeight="windowHeight*0.15"
       />
-      <LowerCodeDisplay :command="cmdLine"/>`
+      <LowerCodeDisplay 
+        :command="cmdLine"
+        :localHeight="windowHeight*0.25"
+      />`
     </a-row>
     
 

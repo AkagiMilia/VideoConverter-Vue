@@ -1,5 +1,5 @@
 <template>
-  <a-col :span="12" class="border" id="divParamLists">
+  <a-col :span="12" class="border border-end-0 bg-light" id="divParamLists">
     <div 
       v-infinite-scroll="loadMore" 
       infinite-scroll-disabled="busy" 
@@ -8,7 +8,7 @@
       :style="{height:localHeight+'px'}"
     >
     <ul v-if="currentStream.streamType == 'video'" class="list-group list-group-flush">
-      <li class="list-group-item list-group-item-action active" @click="triggerVisible('videoOptions')">
+      <li class="list-group-item list-group-item-action titleList" @click="triggerVisible('videoOptions')">
         <div class="d-flex justify-content-between">
           <span class="fs-4">Video Options</span> 
         </div>
@@ -17,9 +17,9 @@
         Hidding
       </li>
       <li 
-        class="list-group-item list-group-item-action" 
+        class="list-group-item list-group-item-action border-0" 
         v-show="displayList.videoOptions"
-        v-for="(paramInfo, paramName) in videoOptions" :key='paramName' 
+        v-for="(paramInfo, paramName) in videoOptions" :key="paramName"
         :class="selectedStyles[paramName]" 
         @click="addParam(paramName, paramInfo)" 
         @mouseenter="showGuidance(paramName, paramInfo)"
@@ -39,13 +39,13 @@
     </ul>
 
     <ul class="list-group list-group-flush">
-      <li class="list-group-item list-group-item-action active">
+      <li class="list-group-item list-group-item-action titleList">
         <div class="d-flex justify-content-between">
           <span class="fs-4">{{currentStream.format}}</span> 
         </div>
       </li>
 
-      <li class="list-group-item list-group-item-action" :class="selectedStyles[paramName]" v-for="(paramInfo, paramName) in parameterObject" :key='paramName' @click="addParam(paramName, paramInfo)" @mouseenter="showGuidance(paramName, paramInfo)">
+      <li class="list-group-item list-group-item-action border-0" :class="selectedStyles[paramName]" v-for="(paramInfo, paramName) in parameterObject" :key='paramName' @click="addParam(paramName, paramInfo)" @mouseenter="showGuidance(paramName, paramInfo)">
         <div class="d-flex justify-content-between">
           <div class="">
             <span>{{paramName}}</span>
@@ -171,13 +171,13 @@ export default {
       for (let key of Object.keys(this.parameterObject)){
         if (this.isSubParam){
           if (curStreamParam[this.currentDict] && key in curStreamParam[this.currentDict])
-            dict[key] = 'list-group-item-info'
+            dict[key] = 'selected'
           else
             dict[key] = ''
         }
         else{
           if (curStreamParam && key in curStreamParam)
-            dict[key] = 'list-group-item-info'
+            dict[key] = 'selected'
           else
             dict[key] = ''
         }
@@ -229,5 +229,12 @@ export default {
   }
   .divParamList{
     overflow: auto;
+  }
+  .selected{
+    background-color: rgb(240, 243, 255);
+  }
+  .titleList{
+    background-color: rgb(158, 106, 255);
+    color:white
   }
 </style>
