@@ -20,13 +20,13 @@
         <UpperRightSelect 
           :currentParameter="currentParameter" 
           :currentProjectId="currentProjectId" 
-          :localHeight="windowHeight*0.6"
+          :localHeight="windowHeight*0.6-2"
         />
         <UpperRightParams 
           :currentFormat="currentFormat"
           :currentStream="currentStream"
           :currentType="currentType"
-          :localHeight="windowHeight*0.6"
+          :localHeight="windowHeight*0.6-2"
         />
       </a-col>
     </a-row>

@@ -41,7 +41,7 @@
     <ul class="list-group list-group-flush">
       <li class="list-group-item list-group-item-action titleList">
         <div class="d-flex justify-content-between">
-          <span class="fs-5">{{currentStream.format.replace(/^\S/, s => s.toUpperCase())}}</span> 
+          <span class="fs-5">{{currentStream.format}}</span> 
         </div>
       </li>
 
