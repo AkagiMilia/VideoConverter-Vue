@@ -255,7 +255,7 @@ export default {
     },
 
     // load parameters and encoders' info from Vuex
-    ...mapState('indexData',['showingParams', 'encodersInfo','videoOptions'])
+    ...mapState('indexData',['showingParams', 'encodersInfo','videoOptions', 'audioOptions'])
   },
   methods:{
     // change(replace) parameters
@@ -392,7 +392,7 @@ export default {
     },
 
     // load Vuex Mutation functions
-    ...mapMutations('indexData', ['loadGuidance', 'loadEncoders', 'loadVideoOptions'])
+    ...mapMutations('indexData', ['loadGuidance', 'loadEncoders', 'loadVideoOptions', 'loadAudioOptions'])
   },
 
   // watchers, run something when the watched data changed
@@ -476,9 +476,11 @@ export default {
     const guidancePath = path.join(__static, 'Guidance.json')
     const encodersPath = path.join(__static, 'Encoders.json')
     const videoOptions = path.join(__static, 'VideoOptions.json')
+    const audioOptions = path.join(__static, 'AudioOptions.json')
     this.loadGuidance(guidancePath)
     this.loadEncoders(encodersPath)
     this.loadVideoOptions(videoOptions)
+    this.loadAudioOptions(audioOptions)
     
     // refresh the data of window's current size
     window.onresize = ()=>{
@@ -503,35 +505,6 @@ export default {
 
   [v-cloak]{
     display: none;
-  }
-
-  #divAll{
-    padding: 2%;
-  }
-
-  #divUpper{
-    height: 80%;
-  }
-
-  #divUpperRight{
-    height:95%
-  }
-  #divUpperRightRow{
-    height: 100%;
-  }
-
-  #divLower{
-    height: auto;
-    margin-top: 3%;
-  }
-
-  .myDivStyles{
-    margin-top: 2%;
-    background-color: white;
-    border-width: 3px;
-    border-radius: 10px;
-    border-color: rgb(177, 177, 177);
-    border-style:solid;
   }
 
   div::-webkit-scrollbar {

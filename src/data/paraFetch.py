@@ -94,6 +94,21 @@ def getPixFormats():
         pixFormats[line[1]] = {'FLAGS':line[0], 'NB_COMPONENTS':line[2], 'BITS_PER_PIXEL':line[3]}
     return pixFormats   
 
+def getSampleFormats():
+    result = os.popen('ffmpeg -sample_fmts')
+    sampleFormats = {}
+    isStart = False
+    for line in result.readlines():
+        line = line.strip('\n')
+        line = line.split(' ')
+        line = list(filter(lambda x : x!='', line))
+        if not isStart or not line:
+            if len(line)>0 and line[0] == 'name':
+                isStart = True
+            continue
+        sampleFormats[line[0]] = {'depth':line[1]}
+    return sampleFormats   
+
 
 if __name__ == '__main__':
 
@@ -115,5 +130,10 @@ if __name__ == '__main__':
     f = open('src/data/pixFormats.json','x',encoding='utf-8')
     pixFormats = json.dumps(getPixFormats(), indent=4)
     f.write(pixFormats)
+    f.close()
+    
+    f = open('src/data/sampleFormats.json','x',encoding='utf-8')
+    sampleFormats = json.dumps(getSampleFormats(), indent=4)
+    f.write(sampleFormats)
     f.close()
 

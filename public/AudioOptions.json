@@ -1,0 +1,74 @@
+{
+    "-b":{
+        "valueType": "sting",
+        "streamSpecifier":true,
+        "explanation": "Set stream's bit rate e.g. -b:a 320k"
+    },
+    "-ar":{
+        "valueType": "sting",
+        "streamSpecifier":true,
+        "explanation": "Set the audio sampling frequency. For output streams it is set by default to the frequency of the corresponding input stream. \nFor input streams this option only makes sense for audio grabbing devices and raw demuxers and is mapped to the corresponding demuxer options."
+    },
+    "-q":{
+        "valueType": "int",
+        "streamSpecifier":true,
+        "explanation": "Set the audio quality (codec-specific, VBR)."
+    },
+    "-ac":{
+        "valueType": "int",
+        "streamSpecifier":true,
+        "explanation": "Set the number of audio channels. \nFor output streams it is set by default to the number of input audio channels. For input streams this option only makes sense for audio grabbing devices and raw demuxers and is mapped to the corresponding demuxer options."
+    },
+    "-an":{
+        "valueType": "none",
+        "explanation": "As an input option, blocks all audio streams of a file from being filtered or being automatically selected or mapped for any output. See -discard option to disable streams individually.\nAs an output option, disables audio recording i.e. automatic selection or mapping of any audio stream. For full manual control see the -map option."
+    },
+    "-sample_fmt":{
+        "valueType": "string",
+        "streamSpecifier":true,
+        "explanation": "Set the audio sample format.",
+        "subValues":{
+            "u8": {
+                "depth": "8"
+            },
+            "s16": {
+                "depth": "16"
+            },
+            "s32": {
+                "depth": "32"
+            },
+            "flt": {
+                "depth": "32"
+            },
+            "dbl": {
+                "depth": "64"
+            },
+            "u8p": {
+                "depth": "8"
+            },
+            "s16p": {
+                "depth": "16"
+            },
+            "s32p": {
+                "depth": "32"
+            },
+            "fltp": {
+                "depth": "32"
+            },
+            "dblp": {
+                "depth": "64"
+            },
+            "s64": {
+                "depth": "64"
+            },
+            "s64p": {
+                "depth": "64"
+            }
+        }
+    },
+    "-filter":{
+        "valueType": "string",
+        "streamSpecifier":true,
+        "explanation": "Create the filtergraph specified by filtergraph and use it to filter the stream."
+    }
+}

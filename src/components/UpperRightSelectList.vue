@@ -29,7 +29,7 @@
 
     <li class="list-group-item list-group-item-action paramList border-0" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click="paramClick(param)">
       <a-row>
-        <a-col :span="typeof Selected[param] == 'object' ? 22 : 12">
+        <a-col :span="typeof Selected[param] == 'object' ? 23 : 12">
           <span><strong>{{param}}</strong></span>
         </a-col>
         <a-col v-show="typeof Selected[param] == 'string'" :span="11">
@@ -136,7 +136,7 @@ export default {
     // load parameter guidance, 
     // and markers' information(e.g {video:['-c:v'], audio:['-c:a']}), 
     // and encoders' info
-    ...mapState('indexData', ['showingParams', 'markParams', 'encodersInfo', 'videoOptions']),
+    ...mapState('indexData', ['showingParams', 'markParams', 'encodersInfo', 'videoOptions', 'audioOptions']),
 
     // mark the parameters who are not in the guidance
     warningStyles(){
@@ -153,6 +153,8 @@ export default {
         if (this.showingParams[this.currentFormat] && key in this.showingParams[this.currentFormat])
           dict[key] = ''
         else if (key.slice(0, key.indexOf(':')>-1 ? key.indexOf(':') : key.length) in this.videoOptions)
+          dict[key] = ''
+        else if (key.slice(0, key.indexOf(':')>-1 ? key.indexOf(':') : key.length) in this.audioOptions)
           dict[key] = ''
         else
           dict[key] = 'list-group-item-warning'
@@ -183,8 +185,14 @@ export default {
         this.$bus.$emit('searchParameter', param, this.streamInfo.streamType)
         if (this.showingParams[this.currentFormat][param])
           this.$bus.$emit('showGuidance', param, this.showingParams[this.currentFormat][param])
-        else if (this.videoOptions[param.slice(0, param.indexOf(':')>-1 ? param.indexOf(':') : param.length)])
-          this.$bus.$emit('showGuidance', param, this.videoOptions[param.slice(0, param.indexOf(':')>-1 ? param.indexOf(':') : param.length)])
+        else if (this.streamInfo.streamType == 'video'){
+          var markIndex = param.indexOf(':')>-1 ? param.indexOf(':') : param.length
+          this.$bus.$emit('showGuidance', param, this.videoOptions[param.slice(0, markIndex)])
+        }
+        else if (this.streamInfo.streamType == 'audio'){
+          var markIndex = param.indexOf(':')>-1 ? param.indexOf(':') : param.length
+          this.$bus.$emit('showGuidance', param, this.audioOptions[param.slice(0, markIndex)])
+        }
       }  
     },
 
@@ -223,14 +231,16 @@ export default {
     onSearch(){
       try {
         console.log(this.currentParam);
-        var sliceIndex = this.nowFocus.indexOf(':')
+        var sliceIndex = this.nowFocus.indexOf(':')>-1 ? this.nowFocus.indexOf(':') : this.nowFocus.length
         if (this.showingParams[this.currentFormat][this.nowFocus]
          && this.showingParams[this.currentFormat][this.nowFocus]['subValues'])
         {
           this.dataSource = Object.keys(this.showingParams[this.currentFormat][this.nowFocus]['subValues'])
         }
-        else if (this.videoOptions[this.nowFocus.slice(0, sliceIndex>-1 ? sliceIndex : this.nowFocus.length)]['subValues'])
-          this.dataSource = Object.keys(this.videoOptions[this.nowFocus.slice(0, sliceIndex>-1 ? sliceIndex : this.nowFocus.length)]['subValues'])
+        else if ( this.streamInfo.streamType == 'video' && this.videoOptions[this.nowFocus.slice(0, sliceIndex)]['subValues'])
+          this.dataSource = Object.keys(this.videoOptions[this.nowFocus.slice(0, sliceIndex)]['subValues'])
+        else if ( this.streamInfo.streamType == 'audio' && this.audioOptions[this.nowFocus.slice(0, sliceIndex)]['subValues'])
+          this.dataSource = Object.keys(this.audioOptions[this.nowFocus.slice(0, sliceIndex)]['subValues'])
       } catch (error) {
         console.log('%c Object Read Error', 'color:orange');
         console.log(`%c ${error}`, 'color:red');

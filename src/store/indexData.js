@@ -18,11 +18,16 @@ export default {
 			var file = fs.readFileSync(path, 'utf8')
 			state.videoOptions = JSON.parse(file)
 		},
+		loadAudioOptions(state, path){
+			var file = fs.readFileSync(path, 'utf8')
+			state.audioOptions = JSON.parse(file)
+		},
 	},
 	state:{
 		showingParams:{},
 		encodersInfo:{},
 		videoOptions:{},
+		audioOptions:{},
 		markParams:{
 			video:['-c:v'],
 			audio:['-c:a']

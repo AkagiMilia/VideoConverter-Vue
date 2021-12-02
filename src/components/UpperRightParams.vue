@@ -7,6 +7,8 @@
       class="divParamList" 
       :style="{height:localHeight+'px'}"
     >
+
+    <!-- Universal Video Options -->
     <ul v-if="currentStream.streamType == 'video'" class="list-group list-group-flush">
       <li class="list-group-item list-group-item-action titleList" @click="triggerVisible('videoOptions')">
         <div class="d-flex justify-content-between">
@@ -37,7 +39,40 @@
         </div>
       </li>
     </ul>
+    
+    <!-- Universal Audio Options -->
+    <ul v-if="currentStream.streamType == 'audio'" class="list-group list-group-flush">
+      <li class="list-group-item list-group-item-action titleList" @click="triggerVisible('audioOptions')">
+        <div class="d-flex justify-content-between">
+          <span class="fs-5">Audio Options</span> 
+        </div>
+      </li>
+      <li class="list-group-item list-group-item-action disabled" v-show="!displayList.audioOptions">
+        Hidding
+      </li>
+      <li 
+        class="list-group-item list-group-item-action border-0" 
+        v-show="displayList.audioOptions"
+        v-for="(paramInfo, paramName) in audioOptions" :key="paramName"
+        :class="selectedStyles[paramName]" 
+        @click="addParam(paramName, paramInfo)" 
+        @mouseenter="showGuidance(paramName, paramInfo)"
+      >
+        <div class="d-flex justify-content-between">
+          <div class="">
+            <span><strong>{{paramName}}</strong></span>
+          </div>
+          <div class="">
+            <a-tag 
+              :color="ColorValueType[paramInfo.valueType] ? ColorValueType[paramInfo.valueType] : 'blue'">
+              {{paramInfo.valueType}}
+            </a-tag>
+          </div>
+        </div>
+      </li>
+    </ul>
 
+    <!-- Stream's Format Options -->
     <ul class="list-group list-group-flush">
       <li class="list-group-item list-group-item-action titleList">
         <div class="d-flex justify-content-between">
@@ -161,7 +196,7 @@ export default {
   computed:{
 
     // Parameter guidance load from Vuex
-    ...mapState('indexData',['showingParams', 'videoOptions']),
+    ...mapState('indexData',['showingParams', 'videoOptions', 'audioOptions']),
 
     // mark which parameter candidate has been selected 
     selectedStyles(){
@@ -182,37 +217,24 @@ export default {
             dict[key] = ''
         }
       }
-      if (this.currentStream.streamType == 'video'){
-        for (let key of Object.keys(this.videoOptions)){
-          if (this.videoOptions[key].streamSpecifier)
-            var keyWithMark = key + mark.slice(mark.indexOf(':'))
-          else
-            var keyWithMark = key
-          
-          if (curStreamParam && keyWithMark in curStreamParam)
-              dict[key] = 'selected'
-            else
-              dict[key] = ''
-        }
+      if (this.currentStream.streamType == 'video')
+        var options = this.videoOptions
+      else if (this.currentStream.streamType == 'audio')
+        var options = this.audioOptions
+      else
+        return dict
+
+      for (let key of Object.keys(options)){
+        if (options[key].streamSpecifier)
+          var keyWithMark = key + mark.slice(mark.indexOf(':'))
+        else
+          var keyWithMark = key
+        if (curStreamParam && keyWithMark in curStreamParam)
+          dict[key] = 'selected'
+        else
+          dict[key] = ''
       }
       return dict
-      
-      /* if (this.isSubParam){
-        for (let key of Object.keys(this.parameterObject)){
-          if (this.currentStream.params[this.currentDict] && key in this.currentStream.params[this.currentDict])
-            dict[key] = 'list-group-item-info'
-          else
-            dict[key] = ''
-        }
-      }
-      else{
-        for (let key of Object.keys(this.parameterObject)){
-          if (this.currentStream.params && key in this.currentStream.params)
-            dict[key] = 'list-group-item-info'
-          else
-            dict[key] = ''
-        }
-      } */
     }
   },
   beforeMount() {
