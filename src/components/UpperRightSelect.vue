@@ -39,4 +39,11 @@ export default {
   .divSelectList {
     overflow: auto;
   }
+  div::-webkit-scrollbar-thumb{
+    background-color:rgb(55, 165, 255);
+  }
+  div::-webkit-scrollbar{
+    background-color:rgb(240, 248, 255);
+    /* border-left-color: rgb(169, 216, 255); */
+  }
 </style>

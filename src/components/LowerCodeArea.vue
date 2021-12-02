@@ -3,7 +3,7 @@
     <textarea 
       class="form-control border-0" id="floatingTextarea2" 
       v-model.trim.lazy="paramLine" 
-      @keyup.enter="editExit" 
+      @keydown.enter="editExit" 
       spellcheck="false" 
       :style="{height:localHeight+'px'}"
     />
@@ -192,5 +192,11 @@ export default {
 
   #divCodeArea{
     height: 100%;
+  }
+  textarea::-webkit-scrollbar-thumb{
+    background-color:rgb(117, 117, 117);
+  }
+  textarea::-webkit-scrollbar{
+    border-left-color: rgb(170, 170, 170);
   }
 </style>

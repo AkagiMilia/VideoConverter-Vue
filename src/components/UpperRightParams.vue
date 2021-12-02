@@ -190,7 +190,7 @@ export default {
             var keyWithMark = key
           
           if (curStreamParam && keyWithMark in curStreamParam)
-              dict[key] = 'list-group-item-info'
+              dict[key] = 'selected'
             else
               dict[key] = ''
         }
@@ -236,5 +236,12 @@ export default {
   .titleList{
     background-color: rgb(158, 106, 255);
     color:white
+  }
+  div::-webkit-scrollbar-thumb{
+    background-color:rgb(158, 106, 255);
+  }
+  div::-webkit-scrollbar{
+    background-color:rgb(237, 225, 255);
+    border-left-color: rgb(195, 162, 255);
   }
 </style>

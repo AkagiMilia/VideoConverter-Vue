@@ -532,5 +532,19 @@ export default {
     border-radius: 10px;
     border-color: rgb(177, 177, 177);
     border-style:solid;
-}
+  }
+
+  div::-webkit-scrollbar {
+    width: 6px;
+  }
+  textarea::-webkit-scrollbar {
+    width: 6px;
+  }
+  body::-webkit-scrollbar {
+    width: 6px;
+    background-color: white;
+  }
+  body::-webkit-scrollbar-thumb{
+    background-color: silver;
+  }
 </style>
