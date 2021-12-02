@@ -224,6 +224,8 @@ export default {
         cmdBlock.push(stream.format)
         for (let [param, value] of Object.entries(stream.params)){
           cmdBlock.push(param)
+          if (value == undefined)
+            continue
           if (typeof value == 'object'){
             var valLine = ''
             for (let [subParam, subValue] of Object.entries(value)){
@@ -294,6 +296,8 @@ export default {
       var defaultVal = '1'
       if (paramInfo.valueType.startsWith('bool'))
         defaultVal = 'true'
+      else if (paramInfo.valueType == 'none')
+        defaultVal = undefined
       else if ('subValues' in paramInfo){
         if (paramInfo.valueType.startsWith('int'))
           defaultVal = '1' 

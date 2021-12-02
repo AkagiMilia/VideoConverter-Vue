@@ -1,6 +1,6 @@
 <template>
   <a-row :span="24">
-    <textarea class="form-control" v-model.trim.lazy="paramLine" spellcheck="false" rows="3"/>
+    <textarea class="form-control" v-model.trim.lazy="paramLine" @keyup.enter="editExit" spellcheck="false" rows="3"/>
   </a-row>
 </template>
 
@@ -34,6 +34,8 @@ export default {
           line += stream.format + ' '
           for (let [key, value] of Object.entries(stream.params)){
             line += key + ' '
+            if (value == undefined)
+              continue
             if (typeof value == 'object'){
               var valLine = ''
               for (let [subKey, subValue] of Object.entries(value)){
@@ -53,11 +55,11 @@ export default {
         this.updateParams(value)
       }
     },
-    ...mapState('indexData', ['showingParams', 'markParams'])
+    ...mapState('indexData', ['showingParams', 'markParams', 'videoOptions'])
   },
   methods: {
     editExit(event){
-      console.log(this.$refs.inputArea);
+      event.target.blur()
     },
 
     // Translate parameter sting to an array including streams parameter objects 
@@ -128,9 +130,14 @@ export default {
         while(index <= len){
           if (params[index].startsWith('-') && !+params[index].substr(1)){
             var paramInfo = null
+            var markIndex = params[index].indexOf(':')
             if (this.showingParams[markList.format])
               paramInfo = this.showingParams[markList.format][params[index]]
-            console.log('paramInfo:',paramInfo);
+            if (this.videoOptions[params[index].slice(0, markIndex>-1 ? markIndex : params[index].length)]){
+              paramInfo = this.videoOptions[params[index].slice(0, markIndex>-1 ? markIndex : params[index].length)]
+              console.log('paramInfo', paramInfo);
+            }
+            
             if (index+1<=len && (!params[index+1].startsWith('-') || +params[index+1].substr(1))){
               if (paramInfo && paramInfo['valueType'].startsWith('dic')){
                 var newSubObject = {}
@@ -151,8 +158,12 @@ export default {
               if (paramInfo && paramInfo['valueType'].startsWith('dic')){
                 newObject[params[index]] = {'param':'value'}
               }  
-              else
+              else if (paramInfo && paramInfo['valueType'] == 'none')
+                newObject[params[index]] = undefined
+              else if (paramInfo)
                 newObject[params[index]] = '1'
+              else
+                newObject[params[index]] = undefined
               index += 1
             }
           }

@@ -132,7 +132,7 @@ export default {
     // load parameter guidance, 
     // and markers' information(e.g {video:['-c:v'], audio:['-c:a']}), 
     // and encoders' info
-    ...mapState('indexData', ['showingParams', 'markParams', 'encodersInfo']),
+    ...mapState('indexData', ['showingParams', 'markParams', 'encodersInfo', 'videoOptions']),
 
     // mark the parameters who are not in the guidance
     warningStyles(){
@@ -146,9 +146,9 @@ export default {
               dict[subKey] = 'list-group-item-warning'
           }
         }
-        if (this.currentFormat in this.showingParams && key in this.showingParams[this.currentFormat])
+        if (this.showingParams[this.currentFormat] && key in this.showingParams[this.currentFormat])
           dict[key] = ''
-        else if (key.startsWith('-c:'))
+        else if (key.slice(0, key.indexOf(':')>-1 ? key.indexOf(':') : key.length) in this.videoOptions)
           dict[key] = ''
         else
           dict[key] = 'list-group-item-warning'
@@ -177,8 +177,10 @@ export default {
       }  
       else{
         this.$bus.$emit('searchParameter', param, this.streamInfo.streamType)
-        if (!param.startsWith('-c:'))
+        if (this.showingParams[this.currentFormat][param])
           this.$bus.$emit('showGuidance', param, this.showingParams[this.currentFormat][param])
+        else if (this.videoOptions[param.slice(0, param.indexOf(':')>-1 ? param.indexOf(':') : param.length)])
+          this.$bus.$emit('showGuidance', param, this.videoOptions[param.slice(0, param.indexOf(':')>-1 ? param.indexOf(':') : param.length)])
       }  
     },
 
@@ -217,17 +219,19 @@ export default {
     onSearch(){
       try {
         console.log(this.currentParam);
-        if (this.markParams.video.indexOf(this.currentParam) > -1){
-          this.dataSource = Object.keys(this.encodersInfo.videos)
-        }
-        else if (this.markParams.audio.indexOf(this.currentParam) > -1){
-          this.dataSource = Object.keys(this.encodersInfo.audios)
-        }
-        else if (this.showingParams[this.currentFormat][this.nowFocus]['subValues']){
+        var sliceIndex = this.nowFocus.indexOf(':')
+        if (this.showingParams[this.currentFormat][this.nowFocus]
+         && this.showingParams[this.currentFormat][this.nowFocus]['subValues'])
+        {
           this.dataSource = Object.keys(this.showingParams[this.currentFormat][this.nowFocus]['subValues'])
         }
+        else if (this.videoOptions[this.nowFocus.slice(0, sliceIndex>-1 ? sliceIndex : this.nowFocus.length)]['subValues'])
+          this.dataSource = Object.keys(this.videoOptions[this.nowFocus.slice(0, sliceIndex>-1 ? sliceIndex : this.nowFocus.length)]['subValues'])
       } catch (error) {
         console.log('%c Object Read Error', 'color:orange');
+        console.log(`%c ${error}`, 'color:red');
+        console.log(sliceIndex);
+        console.log(this.videoOptions[this.nowFocus.slice(0, sliceIndex>-1 ? sliceIndex : this.nowFocus.length)]);
       }
     },
     paramFocus(){
