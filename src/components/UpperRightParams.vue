@@ -71,9 +71,11 @@
         </div>
       </li>
     </ul>
+    
+    <a-empty class="mt-3" v-if="!Object.keys(parameterObject).length && !this.currentFormat" :description="false"/>
 
     <!-- Stream's Format Options -->
-    <ul class="list-group list-group-flush">
+    <ul v-if="Object.keys(parameterObject).length" class="list-group list-group-flush">
       <li class="list-group-item list-group-item-action titleList">
         <div class="d-flex justify-content-between">
           <span class="fs-5">{{currentStream.format}}</span> 

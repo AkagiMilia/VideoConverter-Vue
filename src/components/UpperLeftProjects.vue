@@ -245,7 +245,9 @@ export default {
       this[action](targetKey)
     },
     remove(targetKey){
-      this.$bus.$emit('removeProject', targetKey)
+      if (targetKey != 'empty')
+        this.$bus.$emit('removeProject', targetKey)
+      
     },
     // Set the default output path
     // and send message to the electron main process

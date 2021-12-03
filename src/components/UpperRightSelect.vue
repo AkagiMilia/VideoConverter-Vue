@@ -7,6 +7,7 @@
       :key="stream.streamId"
       :streamInfo="stream"
     />
+    <a-empty class="mt-3" v-if="!Object.keys(currentParameter).length" :description="false"/>
     </div>
   </a-col>
 </template>

@@ -6,7 +6,7 @@ import {
   Tag, AutoComplete, Modal, Steps, 
   Space, Collapse, Popover, Upload,
   List, Radio, Select, InputNumber, 
-  Tooltip, message
+  Tooltip, Empty, message
 } from 'ant-design-vue'
 
 import App from './App.vue'
@@ -41,6 +41,7 @@ Vue.use(Select)
 Vue.use(InputNumber)
 Vue.use(List)
 Vue.use(Tooltip)
+Vue.use(Empty)
 
 Vue.use(VueVirtualScroller)
 Vue.use(infiniteScroll)

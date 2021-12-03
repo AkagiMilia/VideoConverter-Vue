@@ -1,5 +1,6 @@
 <template>
   <ul class="list-group list-group-flush" ref="test">
+    
     <li class="list-group-item list-group-item-action titleList" @click="switchStream">
       
         <a-row type="flex" justify="space-between" align="middle">
@@ -23,9 +24,7 @@
         
     </li>
 
-    <li class="list-group-item list-group-item-action disabled" v-if="!Object.keys(Selected).length">
-      Empty
-    </li>
+    <a-empty class="mt-3" v-if="!Object.keys(Selected).length" :description="false"/>
 
     <li class="list-group-item list-group-item-action paramList border-0" :class="warningStyles[param]" v-for="(value, param) in Selected" :key="param" @click="paramClick(param)">
       <a-row>

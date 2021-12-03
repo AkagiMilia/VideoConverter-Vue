@@ -192,7 +192,8 @@ export default {
       currentFormat:'',
       // current window's height and width
       windowHeight:document.body.clientHeight,
-      windowWidth:document.body.clientWidth
+      windowWidth:document.body.clientWidth,
+      isProjectEmpyt:false
     }
   },
 
@@ -355,6 +356,8 @@ export default {
     // update current format 
     // (by clicking different stream list in Select List)
     switchStream(streamId){
+      if (streamId == 'empty')
+        return
       this.currentStreamId = streamId
     },
 
@@ -415,10 +418,14 @@ export default {
         console.log('Currnet Projects', curVal)
         console.log('Last Projects', oldVal)
 
-        if (!curVal.length)
+        if (!curVal.length){
           this.currentProjectId = ''
-        if (!oldVal.length && curVal.length)
+          this.isProjectEmpyt = true
+        }  
+        if (this.isProjectEmpyt && curVal.length){
           this.currentProjectId = curVal[0].projectId
+          this.isProjectEmpyt = false
+        }
       }
     },
 
