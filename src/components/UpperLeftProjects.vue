@@ -8,15 +8,29 @@
     <!-- Pages of projects -->
     <a-tabs
       :default-active-key="currentProjectId"
+      type="editable-card"
       tab-position="left"
       @tabClick="switchProject"
+      @edit="editProject"
       :style="{height:localHeight+'px'}"
       size="small"
     >
       <a-tab-pane 
+        v-if="!projects.length"
+        key="empty"
+        class="me-3"
+      >
+        <a-button type="primary" @click="clickNewProject">
+          <a-icon type="plus" class="align-middle mb-1"/>
+          Add Project
+        </a-button>
+      </a-tab-pane>
+
+      <a-tab-pane 
         v-for="(project, index) in projects" 
-        :key="project.projectId" :tab="`${index+1}`" 
-        @click="selectProject(project)"
+        :key="project.projectId" :tab="`${index+1}`"
+        :closable="true"
+        @click.stop="selectProject(project)"
         class="me-3"
       >
         <a-space class="mt-3">
@@ -227,6 +241,12 @@ export default {
       this.$bus.$emit('removeFile', fileId)
     },
 
+    editProject(targetKey, action){
+      this[action](targetKey)
+    },
+    remove(targetKey){
+      this.$bus.$emit('removeProject', targetKey)
+    },
     // Set the default output path
     // and send message to the electron main process
     // to open a save file dialog with the default output path

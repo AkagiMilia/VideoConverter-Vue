@@ -200,7 +200,7 @@ export default {
   computed:{
     // command parameters to launch ffmpeg e.g ['ffmpeg', '-i', 'a.mp4'...]
     cmdLine(){
-      if (!this.currentProject)
+      if (!this.projects.length)
         return []
       var currentProjectParams = this.projects.find(project => project.projectId == this.currentProjectId).parameters
       // base address ffmpeg
@@ -341,6 +341,17 @@ export default {
       this.currentProjectId = projectId
     },
 
+    removeProject(projectId){
+      let savedId = this.currentProjectId
+      this.projects = this.projects.filter(project => project.projectId != projectId)
+      if (this.projects.length && savedId == projectId)
+        this.currentProjectId = this.projects[0].projectId
+      else if (!this.projects.length){
+        this.currentProjectId = ''
+      }
+      else
+        this.refreshPointers()
+    },
     // update current format 
     // (by clicking different stream list in Select List)
     switchStream(streamId){
@@ -397,6 +408,62 @@ export default {
 
   // watchers, run something when the watched data changed
   watch:{
+    projects:{
+
+      handler(curVal, oldVal){
+        console.log('Project Changed')
+        console.log('Currnet Projects', curVal)
+        console.log('Last Projects', oldVal)
+
+        if (!curVal.length)
+          this.currentProjectId = ''
+        if (!oldVal.length && curVal.length)
+          this.currentProjectId = curVal[0].projectId
+      }
+    },
+
+
+    // if current project ID changed, refresh pointers
+    currentProjectId:{
+      immediate:true,
+      handler(curVal, oldval){
+        if (!curVal){
+          this.currentProject = {}
+          this.currentParameter = {}
+          this.currentStreamId = ''
+          this.$bus.$emit('empitParameter')
+          return
+        }
+        this.currentProject = this.projects.find(project => project.projectId == curVal)
+        this.currentParameter = this.currentProject.parameters
+        this.currentStreamId = this.currentProject.parameters[0].streamId
+        console.log('currentFormat', this.currentFormat)
+      }
+    },
+
+    // if current stream ID changed, refresh pointers
+    currentStreamId:{
+      immediate:true,
+      handler(curVal, oldval){
+        if (!curVal){
+          this.currentStream = {}
+          this.currentFormat = ''
+          this.currentType = ''
+          return
+        }
+          
+        if (this.currentParameter && this.currentStreamId){
+          for (let stream of this.currentParameter){
+            if (stream.streamId == this.currentStreamId){
+              this.currentStream = stream
+              this.currentFormat = stream.format
+              this.currentType = stream.streamType
+            }
+          }
+        }
+      }
+    },
+
     // if the currentFormat changed
     // let the component Param List refreash
     currentFormat:{
@@ -416,37 +483,6 @@ export default {
         if(!hascurV)
           this.$bus.$emit('empitParameter')
       }
-    },
-
-    // if current project ID changed, refresh pointers
-    currentProjectId:{
-      immediate:true,
-      handler(curVal, oldval){
-        if (!curVal)
-          return
-        this.currentProject = this.projects.find(project => project.projectId == curVal)
-        this.currentParameter = this.currentProject.parameters
-        this.currentStreamId = this.currentProject.parameters[0].streamId
-        console.log('currentFormat', this.currentFormat)
-      }
-    },
-
-    // if current stream ID changed, refresh pointers
-    currentStreamId:{
-      immediate:true,
-      handler(curVal, oldval){
-        if (!curVal)
-          return
-        if (this.currentParameter && this.currentStreamId){
-          for (let stream of this.currentParameter){
-            if (stream.streamId == this.currentStreamId){
-              this.currentStream = stream
-              this.currentFormat = stream.format
-              this.currentType = stream.streamType
-            }
-          }
-        }
-      }
     }
   },
 
@@ -461,6 +497,7 @@ export default {
     // listeners of the event bus
     this.$bus.$on('updateParams', this.getParams)
     this.$bus.$on('changeProject', this.getProject)
+    this.$bus.$on('removeProject', this.removeProject)
     this.$bus.$on('addParam', this.addParam)
     this.$bus.$on('deleteParam', this.deleteParam)
     this.$bus.$on('switchStream', this.switchStream)

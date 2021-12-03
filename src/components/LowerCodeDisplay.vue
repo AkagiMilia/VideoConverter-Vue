@@ -8,6 +8,12 @@
         <a-button type="primary" size="large" @click.stop="runFFmpeg">
           START
         </a-button>
+        <a-button type="primary" size="large" @click.stop="pauseFFmpeg">
+          PAUSE
+        </a-button>
+        <a-button type="primary" size="large" @click.stop="continueFFmpeg">
+          CONTINUE
+        </a-button>
       </a-col>
     </a-row>
     <a-row>
@@ -24,7 +30,8 @@ export default {
   props:['command'],
   data() {
     return {
-      result:''
+      result:'',
+      ffmpeg:null
     }
   },
   methods: {
@@ -34,17 +41,29 @@ export default {
       console.log('head:',head);
       console.log('paras:', commandList)
       // const { spawn } = require('electron')
-      const ffmpeg = spawn(head, commandList)
+      this.ffmpeg = spawn(head, commandList)
   
-      ffmpeg.stdout.on('data', (data)=>{
+      this.ffmpeg.stdout.on('data', (data)=>{
         console.log(data.toString());
         this.result = data.toString()
-      });
+      })
     
-      ffmpeg.stderr.on('data', (data)=>{
+      this.ffmpeg.stderr.on('data', (data)=>{
         console.log(data.toString());
         this.result = data.toString()
-      });   
+      })
+
+      this.ffmpeg.stderr.on('close', (code)=>{
+        console.log('Convert End!!!!!!!!!');
+        if (code != 0)
+          console.log('process end with code:', code);
+      })
+    },
+    pauseFFmpeg(){
+      this.ffmpeg.kill('SIGSTOP')
+    },
+    continueFFmpeg(){
+      this.ffmpeg.kill('SIGCONT')
     }
   },
   computed:{

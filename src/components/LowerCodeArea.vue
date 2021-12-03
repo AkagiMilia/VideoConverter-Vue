@@ -35,7 +35,8 @@ export default {
       // Translate the parameters to string displaying on the input area
       get(){
         var line = ''
-        console.log(`${this.currentParameter}`);
+        if (!this.currentParameter.length)
+          return line
         for (let stream of this.currentParameter){
           line += stream.mark + ' '
           line += stream.format + ' '

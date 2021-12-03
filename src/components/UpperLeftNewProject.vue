@@ -68,7 +68,14 @@
             :disabled="isVideoCopy"
           >
             <a-select-option v-for="format in Object.keys(encodersInfo.videos)" :key="format" :value="format">
-              {{format}}
+              <a-tooltip placement="right">
+                <template slot="title">
+                  {{encodersInfo.videos[format].explanation}}
+                </template>
+                <a-row>
+                  {{format}}
+                </a-row>
+              </a-tooltip>
             </a-select-option>
           </a-select>
         </a-col>
@@ -278,7 +285,10 @@ export default {
       this.audioFormat = value
     },
     filterVideoFormat(input, option){
-      return option.componentOptions.children[0].text.trim().indexOf(input)>-1
+      console.log(option);
+      return option.componentOptions.children[0].
+      componentOptions.children[1].
+      componentOptions.children[0].text.trim().indexOf(input)>-1
     },
     filterAudioFormat(input, option){
       return option.componentOptions.children[0].text.trim().indexOf(input)>-1
