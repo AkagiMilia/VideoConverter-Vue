@@ -3,6 +3,7 @@
 import { app, protocol, BrowserWindow, ipcMain, dialog} from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import { exec } from 'child_process'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -71,7 +72,18 @@ app.on('ready', async () => {
   ipcMain.on('requireSystemInfo',(event)=>{
     const currentSystem = process.platform
     const isMac = currentSystem === 'darwin'
-    console.log('isMac?:',isMac)
+    if (isMac){
+      exec(`where ffmpeg`, (error, stdout, stderr)=>{
+        if (error){
+          console.log('Error:', error)
+          return
+        }
+        if (stdout)
+          console.log('Result:', stdout)
+        if (stderr)
+          console.log('ResultError:', stderr)
+      })
+    }
     event.reply('getSystemInfo', currentSystem, isMac)
   })
 
