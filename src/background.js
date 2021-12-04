@@ -73,7 +73,9 @@ app.on('ready', async () => {
     const currentSystem = process.platform
     const isMac = currentSystem === 'darwin'
     if (isMac){
-      exec(`where ffmpeg`, (error, stdout, stderr)=>{
+      process.env.PATH = process.env.PATH + ':/usr/local/bin'
+      console.log('process.env.PATH:', process.env.PATH)
+      exec(`which ffmpeg`, (error, stdout, stderr)=>{
         if (error){
           console.log('Error:', error)
           return
