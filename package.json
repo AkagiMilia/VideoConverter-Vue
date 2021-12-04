@@ -18,9 +18,7 @@
     "element-ui": "^2.15.6",
     "nanoid": "^3.1.30",
     "vue": "^2.6.14",
-    "vue-highlightable-input": "^1.0.9",
     "vue-infinite-scroll": "^2.0.2",
-    "vue-virtual-scroller": "^1.0.10",
     "vue2-editor": "^2.10.3",
     "vuex": "^3.6.2"
   },

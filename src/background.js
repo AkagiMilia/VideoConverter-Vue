@@ -3,6 +3,7 @@
 import { app, protocol, BrowserWindow, ipcMain, dialog} from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
@@ -65,6 +66,14 @@ app.on('ready', async () => {
     }
   }
   createWindow()
+
+  // send back System Info
+  ipcMain.on('requireSystemInfo',(event)=>{
+    const currentSystem = process.platform
+    const isMac = currentSystem === 'darwin'
+    console.log('isMac?:',isMac)
+    event.reply('getSystemInfo', currentSystem, isMac)
+  })
 
   // waiting message from Vue
   // open dialog 'save file'

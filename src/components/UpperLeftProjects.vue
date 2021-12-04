@@ -15,6 +15,8 @@
       :style="{height:localHeight+'px'}"
       size="small"
     >
+
+      <!-- Tab shows when no project -->
       <a-tab-pane 
         v-if="!projects.length"
         key="empty"
@@ -26,13 +28,32 @@
         </a-button>
       </a-tab-pane>
 
+      <!-- Project Tabs -->
       <a-tab-pane 
         v-for="(project, index) in projects" 
         :key="project.projectId" :tab="`${index+1}`"
         :closable="true"
         @click.stop="selectProject(project)"
+        :id="project.projectId"
         class="me-3"
       >
+        
+        <!-- Process Drawer-->
+        <a-drawer
+          title="Basic Drawer"
+          placement="right"
+          :width="windowWidth*0.5 - 55"
+          closable
+          :mask="false"
+          :visible="isInProcess"
+          :get-container="false"
+          :wrap-style="{ position: 'absolute' }"
+          @close="triggerDrawerVisible"
+        >
+          <p>{{project.projectId}}</p>
+        </a-drawer>
+
+        <!-- Add File & Add Project -->
         <a-space class="mt-3">
           <a-button :loading="isLoadFile" type="primary" @click="clickAddFile(project)">
             <a-icon v-show="!isLoadFile" type="plus" class="align-middle mb-1"/>
@@ -42,12 +63,18 @@
             <a-icon type="plus" class="align-middle mb-1"/>
             Add Project
           </a-button>
+          <a-button type="primary" @click="triggerDrawerVisible">
+            <a-icon type="plus" class="align-middle mb-1"/>
+            Show Convert Process
+          </a-button>
         </a-space>
+        
+        <!-- Loaded Files -->
         <div 
           v-infinite-scroll="loadMore" 
           infinite-scroll-disabled="busy" 
           infinite-scroll-distance="10" 
-          class="divFileCard" 
+          class="divFileCard mt-3" 
           :style="{height:localHeight-100+'px'}"
         > 
           <input 
@@ -98,7 +125,7 @@
           </a-collapse>
         </div>
 
-        <!-- Output location input-->
+        <!-- Output location input -->
         <a-popover title="Output Info" trigger="hover">
           <template slot="content">
             <a-space direction="vertical" :size="0">
@@ -143,6 +170,7 @@ export default {
       activeKey:[],
       busy:false,
       newProjectVisible:false,
+      isInProcess:false,
       isLoadFile:false
     }
   },
@@ -193,6 +221,12 @@ export default {
     clickNewProject(){
       this.newProjectVisible = true
     },
+
+
+    triggerDrawerVisible(){
+      this.isInProcess = !this.isInProcess
+    },
+
 
     // when file parameter input on blur(lose focus), 
     // submit new file parameter

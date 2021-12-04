@@ -5,15 +5,14 @@
         <p id="codeArea" class="align-self-center mt-2">{{cmdStringDis}}</p>
       </a-col>
       <a-col :span="6" align="middle">
-        <a-button type="primary" size="large" @click.stop="runFFmpeg">
-          START
-        </a-button>
-        <a-button type="primary" size="large" @click.stop="pauseFFmpeg">
-          PAUSE
-        </a-button>
-        <a-button type="primary" size="large" @click.stop="continueFFmpeg">
-          CONTINUE
-        </a-button>
+        <a-space>
+          <a-button type="primary" size="large" @click.stop="runFFmpeg">
+            {{buttonNames.switch}}
+          </a-button>
+          <a-button v-show="processState.isRunning" type="primary" size="large" @click.stop="pauseFFmpeg">
+            {{buttonNames.control}}
+          </a-button>
+        </a-space>
       </a-col>
     </a-row>
     <a-row>
@@ -24,46 +23,76 @@
 
 <script>
 const { spawn } = require('child_process')
-console.log('spawn is ', spawn);
+console.log('spawn is ', spawn)
+
+
 export default {
   name:'LowerCodeDisplay',
   props:['command'],
   data() {
     return {
       result:'',
+      buttonNames:{
+        switch:'START',
+        control:'PAUSE'
+      },
+      processState:{
+        isRunning:false,
+        isPause:false
+      },
       ffmpeg:null
     }
   },
   methods: {
     runFFmpeg(){
-      const head = this.command[0]
-      const commandList = this.command.slice(1, this.command.length)
-      console.log('head:',head);
-      console.log('paras:', commandList)
-      // const { spawn } = require('electron')
-      this.ffmpeg = spawn(head, commandList)
-  
-      this.ffmpeg.stdout.on('data', (data)=>{
-        console.log(data.toString());
-        this.result = data.toString()
-      })
-    
-      this.ffmpeg.stderr.on('data', (data)=>{
-        console.log(data.toString());
-        this.result = data.toString()
-      })
 
-      this.ffmpeg.stderr.on('close', (code)=>{
-        console.log('Convert End!!!!!!!!!');
-        if (code != 0)
-          console.log('process end with code:', code);
-      })
+      if (!this.processState.isRunning){
+        this.processState.isRunning = true
+        this.buttonNames.switch = 'STOP'
+
+        const head = this.command[0]
+        const commandList = this.command.slice(1, this.command.length)
+        console.log('head:',head);
+        console.log('paras:', commandList)
+        // const { spawn } = require('electron')
+        this.ffmpeg = spawn(head, commandList)
+    
+        this.ffmpeg.stdout.on('data', (data)=>{
+          console.log(data.toString())
+          this.result = data.toString()
+        })
+      
+        this.ffmpeg.stderr.on('data', (data)=>{
+          console.log(data.toString())
+          this.result = data.toString()
+        })
+
+        this.ffmpeg.stderr.on('close', (code)=>{
+          console.log('Convert End!!!!!!!!!')
+          this.isRunning = false
+          if (code != 0)
+            console.log('process end with code:', code)
+        })
+      }
+      else{
+        this.ffmpeg.kill()
+        this.processState.isRunning = false
+        this.buttonNames.switch = 'START'
+      }
+      
     },
     pauseFFmpeg(){
-      this.ffmpeg.kill('SIGSTOP')
-    },
-    continueFFmpeg(){
-      this.ffmpeg.kill('SIGCONT')
+      console.log(this.ffmpeg.pid)
+      if (this.processState.isPause){
+        // this.ffmpeg.kill('SIGCONT')
+        this.processState.isPause = false
+        this.buttonNames.control = 'PAUSE'
+      }
+      else{
+        // this.ffmpeg.kill('SIGSTOP')
+        this.processState.isPause = true
+        this.buttonNames.control = 'CONTINUE'
+      }
     }
   },
   computed:{

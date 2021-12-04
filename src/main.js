@@ -6,15 +6,13 @@ import {
   Tag, AutoComplete, Modal, Steps, 
   Space, Collapse, Popover, Upload,
   List, Radio, Select, InputNumber, 
-  Tooltip, Empty, message
+  Tooltip, Empty, Drawer, message
 } from 'ant-design-vue'
 
 import App from './App.vue'
 // import 'ant-design-vue/dist/antd.css'
 import store from './store/index'
-import VueVirtualScroller from 'vue-virtual-scroller'
 import infiniteScroll from 'vue-infinite-scroll'
-import { VueEditor } from "vue2-editor"
 
 
 Vue.config.productionTip = true
@@ -42,11 +40,9 @@ Vue.use(InputNumber)
 Vue.use(List)
 Vue.use(Tooltip)
 Vue.use(Empty)
+Vue.use(Drawer)
 
-Vue.use(VueVirtualScroller)
 Vue.use(infiniteScroll)
-
-Vue.component(VueEditor.name, VueEditor)
 
 // Initialize Vue
 const vm = new Vue({

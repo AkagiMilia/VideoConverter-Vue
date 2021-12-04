@@ -65,6 +65,7 @@ import { nanoid } from 'nanoid'
 
 // tool to load data from Vuex
 import { mapMutations, mapState } from 'vuex'
+import { ipcRenderer } from 'electron'
 
 // platform detect
 const isMac = navigator.platform === 'MacIntel'
@@ -496,6 +497,11 @@ export default {
   // do somthing before components mounting on the page
   beforeMount(){
 
+    ipcRenderer.on('getSystemInfo', (event, currentSystem, isMac)=>{
+      console.log('isMac?:', currentSystem, isMac);
+    })
+    ipcRenderer.send('requireSystemInfo')
+    
     // initialize informations
     this.currentProjectId = this.projects[0].projectId
     this.currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
@@ -517,10 +523,10 @@ export default {
 
     // let the Vuex load parameter, encoder's informations from files
     const path = require('path')
-    const guidancePath = path.join(__static, 'Guidance.json')
-    const encodersPath = path.join(__static, 'Encoders.json')
-    const videoOptions = path.join(__static, 'VideoOptions.json')
-    const audioOptions = path.join(__static, 'AudioOptions.json')
+    const guidancePath = path.join(__static, 'data/Guidance.json')
+    const encodersPath = path.join(__static, 'data/Encoders.json')
+    const videoOptions = path.join(__static, 'data/VideoOptions.json')
+    const audioOptions = path.join(__static, 'data/AudioOptions.json')
     this.loadGuidance(guidancePath)
     this.loadEncoders(encodersPath)
     this.loadVideoOptions(videoOptions)

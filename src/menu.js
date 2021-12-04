@@ -3,7 +3,7 @@ const { app, Menu, BrowserWindow} = require('electron')
 
 const isMac = process.platform === 'darwin';
 var shortCutQS = null;
-isMac ? shortCutQS='control+Q' : shortCutQS='crtl+Q';
+// isMac ? shortCutQS='control+Q' : shortCutQS='crtl+Q';
 const template = [
   // { role: 'appMenu' }
   ...(isMac ? [{
@@ -24,7 +24,7 @@ const template = [
   {
     label: 'File',
     submenu: [
-      {
+      /* {
           label: 'Quick Convert',
           accelerator: shortCutQS,
           click: function ()
@@ -44,7 +44,7 @@ const template = [
                   winQuick = null;
               });
           }
-      },
+      }, */
 
       isMac ? { role: 'close' } : { role: 'quit' }
     ]

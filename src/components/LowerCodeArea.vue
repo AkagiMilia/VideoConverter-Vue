@@ -13,12 +13,8 @@
 
 <script>  
 import { mapState } from 'vuex'
-import HighlightableInput from 'vue-highlightable-input'
 export default {
   name:'LowerCodeArea',
-  components:{
-    HighlightableInput
-  },
   props:['currentParameter', 'currentProjectId', 'currentFormat', 'localHeight'],
   data() {
     return {
