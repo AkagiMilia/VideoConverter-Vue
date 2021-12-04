@@ -497,8 +497,8 @@ export default {
   // do somthing before components mounting on the page
   beforeMount(){
 
-    ipcRenderer.on('getSystemInfo', (event, currentSystem, isMac)=>{
-      console.log('isMac?:', currentSystem, isMac);
+    ipcRenderer.on('getSystemInfo', (event, currentSystem, isMac, ffPaths)=>{
+      console.log('isMac?:', currentSystem, isMac, ffPaths);
     })
     ipcRenderer.send('requireSystemInfo')
     

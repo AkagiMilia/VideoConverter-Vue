@@ -72,21 +72,27 @@ app.on('ready', async () => {
   ipcMain.on('requireSystemInfo',(event)=>{
     const currentSystem = process.platform
     const isMac = currentSystem === 'darwin'
+    var ffPaths = {}
+    var finished = 0
     if (isMac){
       process.env.PATH = process.env.PATH + ':/usr/local/bin'
-      console.log('process.env.PATH:', process.env.PATH)
-      exec(`which ffmpeg`, (error, stdout, stderr)=>{
-        if (error){
-          console.log('Error:', error)
-          return
-        }
-        if (stdout)
-          console.log('Result:', stdout)
-        if (stderr)
-          console.log('ResultError:', stderr)
-      })
-    }
-    event.reply('getSystemInfo', currentSystem, isMac)
+      for (let program of ['ffmpeg', 'ffprobe', 'ffplay']){
+        exec(`which ${program}`, (error, stdout, stderr)=>{
+          if (error){
+            console.log('Error:', error)
+          }
+          if (stdout){
+            console.log('Result:', stdout)
+            ffPaths[program] = program
+          }
+          if (stderr)
+            console.log('ResultError:', stderr)
+          finished += 1
+        })
+      }
+      console.log('ffPaths:', ffPaths);
+      event.reply('getSystemInfo', currentSystem, isMac, ffPaths)
+    } 
   })
 
   // waiting message from Vue
