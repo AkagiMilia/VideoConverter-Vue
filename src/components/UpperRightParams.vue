@@ -134,7 +134,7 @@ export default {
       if (this.showingParams[searchFormat]){
         for(let [key, value] of Object.entries(this.showingParams[searchFormat])){
           if (key == param || param.startsWith('-c:')){
-            if (value.valueType.startsWith('dict')){
+            if (value.valueType.startsWith('dict') || value.valueType.startsWith('flag')){
               this.$nextTick(function(){
                 this.parameterObject = value.subValues
                 this.currentDict = key

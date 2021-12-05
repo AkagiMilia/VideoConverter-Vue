@@ -58,7 +58,7 @@
             type="close-circle" 
             theme="twoTone" 
             twoToneColor="red"
-            @click="deleteParam(param, null)"
+            @click.stop="deleteParam(param, null)"
           />
         </a-col>
         
@@ -66,7 +66,7 @@
       
       <!-- If parameter type is an object, -->
       <!-- show their sub parameters -->
-      <ul class="list-group mt-2" v-if="typeof Selected[param] == 'object'">
+      <ul class="list-group mt-2" v-if="Selected[param].constructor == Object">
         <li class="list-group-item list-group-item-action subParamList border-0 border-start rounded-0" :class="warningStyles[subParam]" v-for="(subVal, subParam) in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
           <a-row>
             <a-col :span="11">
@@ -90,7 +90,25 @@
               type="close-circle" 
               theme="twoTone" 
               twoToneColor="red"
-              @click="deleteParam(subParam, param)"
+              @click="deleteParam(subParam, param, 'object')"
+            />
+          </a-row>
+        </li>
+      </ul>
+
+      <!-- If parameter type is an array-->
+      <ul class="list-group mt-2" v-if="Selected[param].constructor == Array">
+        <li class="list-group-item list-group-item-action subParamList border-0 border-start rounded-0" :class="warningStyles[subParam]" v-for=" subParam in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
+          <a-row>
+            <a-col :span="24">
+              <span><strong>{{subParam}}</strong></span>
+            </a-col>
+            <a-icon 
+              class="subDelete" 
+              type="close-circle" 
+              theme="twoTone" 
+              twoToneColor="red"
+              @click.stop="deleteParam(subParam, param, 'array')"
             />
           </a-row>
         </li>
@@ -221,8 +239,9 @@ export default {
       this.$bus.$emit('updateParams', params, this.streamInfo.streamType, this.streamInfo.streamId)
     },
 
-    deleteParam(param, father){
-      this.$bus.$emit('deleteParam', this.streamInfo.streamId, param, father)
+    deleteParam(param, father, type){
+      this.$bus.$emit('deleteParam', this.streamInfo.streamId, param, father, type)
+      this.switchStream()
     },
 
     // gather auto complete's candidate 

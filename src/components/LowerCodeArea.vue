@@ -40,10 +40,18 @@ export default {
             line += key + ' '
             if (value == undefined)
               continue
-            if (typeof value == 'object'){
+            if (value.constructor == Object){
               var valLine = ''
               for (let [subKey, subValue] of Object.entries(value)){
                 valLine += subKey+'='+subValue+':'
+              }
+              valLine = valLine.substr(0, valLine.length-1)
+              line += valLine + ' '
+            }
+            else if(value.constructor == Array){
+              var valLine = ''
+              for (let subKey of value){
+                valLine += subKey+'+'
               }
               valLine = valLine.substr(0, valLine.length-1)
               line += valLine + ' '
@@ -133,17 +141,20 @@ export default {
         index = 0
         while(index <= len){
           if (params[index].startsWith('-') && !+params[index].substr(1)){
+
+            // get Param's Information
             var paramInfo = null
             var markIndex = params[index].indexOf(':')
             if (this.showingParams[markList.format])
               paramInfo = this.showingParams[markList.format][params[index]]
             if (this.videoOptions[params[index].slice(0, markIndex>-1 ? markIndex : params[index].length)]){
               paramInfo = this.videoOptions[params[index].slice(0, markIndex>-1 ? markIndex : params[index].length)]
-              console.log('paramInfo', paramInfo);
             }
             
+            // Analyze Parameters
+            // If this current value start with '-' (e.g. '-crf') and the next value is a legal value 
             if (index+1<=len && (!params[index+1].startsWith('-') || +params[index+1].substr(1))){
-              if (paramInfo && paramInfo['valueType'].startsWith('dic')){
+              if (paramInfo && paramInfo['valueType'].startsWith('dict')){
                 var newSubObject = {}
                 var valList = params[index+1].split(':')
                 for (let val of valList){
@@ -154,14 +165,23 @@ export default {
                 }
                 newObject[params[index]] = newSubObject
               }
+              else if (paramInfo && paramInfo['valueType'].startsWith('flag')){
+                var valList = params[index+1].split('+')
+                newObject[params[index]] = valList
+              }
               else
                 newObject[params[index]] = params[index+1]
               index += 2
             }
+            // Else, we consider there is an missing value for the parameter
+            // and here it will make an auto-complete
             else{
-              if (paramInfo && paramInfo['valueType'].startsWith('dic')){
+              if (paramInfo && paramInfo['valueType'].startsWith('dict')){
                 newObject[params[index]] = {'param':'value'}
-              }  
+              }
+              else if (paramInfo && paramInfo['valueType'].startsWith('flag')){
+                newObject[params[index]] = ['flag']
+              }
               else if (paramInfo && paramInfo['valueType'] == 'none')
                 newObject[params[index]] = undefined
               else if (paramInfo)

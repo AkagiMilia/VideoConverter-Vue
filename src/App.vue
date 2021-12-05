@@ -237,10 +237,18 @@ export default {
           cmdBlock.push(param)
           if (value == undefined)
             continue
-          if (typeof value == 'object'){
+          if (value.constructor == Object){
             var valLine = ''
             for (let [subParam, subValue] of Object.entries(value)){
               valLine += subParam+'='+subValue+':'
+            }
+            valLine = valLine.substr(0, valLine.length-1)
+            cmdBlock.push(valLine)
+          }
+          else if(value.constructor == Array){
+            var valLine = ''
+            for (let subParam of value){
+              valLine += subParam+'+'
             }
             valLine = valLine.substr(0, valLine.length-1)
             cmdBlock.push(valLine)
@@ -305,7 +313,9 @@ export default {
     // add single parameter(from Parameter Candidate List)
     addParam(paramName, paramInfo, father=null){
       var defaultVal = '1'
-      if (paramInfo.valueType.startsWith('bool'))
+      if (!paramInfo.valueType)
+        defaultVal = undefined
+      else if (paramInfo.valueType.startsWith('bool'))
         defaultVal = 'true'
       else if (paramInfo.valueType == 'none')
         defaultVal = undefined
@@ -317,23 +327,42 @@ export default {
       }   
       console.log('add param name:', paramName)
       console.log('add target:',this.currentStream);
-      if (father && !this.currentStream.params[father][paramName])
-        this.$set(this.currentStream.params[father], paramName, defaultVal)
+      if (father && this.currentStream.params[father].constructor == Object){
+        if (!this.currentStream.params[father][paramName])
+          this.$set(this.currentStream.params[father], paramName, defaultVal)
+      }
+      else if (father && this.currentStream.params[father].constructor == Array){
+        if (this.currentStream.params[father].findIndex(flag => flag == paramName) == -1)
+          this.currentStream.params[father].push(paramName)
+      }
       else if(!this.currentStream.params[paramName]){
         console.log('defultVal', defaultVal);
         if (paramInfo.valueType.startsWith('dict')){
           this.$set(this.currentStream.params, paramName, {})
           this.$set(this.currentStream.params[paramName], defaultVal, '1')
         }
+        else if (paramInfo.valueType.startsWith('flag')){
+          this.$set(this.currentStream.params, paramName, [])
+          this.currentStream.params[paramName].push(defaultVal)
+        }
         else
           this.$set(this.currentStream.params, paramName, defaultVal)
       }
     },
 
-    deleteParam(streamId, param, father){
+    deleteParam(streamId, param, father, type=null){
       var targetStream = this.currentProject.parameters.find(stream => stream.streamId == streamId)
-      if (father)
-        this.$delete(targetStream.params[father], param)
+      if (father){
+        if (type == 'object')
+          this.$delete(targetStream.params[father], param)
+        else if (type == 'array'){
+          console.log('delete param:',param)
+          console.log('delete father:',father)
+          console.log('delete target:',targetStream)
+          var newArray = targetStream.params[father].filter(flag => flag != param)
+          this.$set(targetStream.params, father, newArray)
+        }
+      }
       else
         this.$delete(targetStream.params, param)
       this.$bus.$emit('refreshParameter', targetStream.format)

@@ -94,6 +94,26 @@ app.on('ready', async () => {
           }
         })
       }
+    }
+    else{
+      for (let program of ['ffmpeg', 'ffprobe', 'ffplay']){
+        exec(`${program} -h`, (error, stdout, stderr)=>{
+          if (error){
+            console.log('Error:', error)
+          }
+          if (stdout){
+            console.log('Result:')
+            ffPaths[program] = program
+          }
+          if (stderr)
+            console.log('ResultError:')
+          finished += 1
+          if (finished >= 3){
+            console.log('ffPaths:', ffPaths);
+            event.reply('getSystemInfo', currentSystem, isMac, ffPaths)
+          }
+        })
+      }
     } 
   })
 
