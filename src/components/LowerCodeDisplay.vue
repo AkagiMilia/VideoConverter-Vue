@@ -66,6 +66,7 @@ export default {
         this.$bus.$emit('getRunningState', true)
         this.ffmpeg.stderr.on('data', (data)=>{
           var result = data.toString()
+          console.log(result)
           if (result.indexOf('speed')>-1){
             result = result.replace(/=\s+/g, '=')
             result = result.replace(/[\r\n]/g, '')
@@ -78,7 +79,6 @@ export default {
                 infoObj[unit.slice(0, equalIndex)] = unit.slice(equalIndex+1)
               }
             }
-            console.log(infoObj)
             this.result = infoObj
           }
             

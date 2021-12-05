@@ -44,6 +44,7 @@
             v-if="typeof Selected[param] == 'string'"
             v-model.trim.lazy="Selected[param]"
             v-show="param==nowFocus"
+            @keydown.enter="inputEnter"
             @blur="paramExit(param, null, $event)"
             @focus="paramFocus"
             @search="onSearch"
@@ -66,7 +67,7 @@
       
       <!-- If parameter type is an object, -->
       <!-- show their sub parameters -->
-      <ul class="list-group mt-2" v-if="Selected[param].constructor == Object">
+      <ul class="list-group mt-2" v-if="Selected[param] && Selected[param].constructor == Object">
         <li class="list-group-item list-group-item-action subParamList border-0 border-start rounded-0" :class="warningStyles[subParam]" v-for="(subVal, subParam) in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
           <a-row>
             <a-col :span="11">
@@ -79,6 +80,7 @@
                 :data-source="dataSource"
                 v-model.trim.lazy="Selected[param][subParam]"
                 v-show="subParam==nowFocus"
+                @keydown.enter="inputEnter"
                 @blur="paramExit(param, subParam, $event)"
                 @search="onSearch"
                 :ref="'input'+subParam"
@@ -97,7 +99,7 @@
       </ul>
 
       <!-- If parameter type is an array-->
-      <ul class="list-group mt-2" v-if="Selected[param].constructor == Array">
+      <ul class="list-group mt-2" v-if="Selected[param] && Selected[param].constructor == Array">
         <li class="list-group-item list-group-item-action subParamList border-0 border-start rounded-0" :class="warningStyles[subParam]" v-for=" subParam in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
           <a-row>
             <a-col :span="24">
@@ -212,6 +214,12 @@ export default {
         }
       }  
     },
+
+    inputEnter(event){
+      console.log('enterDown:', event);
+      event.target.blur()
+    },
+
 
     // After finishing inputing value(lose focus), update the parameter value
     paramExit(param,subParam,value){

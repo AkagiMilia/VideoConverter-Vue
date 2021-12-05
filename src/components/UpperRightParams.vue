@@ -1,5 +1,5 @@
 <template>
-  <a-col :span="12" class="border border-end-0 bg-light" id="divParamLists">
+  <a-col :span="12" class="border border-end-0 border-top-0 border-start-0 bg-light" id="divParamLists">
     <div 
       v-infinite-scroll="loadMore" 
       infinite-scroll-disabled="busy" 

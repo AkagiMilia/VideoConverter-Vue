@@ -13,7 +13,7 @@
           />
           <UpperLeftGuide 
             :localHeight="windowHeight*0.2"
-            class="bg-light"
+            class="bg-light "
           /> 
       </a-col>
       <a-col :span="12" :style="{height:windowHeight*0.6+'px'}" >

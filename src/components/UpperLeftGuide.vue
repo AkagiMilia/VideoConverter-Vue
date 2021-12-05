@@ -1,8 +1,12 @@
 <template>
-  <a-row class="border px-3 border-end-0 border-start-0 overflow-auto" :style="{height:localHeight+'px'}">
-    <h3>{{paramGuidance.title}}</h3>
-    <p style="whiteSpace: pre-line">{{paramGuidance.info}}</p>
-  </a-row>
+  <a-card class="overflow-auto border-end-0 border-bottom-0 border-start-0 border-1 " :style="{height:localHeight+'px'}">
+    <h4 slot="title" class="m-0">
+      {{paramGuidance.title}}
+    </h4>
+    <a-row >
+      <p class="fs-6" style="whiteSpace: pre-line">{{paramGuidance.info}}</p>
+    </a-row>  
+  </a-card>
 </template>
 
 <script>
