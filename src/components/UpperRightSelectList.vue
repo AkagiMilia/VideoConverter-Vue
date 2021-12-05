@@ -58,7 +58,7 @@
             type="close-circle" 
             theme="twoTone" 
             twoToneColor="red"
-            @click.stop="deleteParam(param, null)"
+            @click="deleteParam(param, null)"
           />
         </a-col>
         
@@ -90,7 +90,7 @@
               type="close-circle" 
               theme="twoTone" 
               twoToneColor="red"
-              @click.stop="deleteParam(subParam, param)"
+              @click="deleteParam(subParam, param)"
             />
           </a-row>
         </li>

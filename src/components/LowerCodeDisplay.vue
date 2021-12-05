@@ -28,7 +28,7 @@ console.log('spawn is ', spawn)
 
 export default {
   name:'LowerCodeDisplay',
-  props:['command'],
+  props:['command', 'isMac'],
   data() {
     return {
       result:'',
@@ -58,18 +58,38 @@ export default {
         this.ffmpeg = spawn(head, commandList)
     
         this.ffmpeg.stdout.on('data', (data)=>{
-          console.log(data.toString())
-          this.result = data.toString()
-        })
-      
-        this.ffmpeg.stderr.on('data', (data)=>{
+          
           console.log(data.toString())
           this.result = data.toString()
         })
 
+        this.$bus.$emit('getRunningState', true)
+        this.ffmpeg.stderr.on('data', (data)=>{
+          var result = data.toString()
+          if (result.indexOf('speed')>-1){
+            result = result.replace(/=\s+/g, '=')
+            result = result.replace(/[\r\n]/g, '')
+            result = result.split(' ')
+            result = result.filter(val => val != '')
+            var infoObj = {}
+            for (let unit of result){
+              var equalIndex = unit.indexOf('=')
+              if (equalIndex>-1){
+                infoObj[unit.slice(0, equalIndex)] = unit.slice(equalIndex+1)
+              }
+            }
+            console.log(infoObj)
+            this.result = infoObj
+          }
+            
+        })
+
         this.ffmpeg.stderr.on('close', (code)=>{
           console.log('Convert End!!!!!!!!!')
-          this.isRunning = false
+          this.processState.isRunning = false
+          this.buttonNames.switch = 'START'
+          this.buttonNames.control = 'PAUSE'
+          this.$bus.$emit('getRunningState', false)
           if (code != 0)
             console.log('process end with code:', code)
         })
@@ -78,18 +98,21 @@ export default {
         this.ffmpeg.kill()
         this.processState.isRunning = false
         this.buttonNames.switch = 'START'
+        this.buttonNames.control = 'PAUSE'
       }
       
     },
     pauseFFmpeg(){
       console.log(this.ffmpeg.pid)
       if (this.processState.isPause){
-        // this.ffmpeg.kill('SIGCONT')
+        if (this.isMac)
+          this.ffmpeg.kill('SIGCONT')
         this.processState.isPause = false
         this.buttonNames.control = 'PAUSE'
       }
       else{
-        // this.ffmpeg.kill('SIGSTOP')
+        if (this.isMac)
+          this.ffmpeg.kill('SIGSTOP')
         this.processState.isPause = true
         this.buttonNames.control = 'CONTINUE'
       }

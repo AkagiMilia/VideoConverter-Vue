@@ -4,10 +4,11 @@
     <UpperLeftNewProject 
       :newProjectVisible="newProjectVisible"
       :windowWidth="windowWidth"
+      :ffPaths="ffPaths"
     />
     <!-- Pages of projects -->
     <a-tabs
-      :default-active-key="currentProjectId"
+      :activeKey="currentProjectId ? currentProjectId : 'empty'"
       type="editable-card"
       tab-position="left"
       @tabClick="switchProject"
@@ -45,7 +46,8 @@
           :width="windowWidth*0.5 - 55"
           closable
           :mask="false"
-          :visible="isInProcess"
+          v-show="isInProcess"
+          :visible="drawerVisible"
           :get-container="false"
           :wrap-style="{ position: 'absolute' }"
           @close="triggerDrawerVisible"
@@ -163,13 +165,14 @@ export default {
   components: { UpperLeftNewProject },
   name:'UpperLeftProjects',
   // props data sent from APP
-  props:['projects', 'currentProjectId', 'localHeight', 'windowWidth', "currentProject"],
+  props:['projects', 'currentProjectId', 'localHeight', 'windowWidth', 'currentProject', 'ffPaths'],
 
   data() {
     return {
       activeKey:[],
       busy:false,
       newProjectVisible:false,
+      drawerVisible:false,
       isInProcess:false,
       isLoadFile:false
     }
@@ -224,7 +227,7 @@ export default {
 
 
     triggerDrawerVisible(){
-      this.isInProcess = !this.isInProcess
+      this.drawerVisible = !this.drawerVisible
     },
 
 
@@ -248,10 +251,12 @@ export default {
         newFile.fileId = nanoid()
         newFile.filePath = file.path
         newFile.fileName = file.name
+        var finished = 0
         var streams = []
-        exec(`ffprobe -i "${file.path}" -show_streams -of json`, (error, stdout, stderr)=>{
+        exec(`${this.ffPaths.ffprobe} -i "${file.path}" -show_streams -of json`, (error, stdout, stderr)=>{
           if (error){
             this.$message.error(`File ${file.name} Load Failed!`)
+            console.log('ERROR:', error)
             this.isLoadFile = false
             return
           }
@@ -261,12 +266,33 @@ export default {
           for (let stream of newFile.streams){
             stream.used = true
           }
-          newFile.fileParams = []
-          newFiles.push(newFile)
-          console.log(newFiles);
-          this.$bus.$emit('addNewFiles', newFiles)
-          event.target.value = ''
-          this.isLoadFile = false
+          finished += 1
+          if (finished >= 2){
+            newFile.fileParams = []
+            newFiles.push(newFile)
+            console.log(newFiles);
+            this.$bus.$emit('addNewFiles', newFiles)
+            event.target.value = ''
+            this.isLoadFile = false
+          }
+        })
+        exec(`${this.ffPaths.ffprobe} -i "${file.path}" -show_format -of json`, (error, stdout, stderr)=>{
+          if (error){
+            this.$message.error(`File ${file.name} Load Failed!`)
+            console.log('ERROR:', error)
+            this.isLoadFile = false
+            return
+          }
+          newFile.fileInfo = JSON.parse(stdout).format
+          finished += 1
+          if (finished >= 2){
+            newFile.fileParams = []
+            newFiles.push(newFile)
+            console.log(newFiles);
+            this.$bus.$emit('addNewFiles', newFiles)
+            event.target.value = ''
+            this.isLoadFile = false
+          }
         })
       }
     },
@@ -312,6 +338,9 @@ export default {
     // Close/open the create new project dialog after receiving a message
     this.$bus.$on('changeVisible', (visible)=>{
       this.newProjectVisible = visible
+    })
+    this.$bus.$on('getRunningState', (isRunning)=>{
+      this.isInProcess = isRunning
     })
     
     // Listen output path from save file dialog

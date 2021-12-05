@@ -6,7 +6,7 @@
             :projects="projects" 
             :currentProjectId="currentProjectId"
             :currentProject="currentProject"
-            :FFmpegPath="FFmpegPath"
+            :ffPaths="ffPaths"
             :localHeight="windowHeight*0.4"
             :windowWidth="windowWidth"
             class="bg-light "
@@ -42,6 +42,8 @@
       <LowerCodeDisplay 
         :command="cmdLine"
         :localHeight="windowHeight*0.25"
+        :ffPaths="ffPaths"
+        :isMac="isMac"
       />`
     </a-row>
     
@@ -68,7 +70,6 @@ import { mapMutations, mapState } from 'vuex'
 import { ipcRenderer } from 'electron'
 
 // platform detect
-const isMac = navigator.platform === 'MacIntel'
 const ffmpegWin = 'ffmpeg'
 const ffmpegMac = '/opt/homebrew/bin/ffmpeg'
 
@@ -86,7 +87,8 @@ export default {
   // data variables
   data() {
     return {
-      FFmpegPath: isMac ? ffmpegMac : ffmpegWin,
+      isMac:null,
+      ffPaths:{},
       // project array e.g [{project1}, {project2}...]
       projects:[
         // project1
@@ -206,7 +208,7 @@ export default {
         return []
       var currentProjectParams = this.projects.find(project => project.projectId == this.currentProjectId).parameters
       // base address ffmpeg
-      var cmd = [this.FFmpegPath]
+      var cmd = [this.ffPaths.ffmpeg]
       // add input files and their input parameters
       this.currentProject.inputFiles.forEach((file)=>{
         cmd = cmd.concat(file.fileParams)
@@ -391,6 +393,9 @@ export default {
     addProject(project){
       console.log('the new Project:',project)
       this.projects.push(project)
+      this.$nextTick(function(){
+        this.currentProjectId = project.projectId
+      })
     },
 
     changeOutput(outputFilePath, outputFileName){
@@ -416,8 +421,6 @@ export default {
 
       handler(curVal, oldVal){
         console.log('Project Changed')
-        console.log('Currnet Projects', curVal)
-        console.log('Last Projects', oldVal)
 
         if (!curVal.length){
           this.currentProjectId = ''
@@ -498,7 +501,9 @@ export default {
   beforeMount(){
 
     ipcRenderer.on('getSystemInfo', (event, currentSystem, isMac, ffPaths)=>{
-      console.log('isMac?:', currentSystem, isMac, ffPaths);
+      console.log('isMac?:', isMac, currentSystem, ffPaths)
+      this.ffPaths = ffPaths
+      this.isMac = isMac
     })
     ipcRenderer.send('requireSystemInfo')
     

@@ -184,7 +184,7 @@ import { mapState } from 'vuex'
 
 export default {
   name:'UpperLeftNewProject',
-  props:['newProjectVisible', 'windowWidth'],
+  props:['newProjectVisible', 'windowWidth', 'ffPaths'],
   data() {
     return {
       currentPage:0,
@@ -247,8 +247,9 @@ export default {
       newFile.fileId = nanoid()
       newFile.filePath = info.file.path
       newFile.fileName = info.file.name
+      var finished = 0
       var streams = []
-      exec(`ffprobe -i "${info.file.path}" -show_streams -of json`, (error, stdout, stderr)=>{
+      exec(`${this.ffPaths.ffprobe} -i "${info.file.path}" -show_streams -of json`, (error, stdout, stderr)=>{
         if (error){
           this.$message.error(`File ${info.file.name} Load Failed!`)
           return
@@ -259,12 +260,30 @@ export default {
         for (let stream of newFile.streams){
           stream.used = true
         }
-        newFile.fileParams = []
-        if (this.newProject.inputFiles)
-          this.newProject.inputFiles.push(newFile)
-        else
-          this.$set(this.newProject, 'inputFiles', [newFile])
+        finished += 1
+        if (finished>=2){
+          newFile.fileParams = []
+          if (this.newProject.inputFiles)
+            this.newProject.inputFiles.push(newFile)
+          else
+            this.$set(this.newProject, 'inputFiles', [newFile])
+        }
       })
+      exec(`${this.ffPaths.ffprobe} -i "${info.file.path}" -show_format -of json`, (error, stdout, stderr)=>{
+          if (error){
+            this.$message.error(`File ${file.name} Load Failed!`)
+            return
+          }
+          newFile.fileInfo = JSON.parse(stdout).format
+          finished += 1
+          if (finished>=2){
+            newFile.fileParams = []
+            if (this.newProject.inputFiles)
+              this.newProject.inputFiles.push(newFile)
+            else
+              this.$set(this.newProject, 'inputFiles', [newFile])
+          }
+        })
     },
     changeVideoCopy(event){
       if (!this.isVideoCopy)

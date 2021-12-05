@@ -83,15 +83,17 @@ app.on('ready', async () => {
           }
           if (stdout){
             console.log('Result:', stdout)
-            ffPaths[program] = program
+            ffPaths[program] = stdout.replaceAll('\n','')
           }
           if (stderr)
             console.log('ResultError:', stderr)
           finished += 1
+          if (finished >= 3){
+            console.log('ffPaths:', ffPaths);
+            event.reply('getSystemInfo', currentSystem, isMac, ffPaths)
+          }
         })
       }
-      console.log('ffPaths:', ffPaths);
-      event.reply('getSystemInfo', currentSystem, isMac, ffPaths)
     } 
   })
 
