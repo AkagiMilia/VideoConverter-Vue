@@ -207,7 +207,13 @@ export default {
       var curStreamParam = this.currentStream.params
       for (let key of Object.keys(this.parameterObject)){
         if (this.isSubParam){
-          if (curStreamParam[this.currentDict] && key in curStreamParam[this.currentDict])
+          if (curStreamParam[this.currentDict] 
+          && curStreamParam[this.currentDict].constructor == Object 
+          && key in curStreamParam[this.currentDict])
+            dict[key] = 'selected'
+          else if (curStreamParam[this.currentDict] 
+          && curStreamParam[this.currentDict].constructor == Array 
+          && curStreamParam[this.currentDict].findIndex(param => param == key)>-1)
             dict[key] = 'selected'
           else
             dict[key] = ''

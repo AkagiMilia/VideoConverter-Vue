@@ -80,6 +80,7 @@ export default {
               }
             }
             this.result = infoObj
+            this.$bus.$emit('getRunningProgress', infoObj)
           }
             
         })

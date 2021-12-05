@@ -39,14 +39,13 @@
         class="me-3"
       >
         
-        <!-- Process Drawer-->
+        <!-- Process Drawer -->
         <a-drawer
           title="Basic Drawer"
           placement="right"
           :width="windowWidth*0.5 - 55"
           closable
           :mask="false"
-          v-show="isInProcess"
           :visible="drawerVisible"
           :get-container="false"
           :wrap-style="{ position: 'absolute' }"
@@ -174,7 +173,19 @@ export default {
       newProjectVisible:false,
       drawerVisible:false,
       isInProcess:false,
-      isLoadFile:false
+      isLoadFile:false,
+      workState:{
+        workingProject:'',
+        longDuration:0,
+        shortDuration:0,
+        currentDuration:0,
+        workPercent:0,
+        currentFrame:0,
+        currentSize:0,
+        currentRite:'',
+        currentSpeed:'',
+        currentQuality:0
+      }
     }
   },
   computed:{
@@ -339,10 +350,64 @@ export default {
     this.$bus.$on('changeVisible', (visible)=>{
       this.newProjectVisible = visible
     })
+
+    // When a project is in process
     this.$bus.$on('getRunningState', (isRunning)=>{
       this.isInProcess = isRunning
+      if (isRunning){
+        console.log('running Index:',this.projects.findIndex(project => project.projectId == this.currentProjectId));
+        this.workState.workingProject = this.projects.findIndex(project => project.projectId == this.currentProjectId) + 1
+        var longDuration = 0
+        var shortDuration = Infinity
+        for (let file of this.currentProject.inputFiles){
+          if (file.fileInfo && file.fileInfo.duration){
+            var fileDurtion = +file.fileInfo.duration
+            if (longDuration<fileDurtion)
+              longDuration = fileDurtion
+            if (shortDuration>fileDurtion)
+              shortDuration = fileDurtion
+          }
+        }
+        if (longDuration)
+          this.workState.longDuration = longDuration
+        if (shortDuration != Infinity)
+          this.workState.shortDuration = shortDuration
+      }
     })
     
+    // when ffmpeg send back Progress feedback
+    this.$bus.$on('getRunningProgress', (resultObj)=>{
+      // load converted frames
+      this.workState.currentFrame = resultObj.frame ? +resultObj.frame : this.workState.currentFrame
+      // load current Time
+      if (resultObj.time){
+        var timeList = resultObj.time.split(':')
+        var finalCurrentTime = 0
+        var timeIndex = 0
+        for (let time of timeList){
+          if (timeIndex == 0)
+            finalCurrentTime += +time * 3600
+          else if (timeIndex == 1)
+            finalCurrentTime += +time * 60
+          else
+            finalCurrentTime += +time
+          timeIndex += 1
+        }
+        this.workState.currentDuration = finalCurrentTime
+      }
+      // load Current Quality
+      this.workState.currentQuality = resultObj.q ? +resultObj.q : this.workState.currentQuality
+      // load Current Size
+      if (resultObj.size)
+        this.workState.currentSize = resultObj.size
+      else if (resultObj.Lsize)
+        this.workState.currentSize = resultObj.Lsize
+      // load Current BitRate
+      this.workState.currentRite = resultObj.bitrate ? resultObj.bitrate : this.workState.currentRite
+      // load Current Speed
+      this.workState.currentSpeed = resultObj.speed ? resultObj.speed : this.workState.currentSpeed
+    })
+
     // Listen output path from save file dialog
     ipcRenderer.on('fileAddressProject', (event, path)=>{
       console.log('filePath:', path)

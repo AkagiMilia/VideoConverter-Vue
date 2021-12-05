@@ -102,7 +102,7 @@
       <ul class="list-group mt-2" v-if="Selected[param] && Selected[param].constructor == Array">
         <li class="list-group-item list-group-item-action subParamList border-0 border-start rounded-0" :class="warningStyles[subParam]" v-for=" subParam in Selected[param]" :key="subParam" @click.stop="paramClick(subParam, param)">
           <a-row>
-            <a-col :span="24">
+            <a-col :span="22">
               <span><strong>{{subParam}}</strong></span>
             </a-col>
             <a-icon 
@@ -110,7 +110,7 @@
               type="close-circle" 
               theme="twoTone" 
               twoToneColor="red"
-              @click.stop="deleteParam(subParam, param, 'array')"
+              @click="deleteParam(subParam, param, 'array')"
             />
           </a-row>
         </li>
@@ -161,7 +161,7 @@ export default {
     warningStyles(){
       var dict = {}
       for (let [key, value] of Object.entries(this.Selected)){
-        if (typeof value == 'object'){
+        if (value.constructor == Object){
           for (let subKey of Object.keys(value)){
             if (this.showingParams[this.currentFormat][key] && this.showingParams[this.currentFormat][key]['subValues'] && subKey in this.showingParams[this.currentFormat][key]['subValues'])
               dict[subKey] = ''
