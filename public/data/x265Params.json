@@ -219,6 +219,271 @@
                 "limit-modes":{
                     "valueType":"int",
                     "explanation":"When enabled, limit-modes will limit modes analyzed for each CU using cost metrics from the 4 sub-CUs. When multiple inter modes like --rect and/or --amp are enabled, this feature will use motion cost heuristics from the 4 sub-CUs to bypass modes that are unlikely to be the best choice. This can significantly improve performance when rect and/or --amp are enabled at minimal compression efficiency loss."
+                },
+                "rect":{
+                    "valueType":"boolean",
+                    "explanation":"Enable analysis of rectangular motion partitions Nx2N and 2NxN (50/50 splits, two directions). Default disabled"
+                },
+                "amp":{
+                    "valueType":"boolean",
+                    "explanation":"Enable analysis of asymmetric motion partitions (75/25 splits, four directions). At RD levels 0 through 4, AMP partitions are only considered at CU sizes 32x32 and below. At RD levels 5 and 6, it will only consider AMP partitions as merge candidates (no motion search) at 64x64, and as merge or inter candidates below 64x64.\nThe AMP partitions which are searched are derived from the current best inter partition. If Nx2N (vertical rectangular) is the best current prediction, then left and right asymmetrical splits will be evaluated. If 2NxN (horizontal rectangular) is the best current prediction, then top and bottom asymmetrical splits will be evaluated, If 2Nx2N is the best prediction, and the block is not a merge/skip, then all four AMP partitions are evaluated.\nThis setting has no effect if rectangular partitions are disabled. Default disabled"
+                },
+                "early-skip":{
+                    "valueType":"boolean",
+                    "explanation":"Measure 2Nx2N merge candidates first; if no residual is found, additional modes at that depth are not analysed. Default disabled"
+                },
+                "rskip":{
+                    "valueType":"int",
+                    "explanation":"This option determines early exit from CU depth recursion in modes 1 and 2. When a skip CU is found, additional heuristics (depending on the RD level and rskip mode) are used to decide whether to terminate recursion. The following table summarizes the behavior.",
+                    "subValues":{
+                        "0":{"value": "0",
+                            "explanation": null
+                        },
+                        "1":{"value": "1",
+                            "explanation": null
+                        },
+                        "2":{"value": "2",
+                            "explanation": null
+                        }
+                    }
+                },
+                "rskip-edge-threshold":{
+                    "valueType":"int",
+                    "explanation":"Range of the value: 0-100.\nDenotes the minimum expected edge-density percentage within the CU, below which the recursion is skipped. Internally normalized to decimal value in x265 library. Recommended low thresholds for slow encodes and high for fast encodes. Default: 5, requires --rskip mode 2 to be enabled."
+                },
+                "splitrd-skip":{
+                    "valueType":"boolean",
+                    "explanation":"Enable skipping split RD analysis when sum of split CU rdCost larger than one split CU rdCost for Intra CU. Default disabled."
+                },
+                "fast-intra":{
+                    "valueType":"boolean",
+                    "explanation":"Perform an initial scan of every fifth intra angular mode, then check modes +/- 2 distance from the best mode, then +/- 1 distance from the best mode, effectively performing a gradient descent. When enabled 10 modes in total are checked. When disabled all 33 angular modes are checked. Only applicable for --rd levels 4 and below (medium preset and faster)."
+                },
+                "b-intra":{
+                    "valueType":"boolean",
+                    "explanation":"Enables the evaluation of intra modes in B slices. \nDefault disabled."
+                },
+                "cu-lossless":{
+                    "valueType":"boolean",
+                    "explanation":"For each CU, evaluate lossless (transform and quant bypass) encode of the best non-lossless mode option as a potential rate distortion optimization. If the global option --lossless has been specified, all CUs will be encoded as lossless unconditionally regardless of whether this option was enabled. Default disabled.\nOnly effective at RD levels 3 and above, which perform RDO mode decisions."
+                },
+                "tskip-fast":{
+                    "valueType":"boolean",
+                    "explanation":"Only evaluate transform skip for NxN intra predictions (4x4 blocks). Only applicable if transform skip is enabled. For chroma, only evaluate if luma used tskip. Inter block tskip analysis is unmodified. \nDefault disabled"
+                },
+                "rd-refine":{
+                    "valueType":"boolean",
+                    "explanation":"For each analysed CU, calculate R-D cost on the best partition mode for a range of QP values, to find the optimal rounding effect. \nDefault disabled. Only effective at RD levels 5 and 6"
+                },
+                "analysis-save":{
+                    "valueType":"string",
+                    "explanation":"Encoder outputs analysis information of each frame. Analysis data from save mode is written to the file specified. Requires cutree, pmode to be off. \nDefault disabled.The amount of analysis data stored is determined by --analysis-save-reuse-level."
+                },
+                "analysis-load":{
+                    "valueType":"string",
+                    "explanation":"Encoder reuses analysis information from the file specified. By reading the analysis data written by an earlier encode of the same sequence, substantial redundant work may be avoided. Requires cutree, pmode to be off. \nDefault disabled.\nThe amount of analysis data reused is determined by --analysis-load-reuse-level."
+                },
+                "analysis-reuse-file":{
+                    "valueType":"string",
+                    "explanation":"Specify a filename for --multi-pass-opt-analysis and option:–multi-pass-opt-distortion. If no filename is specified, x265_analysis.dat is used."
+                },
+                "analysis-save-reuse-level":{
+                    "valueType":"int",
+                    "explanation":"The range of the value is from 0 to 10. ‘analysis-save-reuse-level’ denotes the amount of information stored during --analysis-save and ‘analysis-load-reuse-level’ denotes the amount of information reused during --analysis-load. Higher the value, higher the information stored/reused, faster the encode. Default 0. If not set during analysis-save/load, the encoder will internally configure them to 5.\nNote that --analysis-save-reuse-level and --analysis-load-reuse-level must be paired with --analysis-save and --analysis-load respectively."
+                },
+                "analysis-load-reuse-level":{
+                    "valueType":"int",
+                    "explanation":"The range of the value is from 0 to 10. ‘analysis-save-reuse-level’ denotes the amount of information stored during --analysis-save and ‘analysis-load-reuse-level’ denotes the amount of information reused during --analysis-load. Higher the value, higher the information stored/reused, faster the encode. Default 0. If not set during analysis-save/load, the encoder will internally configure them to 5.\nNote that --analysis-save-reuse-level and --analysis-load-reuse-level must be paired with --analysis-save and --analysis-load respectively."
+                },
+                "refine-mv-type":{
+                    "valueType":"string",
+                    "explanation":"Reuse MV information received through API call. Currently receives information for AVC size and the accepted string input is “avc”. Default is disabled."
+                },
+                "refine-ctu-distortion":{
+                    "valueType":"int",
+                    "explanation":"Store/normalize ctu distortion in analysis-save/load. 0 - Disabled. 1 - Save ctu distortion to the analysis file specified during --analysis-save.\nLoad CTU distortion from the analysis file and normalize it across every frame during --analysis-load.\nDefault 0."
+                },
+                "scale-factor":{
+                    "valueType":"int",
+                    "explanation":"Factor by which input video is scaled down for analysis save mode. This option should be coupled with --analysis-load/--analysis-save at reuse levels 1 to 6 and 10. The ctu size of load can either be the same as that of save or double the size of save. \nDefault 0."
+                },
+                "refine-intra":{
+                    "valueType":"int",
+                    "explanation":"Enables refinement of intra blocks in current encode. Default 0.\nLevel 0 - Forces both mode and depth from the save encode.\nLevel 1 - Evaluates all intra modes at current depth(n) and at depth (n+1) when current block size is one greater than the min-cu-size. Forces modes for larger blocks.\nLevel 2 - In addition to the functionality of level 1, at all depths, force (a) only depth when angular mode is chosen by the save encode. (b) depth and mode when other intra modes are chosen by the save encode.\nLevel 3 - Perform analysis of intra modes for depth reused from first encode.\nLevel 4 - Does not reuse any analysis information - redo analysis for the intra block.",
+                    "subValues":{
+                        "0":{
+                            "value":"0",
+                            "explanation":"Level 0 - Forces both mode and depth from the save encode."
+                        },
+                        "1":{
+                            "value":"1",
+                            "explanation":"Level 1 - Evaluates all inter modes at current depth(n) and at depth (n+1) when current block "
+                        },
+                        "2":{
+                            "value":"2",
+                            "explanation":"Level 2 - In addition to the functionality of level 1, restricts the modes evaluated when specific modes are decided as the best mode by the save encode."
+                        },
+                        "3":{
+                            "value":"3",
+                            "explanation":"Level 3 - Perform analysis of inter modes while reusing depths from the save encode."
+                        }
+                    }
+                },
+                "refine-mv":{
+                    "valueType":"int",
+                    "explanation":"Enables refinement of motion vector for scaled video. Evaluates the best motion vector based on the level selected. Default 1.\nLevel 1 - Search around scaled MV.\nLevel 2 - Level 1 + Search around best AMVP cand.\nLevel 3 - Level 2 + Search around the other AMVP cand.",
+                    "subValues":{
+                        "1":{
+                            "value":"1",
+                            "explanation":"Level 1 - Search around scaled MV."
+                        },
+                        "2":{
+                            "value":"2",
+                            "explanation":"Level 2 - Level 1 + Search around best AMVP cand."
+                        },
+                        "3":{
+                            "value":"3",
+                            "explanation":"Level 3 - Level 2 + Search around the other AMVP cand."
+                        }
+                    }
+                },
+                "dynamic-refine":{
+                    "valueType":"boolean",
+                    "explanation":"Dynamically switches --refine-inter levels 0-3 based on the content and the encoder settings. It is recommended to use --refine-intra 4 with dynamic refinement.\nDefault disabled."
+                },
+                "rdoq-level":{
+                    "valueType":"int",
+                    "explanation":"Specify the amount of rate-distortion analysis to use within quantization:\nAt level 0 rate-distortion cost is not considered in quant\nAt level 1 rate-distortion cost is used to find optimal rounding values for each level (and allows psy-rdoq to be effective). It trades-off the signaling cost of the coefficient vs its post-inverse quant distortion from the pre-quant coefficient. When --psy-rdoq is enabled, this formula is biased in favor of more energy in the residual (larger coefficient absolute levels)\nAt level 2 rate-distortion cost is used to make decimate decisions on each 4x4 coding group, including the cost of signaling the group within the group bitmap. If the total distortion of not signaling the entire coding group is less than the rate cost, the block is decimated. Next, it applies rate-distortion cost analysis to the last non-zero coefficient, which can result in many (or all) of the coding groups being decimated. Psy-rdoq is less effective at preserving energy when RDOQ is at level 2, since it only has influence over the level distortion costs.",
+                    "subValues":{
+                        "0":{
+                            "value":"0",
+                            "explanation":"At level 0 rate-distortion cost is not considered in quant."
+                        },
+                        "1":{
+                            "value":"1",
+                            "explanation":"At level 1 rate-distortion cost is used to find optimal rounding values for each level (and allows psy-rdoq to be effective). It trades-off the signaling cost of the coefficient vs its post-inverse quant distortion from the pre-quant coefficient. When --psy-rdoq is enabled, this formula is biased in favor of more energy in the residual (larger coefficient absolute levels)."
+                        },
+                        "2":{
+                            "value":"2",
+                            "explanation":"At level 2 rate-distortion cost is used to make decimate decisions on each 4x4 coding group, including the cost of signaling the group within the group bitmap. If the total distortion of not signaling the entire coding group is less than the rate cost, the block is decimated. Next, it applies rate-distortion cost analysis to the last non-zero coefficient, which can result in many (or all) of the coding groups being decimated. Psy-rdoq is less effective at preserving energy when RDOQ is at level 2, since it only has influence over the level distortion costs."
+                        }
+                    }
+                },
+                "no-rdoq-level":{
+                    "valueType":"boolean",
+                    "explanation":"No rdoq-level."
+                },
+                "tu-intra-depth":{
+                    "valueType":"int",
+                    "explanation":"The range of the value is from 1 to 4.\nThe transform unit (residual) quad-tree begins with the same depth as the coding unit quad-tree, but the encoder may decide to further split the transform unit tree if it improves compression efficiency. This setting limits the number of extra recursion depth which can be attempted for intra coded units. Default: 1, which means the residual quad-tree is always at the same depth as the coded unit quad-tree\nNote that when the CU intra prediction is NxN (only possible with 8x8 CUs), a TU split is implied, and thus the residual quad-tree begins at 4x4 and cannot split any further."
+                },
+                "tu-inter-depth":{
+                    "valueType":"int",
+                    "explanation":"The range of the value is from 1 to 4.\nThe transform unit (residual) quad-tree begins with the same depth as the coding unit quad-tree, but the encoder may decide to further split the transform unit tree if it improves compression efficiency. This setting limits the number of extra recursion depth which can be attempted for inter coded units. Default: 1. which means the residual quad-tree is always at the same depth as the coded unit quad-tree unless the CU was coded with rectangular or AMP partitions, in which case a TU split is implied and thus the residual quad-tree begins one layer below the CU quad-tree."
+                },
+                "limit-tu":{
+                    "valueType":"int",
+                    "explanation":"Default: 0\nEnables early exit from TU depth recursion, for inter coded blocks.\nLevel 1 - decides to recurse to next higher depth based on cost comparison of full-size TU and split TU.\nLevel 2 - based on first split subTU’s depth, limits recursion of other split subTUs.\nLevel 3 - based on the average depth of the co-located and the neighbor CUs’ TU depth, limits recursion of the current CU.\nLevel 4 - uses the depth of the neighboring/ co-located CUs TU depth to limit the 1st subTU depth. The 1st subTU depth is taken as the limiting depth for the other subTUs.\nEnabling levels 3 or 4 may cause a mismatch in the output bitstreams between --analysis-save and --analysis-load as all neighboring CUs TU depth may not be available in the --analysis-load run as only the best mode’s information is available to it.",
+                    "subValues":{
+                        "0":{
+                            "value":"0",
+                            "explanation":"Off"
+                        },
+                        "1":{
+                            "value":"1",
+                            "explanation":"Level 1 - decides to recurse to next higher depth based on cost comparison of full-size TU and split TU."
+                        },
+                        "2":{
+                            "value":"2",
+                            "explanation":"Level 2 - based on first split subTU’s depth, limits recursion of other split subTUs."
+                        },
+                        "3":{
+                            "value":"3",
+                            "explanation":"Level 3 - based on the average depth of the co-located and the neighbor CUs’ TU depth, limits recursion of the current CU."
+                        },
+                        "4":{
+                            "value":"4",
+                            "explanation":"Level 4 - uses the depth of the neighboring/ co-located CUs TU depth to limit the 1st subTU depth. The 1st subTU depth is taken as the limiting depth for the other subTUs."
+                        }
+                    }
+                },
+                "nr-intra":{
+                    "valueType":"int",
+                    "explanation":"Noise reduction - an adaptive deadzone applied after DCT (subtracting from DCT coefficients), before quantization. It does no pixel-level filtering, doesn’t cross DCT block boundaries, has no overlap, The higher the strength value parameter, the more aggressively it will reduce noise.\nEnabling noise reduction will make outputs diverge between different numbers of frame threads. Outputs will be deterministic but the outputs of -F2 will no longer match the outputs of -F3, etc."
+                },
+                "nr-inter":{
+                    "valueType":"int",
+                    "explanation":"Noise reduction - an adaptive deadzone applied after DCT (subtracting from DCT coefficients), before quantization. It does no pixel-level filtering, doesn’t cross DCT block boundaries, has no overlap, The higher the strength value parameter, the more aggressively it will reduce noise.\nEnabling noise reduction will make outputs diverge between different numbers of frame threads. Outputs will be deterministic but the outputs of -F2 will no longer match the outputs of -F3, etc."
+                },
+                "tskip":{
+                    "valueType":"int",
+                    "explanation":"Enable evaluation of transform skip (bypass DCT but still use quantization) coding for 4x4 TU coded blocks.\nOnly effective at RD levels 3 and above, which perform RDO mode decisions. \nDefault disabled"
+                },
+                "rdpenalty":{
+                    "valueType":"int",
+                    "explanation":"Default 0, disabled.\nWhen set to 1, transform units of size 32x32 are given a 4x bit cost penalty compared to smaller transform units, in intra coded CUs in P or B slices.\nWhen set to 2, transform units of size 32x32 are not even attempted, unless otherwise required by the maximum recursion depth. For this option to be effective with 32x32 intra CUs, --tu-intra-depth must be at least 2. For it to be effective with 64x64 intra CUs, --tu-intra-depth must be at least 3.\nNote that in HEVC an intra transform unit (a block of the residual quad-tree) is also a prediction unit, meaning that the intra prediction signal is generated for each TU block, the residual subtracted and then coded. The coding unit simply provides the prediction modes that will be used when predicting all of the transform units within the CU. This means that when you prevent 32x32 intra transform units, you are preventing 32x32 intra predictions.",
+                    "subValues":{
+                        "0":{
+                            "value":"0",
+                            "explanation":"Disabled."
+                        },
+                        "1":{
+                            "value":"1",
+                            "explanation":"4x cost penalty."
+                        },
+                        "2":{
+                            "value":"2",
+                            "explanation":"Force splits."
+                        }
+                    }
+                },
+                "max-tu-size":{
+                    "valueType":"int",
+                    "explanation":"Maximum TU size (width and height). The residual can be more efficiently compressed by the DCT transform when the max TU size is larger, but at the expense of more computation. Transform unit quad-tree begins at the same depth of the coded tree unit, but if the maximum TU size is smaller than the CU size then transform QT begins at the depth of the max-tu-size. \nDefault: 32.",
+                    "subValues":{
+                        "32":{
+                            "value":"32",
+                            "explanation":null
+                        },
+                        "16":{
+                            "value":"16",
+                            "explanation":null
+                        },
+                        "8":{
+                            "value":"8",
+                            "explanation":null
+                        },
+                        "4":{
+                            "value":"4",
+                            "explanation":null
+                        }
+                    }
+                },
+                "dynamic-rd":{
+                    "valueType":"int",
+                    "explanation":"Increases the RD level at points where quality drops due to VBV rate control enforcement. The number of CUs for which the RD is reconfigured is determined based on the strength. Strength 1 gives the best FPS, strength 4 gives the best SSIM. Strength 0 switches this feature off. Default: 0.\nEffective for RD levels 4 and below.",
+                    "subValues":{
+                        "0":{
+                            "value":"0",
+                            "explanation":null
+                        },
+                        "1":{
+                            "value":"1",
+                            "explanation":null
+                        },
+                        "2":{
+                            "value":"2",
+                            "explanation":null
+                        },
+                        "3":{
+                            "value":"3",
+                            "explanation":null
+                        },
+                        "4":{
+                            "value":"4",
+                            "explanation":null
+                        }
+                    }
                 }
             }
         }
