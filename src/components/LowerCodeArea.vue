@@ -1,7 +1,7 @@
 <template>
   <a-row class="form-floating">
     <textarea 
-      class="form-control border-0" id="floatingTextarea2" 
+      class="form-control border-0 font-monospace" id="floatingTextarea2" 
       v-model.trim.lazy="paramLine" 
       @keydown.enter="editExit" 
       spellcheck="false" 

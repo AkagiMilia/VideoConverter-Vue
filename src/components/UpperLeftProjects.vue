@@ -53,57 +53,46 @@
           <span v-if="!isInProcess && !isShowResult" slot="title">Noting is Working</span>
           <span v-else-if="isInProcess && isShowResult" slot="title">Now Working On Project {{workState.workingProject}}</span>
           <span v-else slot="title">Result of Project {{workState.workingProject}}</span>
-          <a-row type="flex" justify="center" align="middle">
+          <a-row type="flex" justify="center" align="middle" class="mt-5">
             <a-empty class="mt-3" v-if="!isShowResult" :description="false"/>
-            <a-row :gutter="48" v-if="isShowResult">
-              <a-col :span="8">
-                <a-space direction="vertical">
-                  <p class="text-center m-0">Frames</p>
-                  <p class="text-center m-0">{{workState.currentFrame}}</p>
-                </a-space>
+            <a-row :gutter="48" v-if="isShowResult" style="width: 88%;">
+              <a-col :span="7" class="border border-start-0 border-top-0 border-bottom-0">
+                <p class="text-center m-0 text-nowrap"><strong>FRAMES</strong></p>
+                <p class="text-center m-0 text-nowrap fs-4"><strong>{{workState.currentFrame}}</strong></p>
               </a-col>
-              <a-col :span="8">
-                <a-space direction="vertical">
-                  <p class="text-center m-0">Time</p>
-                  <p class="text-center m-0">{{workState.currentTime.startsWith('00:') ? workState.currentTime.replace('00:', '') : workState.currentTime}}</p>
-                </a-space>
+              <a-col :span="10" class="border border-start-0 border-top-0 border-bottom-0">
+                <p class="text-center m-0 text-nowrap"><strong>TIME</strong></p>
+                <p class="text-center m-0 text-nowrap fs-4"><strong>{{workState.currentTime.startsWith('00:') ? workState.currentTime.replace('00:', '') : workState.currentTime}}</strong></p>
               </a-col>
-              <a-col :span="8">
-                <a-space direction="vertical">
-                  <p class="text-center m-0">FPS</p>
-                  <p class="text-center m-0">{{workState.currentFPS}}</p>
-                </a-space>
+              <a-col :span="7">
+                <p class="text-center m-0 text-nowrap"><strong>SPEED</strong></p>
+                <p class="text-center m-0 text-nowrap fs-4"><strong>{{workState.currentSpeed}}</strong></p>
               </a-col>
+              
             </a-row>
           </a-row>
           <a-row v-if="isShowResult" class="mt-3">
             <a-progress :percent="+workState.workPercent.toFixed(1)" :status="workState.processState" />
           </a-row>
           <a-row type="flex" justify="center" align="middle" class="mt-3">
-            <a-row :gutter="48" v-if="isShowResult">
-              <a-col :span="6">
-                <a-space direction="vertical">
-                  <p class="text-center m-0">BitRate</p>
-                  <p class="text-center m-0">{{workState.currentRite}}</p>
-                </a-space>
+            <a-row :gutter="48" v-if="isShowResult" style="width: 88%;">
+              <a-col :span="7" class="border border-start-0 border-top-0 border-bottom-0">
+                <p class="text-center m-0 text-nowrap"><strong>BITRATE</strong></p>
+                <p class="text-center m-0 text-nowrap fs-4"><strong>{{workState.currentRite.replace(/[a-z//]/g, '')}}</strong></p>
+                <p class="text-center m-0 text-nowrap text-start"><strong>{{workState.currentRite.replace(/[0-9.]/g, '')}}</strong></p>
               </a-col>
-              <a-col :span="6">
-                <a-space direction="vertical">
-                  <p class="text-center m-0">Size</p>
-                  <p class="text-center m-0">{{workState.currentSize}}</p>
-                </a-space>
+              <a-col :span="5" class="border border-start-0 border-top-0 border-bottom-0">
+                <p class="text-center m-0 text-nowrap"><strong>FPS</strong></p>
+                <p class="text-center m-0 text-nowrap fs-4"><strong>{{workState.currentFPS}}</strong></p>
               </a-col>
-              <a-col :span="6">
-                <a-space direction="vertical">
-                  <p class="text-center m-0">Speed</p>
-                  <p class="text-center m-0">{{workState.currentSpeed}}</p>
-                </a-space>
+              <a-col :span="5" >
+                <p class="text-center m-0 text-nowrap"><strong>QUALITY</strong></p>
+                <p class="text-center m-0 text-nowrap fs-4"><strong>{{workState.currentQuality}}</strong></p>
               </a-col>
-              <a-col :span="6">
-                <a-space direction="vertical">
-                  <p class="text-center m-0">Quality</p>
-                  <p class="text-center m-0">{{workState.currentQuality}}</p>
-                </a-space>
+              <a-col :span="7" class="border border-end-0 border-top-0 border-bottom-0">
+                <p class="text-center m-0 text-nowrap"><strong>SIZE</strong></p>
+                <p class="text-center m-0 text-nowrap fs-4"><strong>{{workState.currentSize.replace(/[a-z A-Z]/g, '')}}</strong></p>
+                <p class="text-center m-0 text-nowrap"><strong>{{workState.currentSize.replace(/[0-9.]/g, '')}}</strong></p>
               </a-col>
             </a-row>
           </a-row>

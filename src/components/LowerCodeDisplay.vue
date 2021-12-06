@@ -15,9 +15,6 @@
         </a-space>
       </a-col>
     </a-row>
-    <a-row>
-      <p id="pLogProcess">{{result}}</p>
-    </a-row> 
   </div>
 </template>
 
@@ -80,7 +77,6 @@ export default {
                 infoObj[unit.slice(0, equalIndex)] = unit.slice(equalIndex+1)
               }
             }
-            this.result = infoObj
             this.$bus.$emit('getRunningProgress', infoObj)
           }
             

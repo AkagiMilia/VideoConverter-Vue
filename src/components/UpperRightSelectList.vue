@@ -161,7 +161,7 @@ export default {
     warningStyles(){
       var dict = {}
       for (let [key, value] of Object.entries(this.Selected)){
-        if (value.constructor == Object){
+        if ( value && value.constructor == Object){
           for (let subKey of Object.keys(value)){
             if (this.showingParams[this.currentFormat][key] && this.showingParams[this.currentFormat][key]['subValues'] && subKey in this.showingParams[this.currentFormat][key]['subValues'])
               dict[subKey] = ''
