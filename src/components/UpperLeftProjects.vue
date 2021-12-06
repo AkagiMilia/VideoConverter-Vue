@@ -62,7 +62,7 @@
               </a-col>
               <a-col :span="10" class="border border-start-0 border-top-0 border-bottom-0">
                 <p class="text-center m-0 text-nowrap"><strong>TIME</strong></p>
-                <p class="text-center m-0 text-nowrap fs-5"><strong>{{workState.currentTime.startsWith('00:') ? workState.currentTime.replace('00:', '') : workState.currentTime}}</strong></p>
+                <p class="text-center m-0 text-nowrap fs-5"><strong>{{workState.currentTime && workState.currentTime.startsWith('00:') ? workState.currentTime.replace('00:', '') : workState.currentTime}}</strong></p>
               </a-col>
               <a-col :span="7">
                 <p class="text-center m-0 text-nowrap"><strong>SPEED</strong></p>

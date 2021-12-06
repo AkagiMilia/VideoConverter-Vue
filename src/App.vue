@@ -131,7 +131,7 @@ export default {
               streamId:nanoid(),
               streamType:'audio',
               mark:'-c:a',
-              format:'flac',
+              format:'copy',
               params:{
                 // empty
               } 
@@ -171,7 +171,7 @@ export default {
             },
             {
               streamId:nanoid(),
-              steamType:'audio',
+              streamType:'audio',
               mark:'-c:a',
               format:'copy',
               params:{

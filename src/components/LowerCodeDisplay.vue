@@ -53,8 +53,9 @@ export default {
         const commandList = this.command.slice(1, this.command.length)
         console.log('head:',head);
         console.log('paras:', commandList)
-        const lauchPath = path.join(__static, 'temp')
-        this.ffmpeg = spawn(head, commandList, {cwd:lauchPath})
+        const launchPath = path.join(__static, 'temp')
+        console.log('launchPath:', launchPath)
+        this.ffmpeg = spawn(head, commandList)
     
         this.ffmpeg.stdout.on('data', (data)=>{
           
