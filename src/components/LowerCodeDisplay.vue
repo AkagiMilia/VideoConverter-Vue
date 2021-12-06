@@ -38,7 +38,8 @@ export default {
       },
       processState:{
         isRunning:false,
-        isPause:false
+        isPause:false,
+        isFail:false
       },
       ffmpeg:null
     }
@@ -90,13 +91,15 @@ export default {
           this.processState.isRunning = false
           this.buttonNames.switch = 'START'
           this.buttonNames.control = 'PAUSE'
-          this.$bus.$emit('getRunningState', false)
+          this.$bus.$emit('getRunningState', false, this.processState.isFail)
+          this.processState.isFail = false
           if (code != 0)
             console.log('process end with code:', code)
         })
       }
       else{
         this.ffmpeg.kill()
+        this.processState.isFail = true
         this.processState.isRunning = false
         this.buttonNames.switch = 'START'
         this.buttonNames.control = 'PAUSE'

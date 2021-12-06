@@ -41,7 +41,6 @@
         
         <!-- Process Drawer -->
         <a-drawer
-          title="Basic Drawer"
           placement="right"
           :width="windowWidth*0.5 - 55"
           closable
@@ -51,7 +50,63 @@
           :wrap-style="{ position: 'absolute' }"
           @close="triggerDrawerVisible"
         >
-          <p>{{project.projectId}}</p>
+          <span v-if="!isInProcess && !isShowResult" slot="title">Noting is Working</span>
+          <span v-else-if="isInProcess && isShowResult" slot="title">Now Working On Project {{workState.workingProject}}</span>
+          <span v-else slot="title">Result of Project {{workState.workingProject}}</span>
+          <a-row type="flex" justify="center" align="middle">
+            <a-empty class="mt-3" v-if="!isShowResult" :description="false"/>
+            <a-row :gutter="48" v-if="isShowResult">
+              <a-col :span="8">
+                <a-space direction="vertical">
+                  <p class="text-center m-0">Frames</p>
+                  <p class="text-center m-0">{{workState.currentFrame}}</p>
+                </a-space>
+              </a-col>
+              <a-col :span="8">
+                <a-space direction="vertical">
+                  <p class="text-center m-0">Time</p>
+                  <p class="text-center m-0">{{workState.currentTime.startsWith('00:') ? workState.currentTime.replace('00:', '') : workState.currentTime}}</p>
+                </a-space>
+              </a-col>
+              <a-col :span="8">
+                <a-space direction="vertical">
+                  <p class="text-center m-0">FPS</p>
+                  <p class="text-center m-0">{{workState.currentFPS}}</p>
+                </a-space>
+              </a-col>
+            </a-row>
+          </a-row>
+          <a-row v-if="isShowResult" class="mt-3">
+            <a-progress :percent="+workState.workPercent.toFixed(1)" :status="workState.processState" />
+          </a-row>
+          <a-row type="flex" justify="center" align="middle" class="mt-3">
+            <a-row :gutter="48" v-if="isShowResult">
+              <a-col :span="6">
+                <a-space direction="vertical">
+                  <p class="text-center m-0">BitRate</p>
+                  <p class="text-center m-0">{{workState.currentRite}}</p>
+                </a-space>
+              </a-col>
+              <a-col :span="6">
+                <a-space direction="vertical">
+                  <p class="text-center m-0">Size</p>
+                  <p class="text-center m-0">{{workState.currentSize}}</p>
+                </a-space>
+              </a-col>
+              <a-col :span="6">
+                <a-space direction="vertical">
+                  <p class="text-center m-0">Speed</p>
+                  <p class="text-center m-0">{{workState.currentSpeed}}</p>
+                </a-space>
+              </a-col>
+              <a-col :span="6">
+                <a-space direction="vertical">
+                  <p class="text-center m-0">Quality</p>
+                  <p class="text-center m-0">{{workState.currentQuality}}</p>
+                </a-space>
+              </a-col>
+            </a-row>
+          </a-row>
         </a-drawer>
 
         <!-- Add File & Add Project -->
@@ -173,15 +228,19 @@ export default {
       newProjectVisible:false,
       drawerVisible:false,
       isInProcess:false,
+      isShowResult:false,
       isLoadFile:false,
       workState:{
         workingProject:'',
         longDuration:0,
         shortDuration:0,
         currentDuration:0,
+        currntTime:'',
         workPercent:0,
+        processState:'active',
         currentFrame:0,
-        currentSize:0,
+        currentFPS:0,
+        currentSize:'',
         currentRite:'',
         currentSpeed:'',
         currentQuality:0
@@ -352,11 +411,37 @@ export default {
     })
 
     // When a project is in process
-    this.$bus.$on('getRunningState', (isRunning)=>{
+    this.$bus.$on('getRunningState', (isRunning, isFail)=>{
+      if (this.isInProcess && !isRunning){
+        if (isFail){
+          this.workState.processState = 'exception'
+        }
+        else{
+          this.workState.workPercent = 100
+          this.workState.processState = 'success'
+        }
+      }
       this.isInProcess = isRunning
       if (isRunning){
-        console.log('running Index:',this.projects.findIndex(project => project.projectId == this.currentProjectId));
+        // resrt process data
+        this.workState.processState = 'active'
+        this.workState.workingProject = ''
+        this.workState.longDuration = 0
+        this.workState.shortDuration = 0
+        this.workState.currentDuration = 0
+        this.workState.currntTime = ''
+        this.workState.workPercent = 0
+        this.workState.currentFrame = 0
+        this.workState.currentRite = ''
+        this.workState.currentSpeed = ''
+        this.workState.currentQuality = 0
+
+        this.isShowResult = isRunning
+        this.drawerVisible = true
+        // find which project is working
         this.workState.workingProject = this.projects.findIndex(project => project.projectId == this.currentProjectId) + 1
+        
+        // find the project's duration
         var longDuration = 0
         var shortDuration = Infinity
         for (let file of this.currentProject.inputFiles){
@@ -381,6 +466,7 @@ export default {
       this.workState.currentFrame = resultObj.frame ? +resultObj.frame : this.workState.currentFrame
       // load current Time
       if (resultObj.time){
+        this.workState.currentTime = resultObj.time
         var timeList = resultObj.time.split(':')
         var finalCurrentTime = 0
         var timeIndex = 0
@@ -394,7 +480,10 @@ export default {
           timeIndex += 1
         }
         this.workState.currentDuration = finalCurrentTime
+        this.workState.workPercent = this.workState.currentDuration * 100 / this.workState.longDuration
       }
+      // load current FPS
+      this.workState.currentFPS = resultObj.fps ? +resultObj.fps : this.workState.currentFPS 
       // load Current Quality
       this.workState.currentQuality = resultObj.q ? +resultObj.q : this.workState.currentQuality
       // load Current Size
