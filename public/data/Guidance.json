@@ -2789,11 +2789,11 @@
     "libx265": {
         "-crf": {
             "valueType": "float",
-            "explanation": "set the x265 crf (from -1 to FLT_MAX) (default -1)"
+            "explanation": "Quality-controlled variable bitrate. CRF is the default rate control method; it does not try to reach any particular bitrate target, instead it tries to achieve a given uniform quality and the size of the bitstream is determined by the complexity of the source video. The higher the rate factor the higher the quantization and the lower the quality. Default rate factor is 28.0. (from -1 to FLT_MAX) "
         },
         "-qp": {
             "valueType": "int",
-            "explanation": "set the x265 qp (from -1 to INT_MAX) (default -1)"
+            "explanation": "Specify base quantization parameter for Constant QP rate control. Using this option enables Constant QP rate control. The specified QP is assigned to P slices. I and B slices are given QPs relative to P slices using param->rc.ipFactor and param->rc.pbFactor unless QP 0 is specified, in which case QP 0 is used for all slice types. Note that QP 0 does not cause lossless encoding, it only disables quantization. \nDefault disabled.\nRange of values: an integer from 0 to 51"
         },
         "-forced-idr": {
             "valueType": "boolean",
@@ -2801,15 +2801,131 @@
         },
         "-preset": {
             "valueType": "string",
-            "explanation": "set the x265 preset"
+            "explanation": "Sets parameters to preselected values, trading off compression efficiency against encoding speed. These parameters are applied before all other input parameters are applied, and so you can override any parameters that these values control.",
+            "subValues": {
+                "ultrafast": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "superfast": {
+                    "value": "1",
+                    "explanation": null
+                },
+                "veryfast": {
+                    "value": "2",
+                    "explanation": null
+                },
+                "faster": {
+                    "value": "3",
+                    "explanation": null
+                },
+                "fast": {
+                    "value": "4",
+                    "explanation": null
+                },
+                "medium": {
+                    "value": "5",
+                    "explanation": null
+                },
+                "slow": {
+                    "value": "6",
+                    "explanation": null
+                },
+                "slower": {
+                    "value": "7",
+                    "explanation": null
+                },
+                "veryslow": {
+                    "value": "8",
+                    "explanation": null
+                },
+                "placebo": {
+                    "value": "9",
+                    "explanation": null
+                }
+            }
         },
         "-tune": {
             "valueType": "string",
-            "explanation": "set the x265 tune parameter"
+            "explanation": "Tune the settings for a particular type of source or situation. The changes will be applied after --preset but before all other parameters. \nDefault none. "
         },
         "-profile": {
             "valueType": "string",
-            "explanation": "set the x265 profile"
+            "explanation": "Enforce the requirements of the specified profile, ensuring the output stream will be decodable by a decoder which supports that profile. May abort the encode if the specified profile is impossible to be supported by the compile options chosen for the encoder (a high bit depth encoder will be unable to output bitstreams compliant with Main or MainStillPicture).",
+            "subValues": {
+                "main": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "main-intra": {
+                    "value": "1",
+                    "explanation": null
+                },
+                "mainstillpicture": {
+                    "value": "2",
+                    "explanation": null
+                },
+                "main444-8": {
+                    "value": "3",
+                    "explanation": null
+                },
+                "main444-intra": {
+                    "value": "4",
+                    "explanation": null
+                },
+                "main444-stillpicture": {
+                    "value": "5",
+                    "explanation": null
+                },
+                "main10": {
+                    "value": "6",
+                    "explanation": null
+                },
+                "main10-intra": {
+                    "value": "7",
+                    "explanation": null
+                },
+                "main422-10": {
+                    "value": "8",
+                    "explanation": null
+                },
+                "main422-10-intra": {
+                    "value": "9",
+                    "explanation": null
+                },
+                "main444-10": {
+                    "value": "10",
+                    "explanation": null
+                },
+                "main444-10-intra": {
+                    "value": "11",
+                    "explanation": null
+                },
+                "main12": {
+                    "value": "12",
+                    "explanation": null
+                },
+                "main12-intra": {
+                    "value": "13",
+                    "explanation": null
+                },
+                "main422-12": {
+                    "value": "14",
+                    "explanation": null
+                },
+                "main422-12-intra": {
+                    "value": "15",
+                    "explanation": null
+                },
+                "main444-12": {
+                    "value": "16",
+                    "explanation": null
+                },
+                "main444-12-intra": {
+                    "value": "17",
+                    "explanation": null
+                }
+            }
         },
         "-x265-params": {
             "valueType": "dictionary",
@@ -2817,11 +2933,79 @@
             "subValues": {
                 "ssim":{
                     "valueType":"boolean",
-                    "explanation":"xxx"
+                    "explanation":"Calculate and report Structural Similarity values. It is recommended to use --tune ssim if you are measuring ssim, else the results should not be used for comparison purposes. \nDefault disabled"
+                },
+                "psnr":{
+                    "valueType":"boolean",
+                    "explanation":"Calculate and report Peak Signal to Noise Ratio. It is recommended to use --tune psnr if you are measuring PSNR, else the results should not be used for comparison purposes. \nDefault disabled"
+                },
+                "asm":{
+                    "valueType":"string",
+                    "explanation":"x265 will use all detected CPU SIMD architectures by default. You can disable all assembly by using --no-asm or you can specify a comma separated list of SIMD architectures to use, matching these strings: MMX2, SSE, SSE2, SSE3, SSSE3, SSE4, SSE4.1, SSE4.2, AVX, XOP, FMA4, AVX2, FMA3\n Some higher architectures imply lower ones being present, this is handled implicitly.\nOne may also directly supply the CPU capability bitmap as an integer.\nNote that by specifying this option you are overriding x265’s CPU detection and it is possible to do this wrong. You can cause encoder crashes by specifying SIMD architectures which are not supported on your CPU.\nDefault: auto-detected SIMD architectures"
+                },
+                "frame-threads":{
+                    "valueType":"int",
+                    "explanation":"Number of concurrently encoded frames. Using a single frame thread gives a slight improvement in compression, since the entire reference frames are always available for motion compensation, but it has severe performance implications. Default is an autodetected count based on the number of CPU cores and whether WPP is enabled or not.\nOver-allocation of frame threads will not improve performance, it will generally just increase memory use.\nValues: any value between 0 and 16. Default is 0, auto-detect"
+                },
+                "wpp":{
+                    "valueType":"boolean",
+                    "explanation":"Enable Wavefront Parallel Processing. The encoder may begin encoding a row as soon as the row above it is at least two CTUs ahead in the encode process. This gives a 3-5x gain in parallelism for about 1% overhead in compression efficiency.\nThis feature is implicitly disabled when no thread pool is present.\nDefault: Enabled"
+                },
+                "pmode":{
+                    "valueType":"boolean",
+                    "explanation":"Parallel mode decision, or distributed mode analysis. When enabled the encoder will distribute the analysis work of each CU (merge, inter, intra) across multiple worker threads. Only recommended if x265 is not already saturating the CPU cores. In RD levels 3 and 4 it will be most effective if –rect is enabled. At RD levels 5 and 6 there is generally always enough work to distribute to warrant the overhead, assuming your CPUs are not already saturated.\n–pmode will increase utilization without reducing compression efficiency. In fact, since the modes are all measured in parallel it makes certain early-outs impractical and thus you usually get slightly better compression when it is enabled (at the expense of not skipping improbable modes). This bypassing of early-outs can cause pmode to slow down encodes, especially at faster presets.\nThis feature is implicitly disabled when no thread pool is present.\nDefault disabled"
+                },
+                "pme":{
+                    "valueType":"boolean",
+                    "explanation":"Parallel motion estimation. When enabled the encoder will distribute motion estimation across multiple worker threads when more than two references require motion searches for a given CU. Only recommended if x265 is not already saturating CPU cores. --pmode is much more effective than this option, since the amount of work it distributes is substantially higher. With –pme it is not unusual for the overhead of distributing the work to outweigh the parallelism benefits.\nThis feature is implicitly disabled when no thread pool is present.\n –pme will increase utilization on many core systems with no effect on the output bitstream.\nDefault disabled"
+                },
+                "slices":{
+                    "valueType":"int",
+                    "explanation":"Encode each incoming frame as multiple parallel slices that may be decoded independently. Support available only for rectangular slices that cover the entire width of the image.\n Recommended for improving encoder performance only if frame-parallelism and WPP are unable to maximize utilization on given hardware.\nDefault: 1 slice per frame. Experimental feature"
+                },
+                "copy-pic":{
+                    "valueType":"boolean",
+                    "explanation":"Allow encoder to copy input x265 pictures to internal frame buffers. When disabled, x265 will not make an internal copy of the input picture and will work with the application’s buffers. While this allows for deeper integration, it is the responsibility of the application to (a) ensure that the allocated picture has extra space for padding that will be done by the library, and (b) the buffers aren’t recycled until the library has completed encoding this frame (which can be figured out by tracking NALs output by x265)\nDefault: enabled"
+                },
+                "level-idc":{
+                    "valueType":"float",
+                    "explanation":"Minimum decoder requirement level. Defaults to 0, which implies auto-detection by the encoder. If specified, the encoder will attempt to bring the encode specifications within that specified level. If the encoder is unable to reach the level it issues a warning and aborts the encode. The requested level will be signaled in the bitstream even if it is higher than the actual level.\nBeware, specifying a decoder level will force the encoder to enable VBV for constant rate factor encodes, which may introduce non-determinism.\nThe value is specified as a float or as an integer with the level times 10, for example level 5.1 is specified as “5.1” or “51”, and level 5.0 is specified as “5.0” or “50”.\nAnnex A levels: 1, 2, 2.1, 3, 3.1, 4, 4.1, 5, 5.1, 5.2, 6, 6.1, 6.2, 8.5"
+                },
+                "high-tier":{
+                    "valueType":"boolean",
+                    "explanation":"If --level-idc has been specified, –high-tier allows the support of high tier at that level. The encoder will first attempt to encode at the specified level, main tier first, turning on high tier only if necessary and available at that level. If your requested level does not support a High tier, high tier will not be supported. If –no-high-tier has been specified, then the encoder will attempt to encode only at the main tier.\n Default: enabled"
+                },
+                "ref":{
+                    "valueType":"int",
+                    "explanation":"Max number of L0 references to be allowed. This number has a linear multiplier effect on the amount of work performed in motion search but will generally have a beneficial effect on compression and distortion.\n Note that x265 allows up to 16 L0 references but the HEVC specification only allows a maximum of 8 total reference frames. So if you have B frames enabled only 7 L0 refs are valid and if you have --b-pyramid enabled (which is enabled by default in all presets), then only 6 L0 refs are the maximum allowed by the HEVC specification. If x265 detects that the total reference count is greater than 8, it will issue a warning that the resulting stream is non-compliant and it signals the stream as profile NONE and level NONE and will abort the encode unless --allow-non-conformance it specified. Compliant HEVC decoders may refuse to decode such streams.\nDefault 3"
+                },
+                "allow-non-conformance":{
+                    "valueType":"boolean",
+                    "explanation":"Allow libx265 to generate a bitstream with profile and level NONE. By default, it will abort any encode which does not meet strict level compliance. The two most likely causes for non-conformance are --ctu being too small, --ref being too high, or the bitrate or resolution being out of specification.\nDefault: disabled"
+                },
+                "uhd-bd":{
+                    "valueType":"boolean",
+                    "explanation":"Enable Ultra HD Blu-ray format support. If specified with incompatible encoding options, the encoder will attempt to modify/set the right encode specifications. If the encoder is unable to do so, this option will be turned OFF. Highly experimental.\nDefault: disabled"
                 },
                 "rd":{
                     "valueType":"int",
-                    "explanation":"xxx"
+                    "explanation":"Level of RDO in mode decision. The higher the value, the more exhaustive the analysis and the more rate distortion optimization is used. The lower the value the faster the encode, the higher the value the smaller the bitstream (in general). Default 3\nNote that this table aims for accuracy but is not necessarily our final target behavior for each mode.\nRange of values: 1: least .. 6: full RDO analysis\nOptions which affect the coding unit quad-tree, sometimes referred to as the prediction quad-tree."
+                },
+                "ctu":{
+                    "valueType":"int",
+                    "explanation":"Maximum CU size (width and height). The larger the maximum CU size, the more efficiently x265 can encode flat areas of the picture, giving large reductions in bitrate. However, this comes at a loss of parallelism with fewer rows of CUs that can be encoded in parallel, and less frame parallelism as well. Because of this the faster presets use a CU size of 32. \nDefault: 64. Value can be chosen from 16, 32, 64."
+                },
+                "min-cu-size":{
+                    "valueType":"int",
+                    "explanation":"Minimum CU size (width and height). By using 16 or 32 the encoder will not analyze the cost of CUs below that minimum threshold, saving considerable amounts of compute with a predictable increase in bitrate. This setting has a large effect on performance on the faster presets.\nDefault: 8 (minimum 8x8 CU for HEVC, best compression efficiency). Value can be chosen from 8, 16, 32."
+                },
+                "limit-refs":{
+                    "valueType":"int",
+                    "explanation":"When set to X265_REF_LIMIT_DEPTH (1) x265 will limit the references analyzed at the current depth based on the references used to code the 4 sub-blocks at the next depth. For example, a 16x16 CU will only use the references used to code its four 8x8 CUs.\nWhen set to X265_REF_LIMIT_CU (2), the rectangular and asymmetrical partitions will only use references selected by the 2Nx2N motion search (including at the lowest depth which is otherwise unaffected by the depth limit).\nWhen set to 3 (X265_REF_LIMIT_DEPTH && X265_REF_LIMIT_CU), the 2Nx2N motion search at each depth will only use references from the split CUs and the rect/amp motion searches at that depth will only use the reference(s) selected by 2Nx2N.\nFor all non-zero values of limit-refs, the current depth will evaluate intra mode (in inter slices), only if intra mode was chosen as the best mode for at least one of the 4 sub-blocks.\nYou can often increase the number of references you are using (within your decoder level limits) if you enable one or both of these flags. \nValue can be chosen from 0, 1, 2 and 3."
+                },
+                "limit-modes":{
+                    "valueType":"int",
+                    "explanation":"When enabled, limit-modes will limit modes analyzed for each CU using cost metrics from the 4 sub-CUs. When multiple inter modes like --rect and/or --amp are enabled, this feature will use motion cost heuristics from the 4 sub-CUs to bypass modes that are unlikely to be the best choice. This can significantly improve performance when rect and/or --amp are enabled at minimal compression efficiency loss."
                 }
             }
         }

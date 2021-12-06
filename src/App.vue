@@ -401,6 +401,12 @@ export default {
       currentStream.used = used
     },
 
+    changeStreamFormat(format, streamId){
+      var targetStream = this.currentProject.parameters.find(stream => stream.streamId == streamId)
+      this.$set(targetStream, 'format', format)
+      this.$bus.$emit('refreshParameter', format)
+    },
+
     // add new file(s)
     // (from Project List)
     addNewFiles(newFiles){
@@ -549,6 +555,7 @@ export default {
     this.$bus.$on('deleteParam', this.deleteParam)
     this.$bus.$on('switchStream', this.switchStream)
     this.$bus.$on('changeStreamState', this.changeStreamState)
+    this.$bus.$on('changeStreamFormat', this.changeStreamFormat)
     this.$bus.$on('addNewFiles', this.addNewFiles)
     this.$bus.$on('removeFile', this.removeFile)
     this.$bus.$on('changeFileParams', this.changeFileParams)

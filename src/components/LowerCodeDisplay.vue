@@ -19,7 +19,8 @@
 </template>
 
 <script>
-const { spawn } = require('child_process')
+const { spawn, exec } = require('child_process')
+const path = require('path')
 console.log('spawn is ', spawn)
 
 
@@ -52,8 +53,8 @@ export default {
         const commandList = this.command.slice(1, this.command.length)
         console.log('head:',head);
         console.log('paras:', commandList)
-        // const { spawn } = require('electron')
-        this.ffmpeg = spawn(head, commandList)
+        const lauchPath = path.join(__static, 'temp')
+        this.ffmpeg = spawn(head, commandList, {cwd:lauchPath})
     
         this.ffmpeg.stdout.on('data', (data)=>{
           
@@ -103,16 +104,39 @@ export default {
       
     },
     pauseFFmpeg(){
-      console.log(this.ffmpeg.pid)
+      // if pause, continue
       if (this.processState.isPause){
         if (this.isMac)
           this.ffmpeg.kill('SIGCONT')
+        else{
+          const cwd = path.join(__static, 'tools')
+          exec(`.\\pssuspend.exe -r ${this.ffmpeg.pid}`, { cwd }, (error, stdout, stderr)=>{
+            if (error)
+              console.log('error:', error)
+            if (stdout)
+              console.log('stdout:', stdout)
+            if (stderr)
+              console.log('stderr:', stderr)
+          })
+        }
         this.processState.isPause = false
         this.buttonNames.control = 'PAUSE'
       }
+      // else pause
       else{
         if (this.isMac)
           this.ffmpeg.kill('SIGSTOP')
+        else{
+          const cwd = path.join(__static, 'tools')
+          exec(`.\\pssuspend.exe ${this.ffmpeg.pid}`, { cwd }, (error, stdout, stderr)=>{
+            if (error)
+              console.log('error:', error)
+            if (stdout)
+              console.log('stdout:', stdout)
+            if (stderr)
+              console.log('stderr:', stderr)
+          })
+        }
         this.processState.isPause = true
         this.buttonNames.control = 'CONTINUE'
       }

@@ -53,7 +53,7 @@
           <span v-if="!isInProcess && !isShowResult" slot="title">Noting is Working</span>
           <span v-else-if="isInProcess && isShowResult" slot="title">Now Working On Project {{workState.workingProject}}</span>
           <span v-else slot="title">Result of Project {{workState.workingProject}}</span>
-          <a-row type="flex" justify="center" align="middle" class="mt-4">
+          <a-row type="flex" justify="center" align="middle" :style="{marginTop:localHeight*0.1 +'px'}">
             <a-empty class="mt-3" v-if="!isShowResult" :description="false"/>
             <a-row :gutter="48" v-if="isShowResult" style="width: 88%;">
               <a-col :span="7" class="border border-start-0 border-top-0 border-bottom-0">
@@ -99,20 +99,23 @@
         </a-drawer>
 
         <!-- Add File & Add Project -->
-        <a-space class="mt-3">
-          <a-button :loading="isLoadFile" type="primary" @click="clickAddFile(project)">
-            <a-icon v-show="!isLoadFile" type="plus" class="align-middle mb-1"/>
-            Add File
-          </a-button>
-          <a-button type="primary" @click="clickNewProject">
-            <a-icon type="plus" class="align-middle mb-1"/>
-            Add Project
-          </a-button>
+        <a-row  type="flex" justify="space-between" class="mt-3">
+          <a-space>
+            <a-button :loading="isLoadFile" type="primary" @click="clickAddFile(project)">
+              <a-icon v-show="!isLoadFile" type="plus" class="align-middle mb-1"/>
+              Add File
+            </a-button>
+            <a-button type="primary" @click="clickNewProject">
+              <a-icon type="plus" class="align-middle mb-1"/>
+              Add Project
+            </a-button>
+          </a-space>
           <a-button type="primary" @click="triggerDrawerVisible">
-            <a-icon type="plus" class="align-middle mb-1"/>
-            Show Convert Process
+            <a-icon type="menu-fold" class="align-middle mb-1"/>
+            Convert Process
           </a-button>
-        </a-space>
+        </a-row>
+        
         
         <!-- Loaded Files -->
         <div 
