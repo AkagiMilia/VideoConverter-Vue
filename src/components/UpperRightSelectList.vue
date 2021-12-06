@@ -115,7 +115,8 @@
                 v-show="subParam==nowFocus"
                 @keydown.enter="inputEnter"
                 @blur="paramExit(param, subParam, $event)"
-                @search="onSearch"
+                @search="onSearchSub"
+                @focus="paramFocusSub"
                 :ref="'input'+subParam"
                 spellcheck="false"
               />
@@ -162,7 +163,8 @@ export default {
       nowFocus:'',        // the name of focusing parameter input 
       busy:false,
       dataSource:[],      // auto complete's data source
-      currentParam:'',     // selected parameter
+      currentParam:'',    // selected parameter
+      currentDict:'',     
       ColorValueType:{              // value type's showing colors
         string:'orange',
         int:'blue',
@@ -230,6 +232,7 @@ export default {
       }, 200);
       this.switchStream()
       if (father){
+        this.currentDict = father
         this.$bus.$emit('searchParameter', father, this.streamInfo.streamType)
         this.$bus.$emit('showGuidance', param, this.showingParams[this.currentFormat][father]['subValues'][param])
       }  
@@ -310,6 +313,22 @@ export default {
         console.log(this.videoOptions[this.nowFocus.slice(0, sliceIndex>-1 ? sliceIndex : this.nowFocus.length)]);
       }
     },
+    onSearchSub(){
+      console.log('current Dict', this.currentDict)
+      try {
+        console.log('current Dict', this.currentDict)
+        if (this.showingParams[this.currentFormat][this.currentDict]
+         && this.showingParams[this.currentFormat][this.currentDict]['subValues']
+         && this.showingParams[this.currentFormat][this.currentDict]['subValues'][this.nowFocus]
+         && this.showingParams[this.currentFormat][this.currentDict]['subValues'][this.nowFocus]['subValues'])
+        {
+          this.dataSource = Object.keys(this.showingParams[this.currentFormat][this.currentDict]['subValues'][this.nowFocus]['subValues'])
+        }
+      } catch (error) {
+        console.log('%c Object Read Error', 'color:orange')
+        console.log(`%c ${error}`, 'color:red')
+      }
+    },
 
     // Format Selection Filter 
     filterFormat(input, option){
@@ -324,7 +343,10 @@ export default {
     },
     paramFocus(){
       this.onSearch()
-    }
+    },
+    paramFocusSub(){
+      this.onSearchSub()
+    },
   },
   beforeMount() {
   },
