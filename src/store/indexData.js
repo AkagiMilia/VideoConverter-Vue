@@ -22,6 +22,12 @@ export default {
 			var file = fs.readFileSync(path, 'utf8')
 			state.audioOptions = JSON.parse(file)
 		},
+		updateH265Guidance(state, path){
+			var file = fs.readFileSync(path, 'utf8')
+			var { libx265 } = JSON.parse(file)
+			if (libx265)
+				state.showingParams['libx265'] = libx265
+		}
 	},
 	state:{
 		showingParams:{},

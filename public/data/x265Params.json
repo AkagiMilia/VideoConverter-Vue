@@ -6,7 +6,7 @@
         },
         "-qp": {
             "valueType": "int",
-            "explanation": "Specify base quantization parameter for Constant QP rate control. Using this option enables Constant QP rate control. The specified QP is assigned to P slices. I and B slices are given QPs relative to P slices using param->rc.ipFactor and param->rc.pbFactor unless QP 0 is specified, in which case QP 0 is used for all slice types. Note that QP 0 does not cause lossless encoding, it only disables quantization. \nDefault disabled.\nRange of values: an integer from 0 to 51"
+            "explanation": "Default disabled.\nRange of values: an integer from 0 to 51\nSpecify base quantization parameter for Constant QP rate control. Using this option enables Constant QP rate control. The specified QP is assigned to P slices. I and B slices are given QPs relative to P slices using param->rc.ipFactor and param->rc.pbFactor unless QP 0 is specified, in which case QP 0 is used for all slice types. Note that QP 0 does not cause lossless encoding, it only disables quantization. "
         },
         "-forced-idr": {
             "valueType": "boolean",
@@ -416,7 +416,7 @@
                     "explanation":"Noise reduction - an adaptive deadzone applied after DCT (subtracting from DCT coefficients), before quantization. It does no pixel-level filtering, doesn’t cross DCT block boundaries, has no overlap, The higher the strength value parameter, the more aggressively it will reduce noise.\nEnabling noise reduction will make outputs diverge between different numbers of frame threads. Outputs will be deterministic but the outputs of -F2 will no longer match the outputs of -F3, etc."
                 },
                 "tskip":{
-                    "valueType":"int",
+                    "valueType":"boolean",
                     "explanation":"Enable evaluation of transform skip (bypass DCT but still use quantization) coding for 4x4 TU coded blocks.\nOnly effective at RD levels 3 and above, which perform RDO mode decisions. \nDefault disabled"
                 },
                 "rdpenalty":{
@@ -484,7 +484,222 @@
                             "explanation":null
                         }
                     }
+                },
+                "ssim-rd":{
+                    "valueType":"boolean",
+                    "explanation":"Enable/Disable SSIM RDO. SSIM is a better perceptual quality assessment method as compared to MSE. SSIM based RDO calculation is based on residual divisive normalization scheme. This normalization is consistent with the luminance and contrast masking effect of Human Visual System. It is used for mode selection during analysis of CTUs and can achieve significant gain in terms of objective quality metrics SSIM and PSNR. It only has effect on presets which use RDO-based mode decisions (--rd 3 and above)."
+                },
+                "max-merge":{
+                    "valueType":"int",
+                    "explanation":"The range of the value is from 1 to 5. \nMaximum number of neighbor (spatial and temporal) candidate blocks that the encoder may consider for merging motion predictions. If a merge candidate results in no residual, it is immediately selected as a “skip”. Otherwise the merge candidates are tested as part of motion estimation when searching for the least cost inter option. The max candidate number is encoded in the SPS and determines the bit cost of signaling merge CUs. \nDefault 2"
+                },
+                "me":{
+                    "valueType":"int",
+                    "explanation":"Motion search method. Generally, the higher the number the harder the ME method will try to find an optimal match. Diamond search is the simplest. Hexagon search is a little better. Uneven Multi-Hexagon is an adaption of the search method used by x264 for slower presets. Star is a three-step search adapted from the HM encoder: a star-pattern search followed by an optional radix scan followed by an optional star-search refinement. Full is an exhaustive search; an order of magnitude slower than all other searches but not much better than umh or star. SEA is similar to x264’s ESA implementation and a speed optimization of full search.\nIt is a three-step motion search where the DC calculation is followed by ADS calculation followed by SAD of the passed motion vector candidates.",
+                    "subValues":{
+                        "dia":{
+                            "value":"0",
+                            "explanation":null
+                        },
+                        "hex":{
+                            "value":"1",
+                            "explanation":null
+                        },
+                        "umh":{
+                            "value":"2",
+                            "explanation":null
+                        },
+                        "star":{
+                            "value":"3",
+                            "explanation":null
+                        },
+                        "sea":{
+                            "value":"4",
+                            "explanation":null
+                        },
+                        "full":{
+                            "value":"5",
+                            "explanation":null
+                        }
+                    }
+                },
+                "subme":{
+                    "valueType":"int",
+                    "explanation":"The reange of this value is from 0 to 7. \nAmount of subpel refinement to perform. The higher the number the more subpel iterations and steps are performed. \nDefault 2.\nAt –subme values larger than 2, chroma residual cost is included in all subpel refinement steps and chroma residual is included in all motion estimation decisions (selecting the best reference picture in each list, and choosing between merge, uni-directional motion and bi-directional motion). The ‘slow’ preset is the first preset to enable the use of chroma residual."
+                },
+                "merange":{
+                    "valueType":"int",
+                    "explanation":"Motion search range. Default 57\nRange of values: an integer from 0 to 32768.\nThe default is derived from the default CTU size (64) minus the luma interpolation half-length (4) minus maximum subpel distance (2) minus one extra pixel just in case the hex search method is used. If the search range were any larger than this, another CTU row of latency would be required for reference frames."
+                },
+                "temporal-mvp":{
+                    "valueType":"boolean",
+                    "explanation":"Enable temporal motion vector predictors in P and B slices. This enables the use of the motion vector from the collocated block in the previous frame to be used as a predictor. Default is enabled."
+                },
+                "weightp":{
+                    "valueType":"boolean",
+                    "explanation":"Enable weighted prediction in P slices. This enables weighting analysis in the lookahead, which influences slice decisions, and enables weighting analysis in the main encoder which allows P reference samples to have a weight function applied to them prior to using them for motion compensation. In video which has lighting changes, it can give a large improvement in compression efficiency. \nDefault is enabled"
+                },
+                "weightb":{
+                    "valueType":"boolean",
+                    "explanation":"Enable weighted prediction in B slices. \nDefault disabled"
+                },
+                "analyze-src-pics":{
+                    "valueType":"boolean",
+                    "explanation":"Enable motion estimation with source frame pixels, in this mode, motion estimation can be computed independently. \nDefault disabled."
+                },
+                "hme":{
+                    "valueType":"boolean",
+                    "explanation":"Enable 3-level Hierarchical motion estimation at One-Sixteenth, Quarter and Full resolution. \nDefault disabled."
+                },
+                "hme-search":{
+                    "valueType":"string",
+                    "explanation":"Motion search method for HME Level 0, 1 and 2. Refer to --me for values. Specify search method for each level. Alternatively, specify a single value which will apply to all levels. \nDefault is hex,umh,umh for levels 0,1,2 respectively."
+                },
+                "hme-range":{
+                    "valueType":"string",
+                    "explanation":"Search range for HME level 0, 1 and 2. The Search Range for each HME level must be between 0 and 32768(excluding). Default search range is 16,32,48 for level 0,1,2 respectively."
+                },
+                "strong-intra-smoothing":{
+                    "valueType":"boolean",
+                    "explanation":"Enable strong intra smoothing for 32x32 intra blocks. This flag performs bi-linear interpolation of the corner reference samples for a strong smoothing effect. The purpose is to prevent blocking or banding artifacts in regions with few/zero AC coefficients. \nDefault enabled"
+                },
+                "constrained-intra":{
+                    "valueType":"boolean",
+                    "explanation":"Constrained intra prediction. When generating intra predictions for blocks in inter slices, only intra-coded reference pixels are used. Inter-coded reference pixels are replaced with intra-coded neighbor pixels or default values. The general idea is to block the propagation of reference errors that may have resulted from lossy signals. \nDefault disabled"
+                },
+                "psy-rd":{
+                    "valueType":"float",
+                    "explanation":"Range of values: 0 .. 5.0. Default 2.0\nInfluence rate distortion optimized mode decision to preserve the energy of the source image in the encoded image at the expense of compression efficiency. It only has effect on presets which use RDO-based mode decisions (--rd 3 and above). 1.0 is a typical value."
+                },
+                "psy-rdoq":{
+                    "valueType":"float",
+                    "explanation":"Range of values: 0 .. 50.0\nInfluence rate distortion optimized quantization by favoring higher energy in the reconstructed image. This generally improves perceived visual quality at the cost of lower quality metric scores. It only has effect when --rdoq-level is 1 or 2. High values can be beneficial in preserving high-frequency detail. Default: 0.0 (1.0 for presets slow, slower, veryslow)"
+                },
+                "open-gop":{
+                    "valueType":"float",
+                    "explanation":"Enable open GOP, allow I-slices to be non-IDR. \nDefault enabled"
+                },
+                "keyint":{
+                    "valueType":"int",
+                    "explanation":"Max intra period in frames. A special case of infinite-gop (single keyframe at the beginning of the stream) can be triggered with argument -1. Use 1 to force all-intra. When intra-refresh is enabled it specifies the interval between which refresh sweeps happen. \nDefault 250"
+                },
+                "min-keyint":{
+                    "valueType":"int",
+                    "explanation":"Range of values: >=0 (0: auto)\nMinimum GOP size. Scenecuts beyond this interval are coded as IDR and start a new keyframe, while scenecuts closer together are coded as I or P. For fixed keyframe interval, set value to be equal to keyint."
+                },
+                "scenecut":{
+                    "valueType":"int",
+                    "explanation":"How aggressively I-frames need to be inserted. The higher the threshold value, the more aggressive the I-frame placement. --scenecut 0 or --no-scenecut disables adaptive I frame placement. \nDefault 40"
+                },
+                "no-scenecut":{
+                    "valueType":"boolean",
+                    "explanation":"Disables adaptive I frame placement."
+                },
+                "scenecut-bias":{
+                    "valueType":"float",
+                    "explanation":"Range of values: 0 to 100.0\nThis value represents the percentage difference between the inter cost and intra cost of a frame used in scenecut detection. For example, a value of 5 indicates, if the inter cost of a frame is greater than or equal to 95 percent of the intra cost of the frame, then detect this frame as scenecut. Values between 5 and 15 are recommended. \nDefault 5."
+                },
+                "hist-scenecut":{
+                    "valueType":"boolean",
+                    "explanation":"Indicates that scenecuts need to be detected using luma edge and chroma histograms. --hist-scenecut enables scenecut detection using the histograms and disables the default scene cut algorithm. --no-hist-scenecut disables histogram based scenecut algorithm."
+                },
+                "hist-threshold":{
+                    "valueType":"float",
+                    "explanation":"Range of values: 0 to 1.0\nThis value represents the threshold for normalized SAD of edge histograms used in scenecut detection. This requires --hist-scenecut to be enabled. For example, a value of 0.2 indicates that a frame with normalized SAD value greater than 0.2 against the previous frame as scenecut. Increasing the threshold reduces the number of scenecuts detected. \nDefault 0.03."
+                },
+                "radl":{
+                    "valueType":"float",
+                    "explanation":"Range of values: Between 0 and –bframes\nNumber of RADL pictures allowed infront of IDR. Requires closed gop interval. If enabled for fixed keyframe interval, inserts RADL at every IDR. If enabled for closed gop interval, in case of --hist-scenecut inserts RADL at every hard scenecut whereas for the --scenecut, inserts RADL at every scenecut. Recommended value is 2-3. Default 0 (disabled)."
+                },
+                "ctu-info":{
+                    "valueType":"float",
+                    "explanation":"This value enables receiving CTU information asynchronously and determine reaction to the CTU information. Default 0. 1: force the partitions if CTU information is present. 2: functionality of (1) and reduce qp if CTU information has changed. 4: functionality of (1) and force Inter modes when CTU Information has changed, merge/skip otherwise. This option should be enabled only when planning to invoke the API function x265_encoder_ctu_info to copy ctu-info asynchronously. If enabled without calling the API function, the encoder will wait indefinitely."
+                },
+                "intra-refresh":{
+                    "valueType":"boolean",
+                    "explanation":"Enables Periodic Intra Refresh(PIR) instead of keyframe insertion. PIR can replace keyframes by inserting a column of intra blocks in non-keyframes, that move across the video from one side to the other and thereby refresh the image but over a period of multiple frames instead of a single keyframe."
+                },
+                "rc-lookahead":{
+                    "valueType":"boolean",
+                    "explanation":"Default 20. Range of values: Between the maximum consecutive bframe count (--bframes) and 250\nNumber of frames for slice-type decision lookahead (a key determining factor for encoder latency). The longer the lookahead buffer the more accurate scenecut decisions will be, and the more effective cutree will be at improving adaptive quant. Having a lookahead larger than the max keyframe interval is not helpful."
+                },
+                "gop-lookahead":{
+                    "valueType":"boolean",
+                    "explanation":"Default 0. Range of values: Between 0 and (–rc-lookahead - mini-GOP length)\nNumber of frames for GOP boundary decision lookahead. If a scenecut frame is found within this from the gop boundary set by –keyint, the GOP will be extended until such a point, otherwise the GOP will be terminated as set by –keyint. \nIt is recommended to have –gop-lookahaed less than –min-keyint as scenecuts beyond –min-keyint are already being coded as keyframes."
+                },
+                "lookahead-slices":{
+                    "valueType":"int",
+                    "explanation":"Use multiple worker threads to measure the estimated cost of each frame within the lookahead. The frame is divided into the specified number of slices, and one-thread is launched per slice. When --b-adapt is 2, most frame cost estimates will be performed in batch mode (many cost estimates at the same time) and lookahead-slices is ignored for batched estimates; it may still be used for single cost estimations. The higher this parameter, the less accurate the frame costs will be (since context is lost across slice boundaries) which will result in less accurate B-frame and scene-cut decisions. The effect on performance can be significant especially on systems with many threads.\nThe encoder may internally lower the number of slices or disable slicing to ensure each slice codes at least 10 16x16 rows of lowres blocks to minimize the impact on quality. For example, for 720p and 1080p videos, the number of slices is capped to 4 and 6, respectively. For resolutions lesser than 720p, slicing is auto-disabled.\nIf slices are used in lookahead, they are logged in the list of tools as lslices\nValues: 0 - disabled. 1 is the same as 0. Max 16. Default: 8 for ultrafast, superfast, faster, fast, medium\n4 for slow, slower disabled for veryslow, slower"
+                },
+                "lookahead-threads":{
+                    "valueType":"int",
+                    "explanation":"Use multiple worker threads dedicated to doing only lookahead instead of sharing the worker threads with frame Encoders. A dedicated lookahead threadpool is created with the specified number of worker threads. This can range from 0 upto half the hardware threads available for encoding. Using too many threads for lookahead can starve resources for frame Encoder and can harm performance. Default is 0 - disabled, Lookahead shares worker threads with other FrameEncoders .\nValues: 0 - disabled(default). Max - Half of available hardware threads."
+                },
+                "b-adapt":{
+                    "valueType":"int",
+                    "explanation":"Set the level of effort in determining B frame placement.\nWith b-adapt 0, the GOP structure is fixed based on the values of --keyint and --bframes.\nWith b-adapt 1 a light lookahead is used to choose B frame placement.\nWith b-adapt 2 (trellis) a viterbi B path selection is performed\nValues: 0:none; 1:fast; 2:full(trellis) default"
+                },
+                "bframes":{
+                    "valueType":"int",
+                    "explanation":"Range of values: 0 to 16\nMaximum number of consecutive b-frames. Use --bframes 0 to force all P/I low-latency encodes. \nDefault 4. \nThis parameter has a quadratic effect on the amount of memory allocated and the amount of work performed by the full trellis version of --b-adapt lookahead."
+                },
+                "bframe-bias":{
+                    "valueType":"int",
+                    "explanation":"Bias towards B frames in slicetype decision. The higher the bias the more likely x265 is to use B frames. \nCan be any value between -90 and 100 and is clipped to that range. Default 0"
+                },
+                "b-pyramid":{
+                    "valueType":"int",
+                    "explanation":"Use B-frames as references, when possible. Default enabled."
+                },
+                "force-flush":{
+                    "valueType":"int",
+                    "explanation":"Force the encoder to flush frames. Default is 0.\nValues: 0 - flush the encoder only when all the input pictures are over. \n1 - flush all the frames even when the input is not over. slicetype decision may change with this option.\n2 - flush the slicetype decided frames only."
+                },
+                "crf-max":{
+                    "valueType":"int",
+                    "explanation":"Range of values: 0 to 51.\nSpecify an upper limit to the rate factor which may be assigned to any given frame (ensuring a max QP). This is dangerous when CRF is used in combination with VBV as it may result in buffer underruns. \nDefault disabled"
+                },
+                "crf-min":{
+                    "valueType":"int",
+                    "explanation":"Specify a lower limit to the rate factor which may be assigned to any given frame (ensuring a min compression factor)."
+                },
+                "vbv-bufsize":{
+                    "valueType":"int",
+                    "explanation":"Specify the size of the VBV buffer (kbits). Enables VBV in ABR mode. In CRF mode, --vbv-maxrate must also be specified. Default 0 (vbv disabled)"
+                },
+                "vbv-maxrate":{
+                    "valueType":"int",
+                    "explanation":"Maximum local bitrate (kbits/sec). Will be used only if vbv-bufsize is also non-zero. Both vbv-bufsize and vbv-maxrate are required to enable VBV in CRF mode. \nDefault 0 (disabled)\nNote that when VBV is enabled (with a valid --vbv-bufsize), VBV emergency denoising is turned on. This will turn on aggressive denoising at the frame level when frame QP > QP_MAX_SPEC (51), drastically reducing bitrate and allowing ratecontrol to assign lower QPs for the following frames. The visual effect is blurring, but removes significant blocking/displacement artifacts."
+                },
+                "vbv-init":{
+                    "valueType":"float",
+                    "explanation":"Default 0.9\nRange of values: fractional: 0 - 1.0, or kbits: 2 .. bufsize\nInitial buffer occupancy. The portion of the decode buffer which must be full before the decoder will begin decoding. Determines absolute maximum frame size. May be specified as a fractional value between 0 and 1, or in kbits. In other words, these two option pairs are equivalent:\n--vbv-bufsize 1000 --vbv-init 900\n--vbv-bufsize 1000 --vbv-init 0.9"
+                },
+                "vbv-end":{
+                    "valueType":"float",
+                    "explanation":"Final buffer fullness. The portion of the decode buffer that must be full after all the specified frames have been inserted into the decode buffer. Specified as a fractional value between 0 and 1, or in kbits. \nDefault 0 (disabled)\nThis enables basic support for chunk-parallel encoding where each segment can specify the starting and ending state of the VBV buffer so that VBV compliance can be maintained when chunks are independently encoded and stitched together."
+                },
+                "vbv-end-fr-adj":{
+                    "valueType":"float",
+                    "explanation":"Frame from which qp has to be adjusted to achieve final decode buffer fullness. Specified as a fraction of the total frames. Fractions > 0 are supported only when the total number of frames is known. \nDefault 0."
+                },
+                "min-vbv-fullness":{
+                    "valueType":"double",
+                    "explanation":"Minimum VBV fullness percentage to be maintained. Specified as a fractional value ranging between 0 and 100. Default 50 i.e, Tries to keep the buffer at least 50% full at any point in time.\nDecreasing the minimum required fullness shall improve the compression efficiency, but is expected to affect VBV conformance. Experimental option."
+                },
+                "max-vbv-fullness":{
+                    "valueType":"double",
+                    "explanation":"Maximum VBV fullness percentage to be maintained. Specified as a fractional value ranging between 0 and 100. Default 80 i.e Tries to keep the buffer at max 80% full at any point in time.\nIncreasing the minimum required fullness shall improve the compression efficiency, but is expected to affect VBV conformance. \nExperimental option."
+                },
+                "lossless":{
+                    "valueType":"boolean",
+                    "explanation":"Enables true lossless coding by bypassing scaling, transform, quantization and in-loop filter processes. This is used for ultra-high bitrates with zero loss of quality. Reconstructed output pictures are bit-exact to the input pictures. Lossless encodes implicitly have no rate control, all rate control options are ignored. Slower presets will generally achieve better compression efficiency (and generate smaller bitstreams). \nDefault disabled."
+                },
+                "aq-mode":{
+                    "valueType":"int",
+                    "explanation":"Adaptive Quantization operating mode. Raise or lower per-block quantization based on complexity analysis of the source image. The more complex the block, the more quantization is used. These offsets the tendency of the encoder to spend too many bits on complex areas and not enough in flat areas.\n0: disabled\n1: AQ enabled\n2: AQ enabled with auto-variance (default)\n3: AQ enabled with auto-variance and bias to dark scenes. This is recommended for 8-bit encodes or low-bitrate 10-bit encodes, to prevent color banding/blocking.\n4: AQ enabled with auto-variance and edge information."
                 }
+                
             }
         }
     }

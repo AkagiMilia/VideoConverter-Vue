@@ -1,8 +1,12 @@
 <template>
-  <div>
-    <a-row class="border-0 border-bottom row align-items-center bg-light">
-      <a-col :span="18" class="border-0 border-end ps-3">
-        <p id="codeArea" class="align-self-center mt-2">{{cmdStringDis}}</p>
+  <div class="overflow-auto">
+    <a-row class="border-0 border-bottom row align-items-center bg-light " :style="{height:localHeight+'px'}">
+      
+      <a-col :span="18" class="border-0 border-end ps-3" >
+        <h5>Full Command Line</h5>
+        <a-row :style="{height:localHeight-35+'px'}" class=" overflow-auto">
+          <p id="codeArea" class="align-self-center mt-2">{{cmdStringDis}}</p>
+        </a-row>
       </a-col>
       <a-col :span="6" align="middle">
         <a-space>
@@ -26,7 +30,7 @@ console.log('spawn is ', spawn)
 
 export default {
   name:'LowerCodeDisplay',
-  props:['command', 'isMac'],
+  props:['command', 'isMac', 'localHeight'],
   data() {
     return {
       result:'',

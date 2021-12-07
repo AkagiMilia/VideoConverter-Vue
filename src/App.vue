@@ -12,21 +12,21 @@
             class="bg-light "
           />
           <UpperLeftGuide 
-            :localHeight="windowHeight*0.2"
+            :localHeight="windowHeight*0.3"
             class="bg-light "
           /> 
       </a-col>
-      <a-col :span="12" :style="{height:windowHeight*0.6+'px'}" >
+      <a-col :span="12" :style="{height:windowHeight*0.7+'px'}" >
         <UpperRightSelect 
           :currentParameter="currentParameter" 
           :currentProjectId="currentProjectId" 
-          :localHeight="windowHeight*0.6-2"
+          :localHeight="windowHeight*0.7-2"
         />
         <UpperRightParams 
           :currentFormat="currentFormat"
           :currentStream="currentStream"
           :currentType="currentType"
-          :localHeight="windowHeight*0.6-2"
+          :localHeight="windowHeight*0.7-2"
         />
       </a-col>
     </a-row>
@@ -41,10 +41,10 @@
       />
       <LowerCodeDisplay 
         :command="cmdLine"
-        :localHeight="windowHeight*0.25"
+        :localHeight="windowHeight*0.15"
         :ffPaths="ffPaths"
         :isMac="isMac"
-      />`
+      />
     </a-row>
     
 
@@ -447,7 +447,7 @@ export default {
     },
 
     // load Vuex Mutation functions
-    ...mapMutations('indexData', ['loadGuidance', 'loadEncoders', 'loadVideoOptions', 'loadAudioOptions'])
+    ...mapMutations('indexData', ['loadGuidance', 'loadEncoders', 'loadVideoOptions', 'loadAudioOptions', 'updateH265Guidance'])
   },
 
   // watchers, run something when the watched data changed
@@ -568,10 +568,12 @@ export default {
     const encodersPath = path.join(__static, 'data/Encoders.json')
     const videoOptions = path.join(__static, 'data/VideoOptions.json')
     const audioOptions = path.join(__static, 'data/AudioOptions.json')
+    const h265GuidancePath = path.join(__static, 'data/x265Params.json')
     this.loadGuidance(guidancePath)
     this.loadEncoders(encodersPath)
     this.loadVideoOptions(videoOptions)
     this.loadAudioOptions(audioOptions)
+    this.updateH265Guidance(h265GuidancePath)
     
     // refresh the data of window's current size
     window.onresize = ()=>{
