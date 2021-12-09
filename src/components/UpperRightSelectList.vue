@@ -1,7 +1,7 @@
 <template>
   <ul class="list-group list-group-flush" ref="test">
     
-    <li class="list-group-item list-group-item-action titleList" @click="switchStream">
+    <li class="list-group-item list-group-item-action titleList" @click="switchStream(streamInfo.format)">
       
         <a-row type="flex" justify="space-between" align="middle">
           <!-- Video Icon -->
@@ -23,6 +23,7 @@
                 :defaultValue="streamInfo.format"
                 :filter-option="filterFormat"
                 @blur="FormatExit"
+                @click="switchStream(streamInfo.format)"
                 ref="formSelect"
               >
                 <a-select-option v-for="format in Object.keys(encodersInfo[streamInfo.streamType+'s'])" :key="format" :value="format">
@@ -274,7 +275,9 @@ export default {
 
     // Update the focusing stream
     // after user clicking this stream param list
-    switchStream(){
+    switchStream(format = null){
+      if (format)
+        this.$bus.$emit('refreshParameter', format)
       this.$bus.$emit('switchStream', this.streamInfo.streamId)
     },
     triggerFormatSelection(format){
