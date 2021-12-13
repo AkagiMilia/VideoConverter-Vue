@@ -83,6 +83,7 @@ export default {
                 infoObj[unit.slice(0, equalIndex)] = unit.slice(equalIndex+1)
               }
             }
+            console.log(infoObj);
             this.$bus.$emit('getRunningProgress', infoObj)
           }
             

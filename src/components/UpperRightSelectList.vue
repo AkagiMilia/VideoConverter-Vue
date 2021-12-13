@@ -127,7 +127,7 @@
               type="close-circle" 
               theme="twoTone" 
               twoToneColor="red"
-              @click="deleteParam(subParam, param, 'object')"
+              @click.stop="deleteParam(subParam, param, 'object')"
             />
           </a-row>
         </li>
@@ -145,7 +145,7 @@
               type="close-circle" 
               theme="twoTone" 
               twoToneColor="red"
-              @click="deleteParam(subParam, param, 'array')"
+              @click.stop="deleteParam(subParam, param, 'array')"
             />
           </a-row>
         </li>

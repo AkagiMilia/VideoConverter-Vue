@@ -366,9 +366,10 @@ export default {
           this.$set(targetStream.params, father, newArray)
         }
       }
-      else
+      else{
         this.$delete(targetStream.params, param)
-      this.$bus.$emit('refreshParameter', targetStream.format)
+        this.$bus.$emit('refreshParameter', targetStream.format)
+      } 
     },
 
     // change current project 

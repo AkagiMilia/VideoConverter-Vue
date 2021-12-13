@@ -170,9 +170,11 @@ export default {
     // if the project or stream's format changed,
     // refresh the candidate
     refreshParameter(curV){
-      this.parameterObject = this.showingParams[curV]
-      this.isSubParam = false
-
+      console.log(Object.keys(this.parameterObject).length);
+      if (curV != this.currentStream.format || this.isSubParam || !Object.keys(this.parameterObject).length){
+        this.parameterObject = this.showingParams[curV]
+        this.isSubParam = false
+      }
     },
 
     // if the new format is not recorded in the guidance
