@@ -103,11 +103,11 @@
           <a-space>
             <a-button :loading="isLoadFile" type="primary" @click="clickAddFile(project)">
               <a-icon v-show="!isLoadFile" type="plus" class="align-middle mb-1"/>
-              Add File
+              File
             </a-button>
             <a-button type="primary" @click="clickNewProject">
               <a-icon type="plus" class="align-middle mb-1"/>
-              Add Project
+              Project
             </a-button>
           </a-space>
           <a-button type="primary" @click="triggerDrawerVisible">

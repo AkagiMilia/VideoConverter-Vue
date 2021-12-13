@@ -108,6 +108,7 @@ export default {
   data(){
     return{
       parameterObject:{},           // Parameter candidates showing on the page
+      showingFormat:'',
       currentDict:'',               // save the parameter name if it requires dictionary sub value
       isSubParam:false,             // wheter the selected candidate is a sub value
       busy:false,
@@ -130,6 +131,7 @@ export default {
       console.log('searching param:', param)
       console.log('searching type:', type);
       var searchFormat = this.currentStream.format
+      this.showingFormat = searchFormat
       console.log('searching format:',searchFormat);
       if (this.showingParams[searchFormat]){
         for(let [key, value] of Object.entries(this.showingParams[searchFormat])){
@@ -170,10 +172,10 @@ export default {
     // if the project or stream's format changed,
     // refresh the candidate
     refreshParameter(curV){
-      console.log(Object.keys(this.parameterObject).length);
-      if (curV != this.currentStream.format || this.isSubParam || !Object.keys(this.parameterObject).length){
+      if (curV != this.showingFormat || this.isSubParam || !Object.keys(this.parameterObject).length){
         this.parameterObject = this.showingParams[curV]
         this.isSubParam = false
+        this.showingFormat = curV
       }
     },
 
