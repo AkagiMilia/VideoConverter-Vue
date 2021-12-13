@@ -2,7 +2,7 @@
 node_modules
 /dist
 package-lock.json
-savedProject.json
+/public/data/savedProject.json
 
 # local env files
 .env.local
