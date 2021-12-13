@@ -64,10 +64,13 @@ import LowerCodeDisplay from './components/LowerCodeDisplay.vue'
 
 // random id generator
 import { nanoid } from 'nanoid'
+import fs from 'fs'
+import path from 'path'
 
 // tool to load data from Vuex
 import { mapMutations, mapState } from 'vuex'
 import { ipcRenderer } from 'electron'
+import { Col } from 'ant-design-vue'
 
 // platform detect
 const ffmpegWin = 'ffmpeg'
@@ -453,7 +456,7 @@ export default {
   // watchers, run something when the watched data changed
   watch:{
     projects:{
-
+      deep:true,
       handler(curVal, oldVal){
         console.log('Project Changed')
 
@@ -465,6 +468,8 @@ export default {
           this.currentProjectId = curVal[0].projectId
           this.isProjectEmpyt = false
         }
+
+        ipcRenderer.send('saveProjects', curVal)
       }
     },
 
@@ -540,12 +545,28 @@ export default {
       this.ffPaths = ffPaths
       this.isMac = isMac
     })
+    ipcRenderer.on('ffpmegError', (event, error, path)=>{
+      console.log('FFmpeg loaded Failed!', error)
+      console.log('Environment:', path);
+    })
     ipcRenderer.send('requireSystemInfo')
+
     
+    try {
+      const loadPath = path.join(__static, 'data/savedProject.json')
+      var file = fs.readFileSync(loadPath, 'utf8')
+      this.projects = JSON.parse(file)
+      fs.close()
+    } catch (error) {
+      console.log('Load Save Error:', error)
+    }
     // initialize informations
-    this.currentProjectId = this.projects[0].projectId
-    this.currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
-    this.currentStreamId = this.currentProject.parameters[0].streamId
+    if (Object.keys(this.projects).length){
+      this.currentProjectId = this.projects[0].projectId
+      this.currentProject = this.projects.find(project => project.projectId == this.currentProjectId)
+      this.currentStreamId = this.currentProject.parameters[0].streamId
+    }
+    
 
     // listeners of the event bus
     this.$bus.$on('updateParams', this.getParams)
@@ -563,7 +584,6 @@ export default {
     this.$bus.$on('addProject', this.addProject)
 
     // let the Vuex load parameter, encoder's informations from files
-    const path = require('path')
     const guidancePath = path.join(__static, 'data/Guidance.json')
     const encodersPath = path.join(__static, 'data/Encoders.json')
     const videoOptions = path.join(__static, 'data/VideoOptions.json')
@@ -580,8 +600,8 @@ export default {
       this.windowHeight = document.body.clientHeight
       this.windowWidth = document.body.clientWidth
     }
-
-  },
+  console.log('This Path:', process.cwd());
+  }
 }
 </script>
 

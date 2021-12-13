@@ -23,7 +23,7 @@
 </template>
 
 <script>
-const { spawn, exec } = require('child_process')
+const { spawn, exec, execFile } = require('child_process')
 const path = require('path')
 console.log('spawn is ', spawn)
 
@@ -114,8 +114,11 @@ export default {
         if (this.isMac)
           this.ffmpeg.kill('SIGCONT')
         else{
-          const cwd = path.join(__static, 'tools')
-          exec(`.\\pssuspend.exe -r ${this.ffmpeg.pid}`, { cwd }, (error, stdout, stderr)=>{
+          var cwd = path.join(__static, 'tools')
+          if (process.env.NODE_ENV == 'production')
+            cwd = cwd.replace('app.asar', 'app.asar.unpacked')
+          console.log('cwd:', cwd)
+          execFile(`pssuspend.exe`, ['-r',`${this.ffmpeg.pid}`], { cwd }, (error, stdout, stderr)=>{
             if (error)
               console.log('error:', error)
             if (stdout)
@@ -132,8 +135,11 @@ export default {
         if (this.isMac)
           this.ffmpeg.kill('SIGSTOP')
         else{
-          const cwd = path.join(__static, 'tools')
-          exec(`.\\pssuspend.exe ${this.ffmpeg.pid}`, { cwd }, (error, stdout, stderr)=>{
+          var cwd = path.join(__static, 'tools')
+          if (process.env.NODE_ENV == 'production')
+            cwd = cwd.replace('app.asar', 'app.asar.unpacked')
+          console.log('cwd:', cwd)
+          execFile(`pssuspend.exe`, [`${this.ffmpeg.pid}`], { cwd }, (error, stdout, stderr)=>{
             if (error)
               console.log('error:', error)
             if (stdout)

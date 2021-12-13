@@ -4,6 +4,8 @@ import { app, protocol, BrowserWindow, ipcMain, dialog} from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { exec } from 'child_process'
+import path from 'path'
+const fs = require('fs')
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -72,6 +74,7 @@ app.on('ready', async () => {
   ipcMain.on('requireSystemInfo',(event)=>{
     const currentSystem = process.platform
     const isMac = currentSystem === 'darwin'
+    const savePath = path.join(__static, 'data/savedProject.json')
     var ffPaths = {}
     var finished = 0
     if (isMac){
@@ -100,6 +103,7 @@ app.on('ready', async () => {
         exec(`${program} -h`, (error, stdout, stderr)=>{
           if (error){
             console.log('Error:', error)
+            event.reply('ffpmegError', error.toString(), process.env.PATH)
           }
           if (stdout){
             console.log('Result:')
@@ -128,6 +132,13 @@ app.on('ready', async () => {
         event.reply('fileAddressProject', result.filePath)
       else if (sender == 'newProject')
         event.reply('fileAddressNewProject', result.filePath)
+    })
+  })
+
+
+  ipcMain.on('saveProjects', (event, projects)=>{
+    fs.writeFile(path.join(__static, 'data/savedProject.json'), JSON.stringify(projects), (err)=>{
+      console.log('Saved');
     })
   })
 })
