@@ -139,7 +139,7 @@ app.on('ready', async () => {
 
 
   ipcMain.on('saveProjects', (event, projects)=>{
-    fs.writeFile(path.join(__static, 'data/savedProject.json'), JSON.stringify(projects), (err)=>{
+    fs.writeFile(path.join(__static, 'data/savedProject.json'), JSON.stringify(projects, null, 2), (err)=>{
       console.log('Saved');
     })
   })

@@ -18,7 +18,9 @@ module.exports = {
   },
   configureWebpack: {
     devServer: {
-      hot:false
+      hot: false,
+      inline: false,
+      liveReload: false
     }
   }
 }
