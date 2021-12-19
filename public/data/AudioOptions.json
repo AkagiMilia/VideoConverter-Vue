@@ -12,7 +12,7 @@
     "-q":{
         "valueType": "int",
         "streamSpecifier":true,
-        "explanation": "Set the audio quality (codec-specific, VBR)."
+        "explanation": "Set the audio quality (codec-specific, VBR). The higher the better quality."
     },
     "-ac":{
         "valueType": "int",

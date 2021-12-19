@@ -4,6 +4,11 @@
         "streamSpecifier":true,
         "explanation": "Set stream's bit rate e.g. -b:v 1500k."
     },
+    "-q":{
+        "valueType": "int",
+        "streamSpecifier":true,
+        "explanation": "Set the Video quality (codec-specific, VBR). The less the better quality."
+    },
     "-s":{
         "valueType": "string",
         "streamSpecifier":true,

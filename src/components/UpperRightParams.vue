@@ -15,8 +15,8 @@
           <span class="fs-5">Video Options</span> 
         </div>
       </li>
-      <li class="list-group-item list-group-item-action disabled" v-show="!displayList.videoOptions">
-        Hidding
+      <li class="list-group-item list-group-item-action text-secondary" v-show="!displayList.videoOptions" @click="triggerVisible('videoOptions')">
+        Folded
       </li>
       <li 
         class="list-group-item list-group-item-action border-0" 
@@ -47,8 +47,8 @@
           <span class="fs-5">Audio Options</span> 
         </div>
       </li>
-      <li class="list-group-item list-group-item-action disabled" v-show="!displayList.audioOptions">
-        Hidding
+      <li class="list-group-item list-group-item-action text-secondary" v-show="!displayList.audioOptions" @click="triggerVisible('audioOptions')">
+        Folded
       </li>
       <li 
         class="list-group-item list-group-item-action border-0" 
