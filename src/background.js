@@ -78,17 +78,20 @@ app.on('ready', async () => {
     var ffPaths = {}
     var finished = 0
     if (isMac){
-      process.env.PATH = process.env.PATH + `:/usr/local/bin:/opt/homebrew/bin/`
+      if (isDevelopment)
+        process.env.PATH = process.env.PATH + `:/usr/local/bin`
+      else
+        process.env.PATH = process.env.PATH + `:/usr/local/bin:/opt/homebrew/bin/`
       console.log(process.env);
       for (let program of ['ffmpeg', 'ffprobe', 'ffplay']){
-        exec(`where ${program}`, {shell:'/bin/zsh'}, (error, stdout, stderr)=>{
+        exec(`which ${program}`, {shell:'/bin/zsh'}, (error, stdout, stderr)=>{
           if (error){
             console.log(error)
             event.reply('ffpmegError', error.toString(), process.env)
           }
           if (stdout){
             console.log('Result:', stdout)
-            ffPaths[program] = stdout.replaceAll('\n','')
+            ffPaths[program] = stdout.replaceAll(/\S/g,'')
           }
           if (stderr)
             console.log('ResultError:', stderr)
