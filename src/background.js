@@ -91,7 +91,7 @@ app.on('ready', async () => {
           }
           if (stdout){
             console.log('Result:', stdout)
-            ffPaths[program] = stdout.replaceAll(/\S/g,'')
+            ffPaths[program] = stdout.replaceAll(/[^\S]/g,'')
           }
           if (stderr)
             console.log('ResultError:', stderr)
