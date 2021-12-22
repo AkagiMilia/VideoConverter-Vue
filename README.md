@@ -1,7 +1,31 @@
 # VideoConverter
+## Overview
+![screenshot](/src/assets/ScreenShot01.png)
+
+## Project Setup
+```
+yarn install
+# or
+npm install
+```
+
+## Compiles for Development
+```
+yarn electron:serve
+# or
+npm run electron:serve
+```
+
+## Build This Project
+```
+yarn electron:build
+# or
+npm run electron:build
+```
+
 ## Files System Tree
 ```
-XinzeYangConvertVideo
+videoConverter
 ├── README.md
 ├── babel.config.js
 ├── jsconfig.json
@@ -43,23 +67,5 @@ XinzeYangConvertVideo
 └── yarn.lock
 
 ```
-## Project setup
-```
-npm install
-```
-#### or 
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run electron:serve
-```
-#### or
-```
-yarn electron:serve
-```
-
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
