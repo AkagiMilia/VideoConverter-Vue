@@ -1,19 +1,6 @@
-import pandas as pd
 import numpy as np
-import sqlite3
 import os
 import json
-
-con = sqlite3.connect('src/data/database.db')
-cur = con.cursor()
-
-def load(path, index='name'):
-    dataFrame = pd.read_csv(path,index_col=index)
-    return dataFrame
-
-def toDB(csvPath, tableName, con):
-    df = load(csvPath)
-    df.to_sql(tableName, con, if_exists='replace')
 
 def getEncoders():
     result = os.popen('ffmpeg -encoders')
@@ -42,7 +29,6 @@ def getEncoders():
     encoders['audios'] = audios
     encoders['subtitles'] = subtitles
     return encoders
-
 
 
 def getGuidance(type='encoder', format='libx264'):
@@ -79,6 +65,7 @@ def getGuidance(type='encoder', format='libx264'):
     print(parameters) """
     return parameters
 
+
 def getPixFormats():
     result = os.popen('ffmpeg -pix_fmts')
     pixFormats = {}
@@ -92,7 +79,7 @@ def getPixFormats():
                 isStart = True
             continue
         pixFormats[line[1]] = {'FLAGS':line[0], 'NB_COMPONENTS':line[2], 'BITS_PER_PIXEL':line[3]}
-    return pixFormats   
+    return pixFormats
 
 def getSampleFormats():
     result = os.popen('ffmpeg -sample_fmts')
@@ -107,26 +94,26 @@ def getSampleFormats():
                 isStart = True
             continue
         sampleFormats[line[0]] = {'depth':line[1]}
-    return sampleFormats   
+    return sampleFormats
 
 
 if __name__ == '__main__':
 
-    """ 
     encoders = getEncoders()
-    fEncoder = open('public/Encoders.json','x',encoding='utf-8')
+    fEncoder = open('public/data/Encoders.json','x',encoding='utf-8')
     fEncoder.write(json.dumps(encoders, indent=4))
     fEncoder.close()
-    f = open('src/data/Guidance.json','x',encoding='utf-8')
+
+    f = open('public/data/Guidance.json','x',encoding='utf-8')
     guidance = {}
     for key, value in encoders.items():
         for encoder in value.keys():
             guidance[encoder] = getGuidance(format=encoder)
     guidance = json.dumps(guidance, indent=4)
     f.write(guidance)
-    f.close()  
-    """
+    f.close()
 
+    '''
     f = open('src/data/pixFormats.json','x',encoding='utf-8')
     pixFormats = json.dumps(getPixFormats(), indent=4)
     f.write(pixFormats)
@@ -136,4 +123,5 @@ if __name__ == '__main__':
     sampleFormats = json.dumps(getSampleFormats(), indent=4)
     f.write(sampleFormats)
     f.close()
+    '''
 

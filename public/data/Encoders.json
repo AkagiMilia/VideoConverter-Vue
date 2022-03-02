@@ -27,6 +27,9 @@
         "librav1e": {
             "explanation": "librav1e AV1 (codec av1)"
         },
+        "libsvtav1": {
+            "explanation": "SVT-AV1(Scalable Video Technology for AV1) encoder (codec av1)"
+        },
         "avrp": {
             "explanation": "Avid 1:1 10-bit RGB Packer"
         },
@@ -99,8 +102,20 @@
         "libx264rgb": {
             "explanation": "libx264 H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10 RGB (codec h264)"
         },
-        "h264_videotoolbox": {
-            "explanation": "VideoToolbox H.264 Encoder (codec h264)"
+        "h264_amf": {
+            "explanation": "AMD AMF H.264 Encoder (codec h264)"
+        },
+        "h264_nvenc": {
+            "explanation": "NVIDIA NVENC H.264 encoder (codec h264)"
+        },
+        "h264_qsv": {
+            "explanation": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10 (Intel Quick Sync Video acceleration) (codec h264)"
+        },
+        "nvenc": {
+            "explanation": "NVIDIA NVENC H.264 encoder (codec h264)"
+        },
+        "nvenc_h264": {
+            "explanation": "NVIDIA NVENC H.264 encoder (codec h264)"
         },
         "hap": {
             "explanation": "Vidvox Hap"
@@ -108,8 +123,17 @@
         "libx265": {
             "explanation": "libx265 H.265 / HEVC (codec hevc)"
         },
-        "hevc_videotoolbox": {
-            "explanation": "VideoToolbox H.265 Encoder (codec hevc)"
+        "nvenc_hevc": {
+            "explanation": "NVIDIA NVENC hevc encoder (codec hevc)"
+        },
+        "hevc_amf": {
+            "explanation": "AMD AMF HEVC encoder (codec hevc)"
+        },
+        "hevc_nvenc": {
+            "explanation": "NVIDIA NVENC hevc encoder (codec hevc)"
+        },
+        "hevc_qsv": {
+            "explanation": "HEVC (Intel Quick Sync Video acceleration) (codec hevc)"
         },
         "huffyuv": {
             "explanation": "Huffyuv / HuffYUV"
@@ -132,11 +156,17 @@
         "mjpeg": {
             "explanation": "MJPEG (Motion JPEG)"
         },
+        "mjpeg_qsv": {
+            "explanation": "MJPEG (Intel Quick Sync Video acceleration) (codec mjpeg)"
+        },
         "mpeg1video": {
             "explanation": "MPEG-1 video"
         },
         "mpeg2video": {
             "explanation": "MPEG-2 video"
+        },
+        "mpeg2_qsv": {
+            "explanation": "MPEG-2 video (Intel Quick Sync Video acceleration) (codec mpeg2video)"
         },
         "mpeg4": {
             "explanation": "MPEG-4 part 2"
@@ -255,6 +285,9 @@
         "libvpx-vp9": {
             "explanation": "libvpx VP9 (codec vp9)"
         },
+        "vp9_qsv": {
+            "explanation": "VP9 video (Intel Quick Sync Video acceleration) (codec vp9)"
+        },
         "libwebp_anim": {
             "explanation": "libwebp WebP image (codec webp)"
         },
@@ -295,9 +328,6 @@
     "audios": {
         "aac": {
             "explanation": "AAC (Advanced Audio Coding)"
-        },
-        "aac_at": {
-            "explanation": "aac (AudioToolbox) (codec aac)"
         },
         "ac3": {
             "explanation": "ATSC A/52A (AC-3)"
@@ -350,11 +380,11 @@
         "alac": {
             "explanation": "ALAC (Apple Lossless Audio Codec)"
         },
-        "alac_at": {
-            "explanation": "alac (AudioToolbox) (codec alac)"
-        },
         "libopencore_amrnb": {
             "explanation": "OpenCORE AMR-NB (Adaptive Multi-Rate Narrow-Band) (codec amr_nb)"
+        },
+        "libvo_amrwbenc": {
+            "explanation": "Android VisualOn AMR-WB (Adaptive Multi-Rate Wide-Band) (codec amr_wb)"
         },
         "aptx": {
             "explanation": "aptX (Audio Processing Technology for Bluetooth)"
@@ -377,8 +407,14 @@
         "g723_1": {
             "explanation": "G.723.1"
         },
-        "ilbc_at": {
-            "explanation": "ilbc (AudioToolbox) (codec ilbc)"
+        "libgsm": {
+            "explanation": "libgsm GSM (codec gsm)"
+        },
+        "libgsm_ms": {
+            "explanation": "libgsm GSM Microsoft variant (codec gsm_ms)"
+        },
+        "libilbc": {
+            "explanation": "iLBC (Internet Low Bitrate Codec) (codec ilbc)"
         },
         "mlp": {
             "explanation": "MLP (Meridian Lossless Packing)"
@@ -389,8 +425,14 @@
         "mp2fixed": {
             "explanation": "MP2 fixed point (MPEG audio layer 2) (codec mp2)"
         },
+        "libtwolame": {
+            "explanation": "libtwolame MP2 (MPEG audio layer 2) (codec mp2)"
+        },
         "libmp3lame": {
             "explanation": "libmp3lame MP3 (MPEG audio layer 3) (codec mp3)"
+        },
+        "libshine": {
+            "explanation": "libshine MP3 (MPEG audio layer 3) (codec mp3)"
         },
         "nellymoser": {
             "explanation": "Nellymoser Asao"
@@ -403,9 +445,6 @@
         },
         "pcm_alaw": {
             "explanation": "PCM A-law / G.711 A-law"
-        },
-        "pcm_alaw_at": {
-            "explanation": "pcm_alaw (AudioToolbox) (codec pcm_alaw)"
         },
         "pcm_dvd": {
             "explanation": "PCM signed 16|20|24-bit big-endian for DVD media"
@@ -424,9 +463,6 @@
         },
         "pcm_mulaw": {
             "explanation": "PCM mu-law / G.711 mu-law"
-        },
-        "pcm_mulaw_at": {
-            "explanation": "pcm_mulaw (AudioToolbox) (codec pcm_mulaw)"
         },
         "pcm_s16be": {
             "explanation": "PCM signed 16-bit big-endian"
