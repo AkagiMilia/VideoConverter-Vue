@@ -123,7 +123,7 @@
           infinite-scroll-disabled="busy" 
           infinite-scroll-distance="10" 
           class="divFileCard mt-3" 
-          :style="{height:localHeight-100+'px'}"
+          :style="{height:localHeight-130+'px'}"
         > 
           <input 
             type="file" 
@@ -160,8 +160,9 @@
                 </a-row>
                 <a-row>
                   <a-space>
-                    <span>File Params</span>
+                    <!-- <span>File Params</span> -->
                     <a-input 
+                      placeholder="File Param"
                       v-model="fileParams[file.fileId]" 
                       spellcheck="false"
                       @blur="fileParamExit(file.fileId, $event)"
@@ -172,8 +173,15 @@
             </a-collapse-panel>
           </a-collapse>
         </div>
-
+        
         <!-- Output location input -->
+
+        <a-input
+          placeholder="OutPutParam"
+          v-model="currentOutputParam"
+          spellcheck="false"
+        />
+
         <a-popover title="Output Info" trigger="hover">
           <template slot="content">
             <a-space direction="vertical" :size="0">
@@ -181,6 +189,7 @@
               <span><b>Output Path: </b>{{currentProject.outputFilePath}}</span>
             </a-space>
           </template>
+          
           <a-input-search
             placeholder="Output Path"
             v-model="currentOutputPath"
@@ -256,6 +265,14 @@ export default {
       },
       set(path){
         this.changeOutput(path)
+      }
+    },
+    currentOutputParam:{
+      get(){
+        return this.currentProject.outputParams.join(' ')
+      },
+      set(param){
+        this.changeOutParam(param)
       }
     }
   },
@@ -391,6 +408,12 @@ export default {
       console.log('outputFileName', outputFileName)
       this.$bus.$emit('changeOutput', path, outputFileName)
     },
+
+    changeOutParam(param){
+      var paramArr = param.split(' ')
+      this.$bus.$emit('changeOutParam', paramArr)
+    },
+
     loadMore(){
       this.busy = false
     }
