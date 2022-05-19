@@ -33,11 +33,17 @@
         "avrp": {
             "explanation": "Avid 1:1 10-bit RGB Packer"
         },
+        "libxavs2": {
+            "explanation": "libxavs2 AVS2-P2/IEEE1857.4 (codec avs2)"
+        },
         "avui": {
             "explanation": "Avid Meridien Uncompressed"
         },
         "ayuv": {
             "explanation": "Uncompressed packed MS 4:4:4:4"
+        },
+        "bitpacked": {
+            "explanation": "Bitpacked"
         },
         "bmp": {
             "explanation": "BMP (Windows and OS/2 bitmap)"
@@ -105,17 +111,14 @@
         "h264_amf": {
             "explanation": "AMD AMF H.264 Encoder (codec h264)"
         },
+        "h264_mf": {
+            "explanation": "H264 via MediaFoundation (codec h264)"
+        },
         "h264_nvenc": {
             "explanation": "NVIDIA NVENC H.264 encoder (codec h264)"
         },
         "h264_qsv": {
             "explanation": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10 (Intel Quick Sync Video acceleration) (codec h264)"
-        },
-        "nvenc": {
-            "explanation": "NVIDIA NVENC H.264 encoder (codec h264)"
-        },
-        "nvenc_h264": {
-            "explanation": "NVIDIA NVENC H.264 encoder (codec h264)"
         },
         "hap": {
             "explanation": "Vidvox Hap"
@@ -123,11 +126,11 @@
         "libx265": {
             "explanation": "libx265 H.265 / HEVC (codec hevc)"
         },
-        "nvenc_hevc": {
-            "explanation": "NVIDIA NVENC hevc encoder (codec hevc)"
-        },
         "hevc_amf": {
             "explanation": "AMD AMF HEVC encoder (codec hevc)"
+        },
+        "hevc_mf": {
+            "explanation": "HEVC via MediaFoundation (codec hevc)"
         },
         "hevc_nvenc": {
             "explanation": "NVIDIA NVENC hevc encoder (codec hevc)"
@@ -146,6 +149,9 @@
         },
         "jpegls": {
             "explanation": "JPEG-LS"
+        },
+        "libjxl": {
+            "explanation": "libjxl JPEG XL (codec jpegxl)"
         },
         "ljpeg": {
             "explanation": "Lossless JPEG"
@@ -243,6 +249,9 @@
         "sgi": {
             "explanation": "SGI image"
         },
+        "smc": {
+            "explanation": "QuickTime Graphics (SMC)"
+        },
         "snow": {
             "explanation": "Snow"
         },
@@ -278,6 +287,9 @@
         },
         "v410": {
             "explanation": "Uncompressed 4:4:4 10-bit"
+        },
+        "vbn": {
+            "explanation": "Vizrt Binary Image"
         },
         "libvpx": {
             "explanation": "libvpx VP8 (codec vp8)"
@@ -329,11 +341,17 @@
         "aac": {
             "explanation": "AAC (Advanced Audio Coding)"
         },
+        "aac_mf": {
+            "explanation": "AAC via MediaFoundation (codec aac)"
+        },
         "ac3": {
             "explanation": "ATSC A/52A (AC-3)"
         },
         "ac3_fixed": {
             "explanation": "ATSC A/52A (AC-3) (codec ac3)"
+        },
+        "ac3_mf": {
+            "explanation": "AC3 via MediaFoundation (codec ac3)"
         },
         "adpcm_adx": {
             "explanation": "SEGA CRI ADX ADPCM"
@@ -368,6 +386,9 @@
         "adpcm_ima_wav": {
             "explanation": "ADPCM IMA WAV"
         },
+        "adpcm_ima_ws": {
+            "explanation": "ADPCM IMA Westwood"
+        },
         "adpcm_ms": {
             "explanation": "ADPCM Microsoft"
         },
@@ -394,6 +415,9 @@
         },
         "comfortnoise": {
             "explanation": "RFC 3389 comfort noise generator"
+        },
+        "dfpwm": {
+            "explanation": "DFPWM1a audio"
         },
         "dca": {
             "explanation": "DCA (DTS Coherent Acoustics) (codec dts)"
@@ -434,6 +458,9 @@
         "libshine": {
             "explanation": "libshine MP3 (MPEG audio layer 3) (codec mp3)"
         },
+        "mp3_mf": {
+            "explanation": "MP3 via MediaFoundation (codec mp3)"
+        },
         "nellymoser": {
             "explanation": "Nellymoser Asao"
         },
@@ -445,6 +472,9 @@
         },
         "pcm_alaw": {
             "explanation": "PCM A-law / G.711 A-law"
+        },
+        "pcm_bluray": {
+            "explanation": "PCM signed 16|20|24-bit big-endian for Blu-ray media"
         },
         "pcm_dvd": {
             "explanation": "PCM signed 16|20|24-bit big-endian for DVD media"

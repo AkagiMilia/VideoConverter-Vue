@@ -111,22 +111,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -213,10 +197,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -233,27 +213,9 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
-        "-a53cc": {
-            "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
-        },
-        "-rc_strategy": {
-            "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
-        },
         "-pred": {
             "valueType": "int",
-            "explanation": "Prediction method (from 1 to 3) (default left)",
+            "explanation": "Deprecated, does nothing (from 1 to 3) (default left)",
             "subValues": {
                 "left": {
                     "value": "1",
@@ -282,6 +244,30 @@
                     "explanation": null
                 }
             }
+        },
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
+        },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
+        "-a53cc": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default true)"
+        },
+        "-b_strategy": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 3) (default 0)"
         }
     },
     "apng": {
@@ -479,6 +465,10 @@
                 }
             }
         },
+        "-still-picture": {
+            "valueType": "boolean",
+            "explanation": "Encode in single frame mode (typically used for still AVIF images). (default false)"
+        },
         "-enable-rect-partitions": {
             "valueType": "boolean",
             "explanation": "Enable rectangular partitions (default auto)"
@@ -625,7 +615,7 @@
     "libsvtav1": {
         "-hielevel": {
             "valueType": "int",
-            "explanation": "Hierarchical prediction levels setting (from 3 to 4) (default 4level)",
+            "explanation": "Hierarchical prediction levels setting (Deprecated, use svtav1-params) (from 3 to 4) (default 4level)",
             "subValues": {
                 "3level": {
                     "value": "3",
@@ -639,15 +629,11 @@
         },
         "-la_depth": {
             "valueType": "int",
-            "explanation": "Look ahead distance [0, 120] (from -1 to 120) (default -1)"
-        },
-        "-preset": {
-            "valueType": "int",
-            "explanation": "Encoding preset [0, 8] (from 0 to 8) (default 8)"
+            "explanation": "Look ahead distance [0, 120] (Deprecated, use svtav1-params) (from -1 to 120) (default -1)"
         },
         "-tier": {
             "valueType": "int",
-            "explanation": "Set operating point tier (from 0 to 1) (default main)",
+            "explanation": "Set operating point tier (Deprecated, use svtav1-params) (from 0 to 1) (default main)",
             "subValues": {
                 "main": {
                     "value": "0",
@@ -659,44 +645,73 @@
                 }
             }
         },
-        "-rc": {
+        "-preset": {
             "valueType": "int",
-            "explanation": "Bit rate control mode (from 0 to 3) (default cqp)",
-            "subValues": {
-                "cqp": {
-                    "value": "0",
-                    "explanation": "Constant quantizer"
-                },
-                "vbr": {
-                    "value": "1",
-                    "explanation": "Variable Bit Rate, use a target bitrate for the entire stream"
-                },
-                "cvbr": {
-                    "value": "2",
-                    "explanation": "Constrained Variable Bit Rate, use a target bitrate for each GOP"
-                }
-            }
+            "explanation": "Encoding preset (from -1 to 13) (default -1)"
+        },
+        "-crf": {
+            "valueType": "int",
+            "explanation": "Constant Rate Factor value (from 0 to 63) (default 0)"
         },
         "-qp": {
             "valueType": "int",
-            "explanation": "Quantizer to use with cqp rate control mode (from 0 to 63) (default 50)"
+            "explanation": "Initial Quantizer level value (from 0 to 63) (default 0)"
         },
         "-sc_detection": {
             "valueType": "boolean",
-            "explanation": "Scene change detection (default false)"
+            "explanation": "Scene change detection (Deprecated, use svtav1-params) (default false)"
         },
         "-tile_columns": {
             "valueType": "int",
-            "explanation": "Log2 of number of tile columns to use (from 0 to 4) (default 0)"
+            "explanation": "Log2 of number of tile columns to use (Deprecated, use svtav1-params) (from 0 to 4) (default 0)"
         },
         "-tile_rows": {
             "valueType": "int",
-            "explanation": "Log2 of number of tile rows to use (from 0 to 6) (default 0)"
+            "explanation": "Log2 of number of tile rows to use (Deprecated, use svtav1-params) (from 0 to 6) (default 0)"
+        },
+        "-svtav1-params": {
+            "valueType": "dictionary",
+            "explanation": "Set the SVT-AV1 configuration using a :-separated list of key=value parameters"
         }
     },
     "avrp": {},
+    "libxavs2": {
+        "-lcu_row_threads": {
+            "valueType": "int",
+            "explanation": "number of parallel threads for rows (from 0 to INT_MAX) (default 0)"
+        },
+        "-initial_qp": {
+            "valueType": "int",
+            "explanation": "Quantization initial parameter (from 1 to 63) (default 34)"
+        },
+        "-qp": {
+            "valueType": "int",
+            "explanation": "Quantization parameter (from 1 to 63) (default 34)"
+        },
+        "-max_qp": {
+            "valueType": "int",
+            "explanation": "max qp for rate control (from 0 to 63) (default 55)"
+        },
+        "-min_qp": {
+            "valueType": "int",
+            "explanation": "min qp for rate control (from 0 to 63) (default 20)"
+        },
+        "-speed_level": {
+            "valueType": "int",
+            "explanation": "Speed level, higher is better but slower (from 0 to 9) (default 0)"
+        },
+        "-log_level": {
+            "valueType": "int",
+            "explanation": "log level: -1: none, 0: error, 1: warning, 2: info, 3: debug (from -1 to 3) (default 0)"
+        },
+        "-xavs2-params": {
+            "valueType": "dictionary",
+            "explanation": "set the xavs2 configuration using a :-separated list of key=value parameters"
+        }
+    },
     "avui": {},
     "ayuv": {},
+    "bitpacked": {},
     "bmp": {},
     "cfhd": {
         "-quality": {
@@ -968,7 +983,7 @@
     "ffvhuff": {
         "-non_deterministic": {
             "valueType": "boolean",
-            "explanation": "Allow multithreading for e.g. context=1 at the expense of determinism (default true)"
+            "explanation": "Allow multithreading for e.g. context=1 at the expense of determinism (default false)"
         },
         "-pred": {
             "valueType": "int",
@@ -1105,22 +1120,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -1207,10 +1206,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -1227,23 +1222,29 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
         "-a53cc": {
             "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
+            "explanation": "Deprecated, does nothing (default true)"
         },
-        "-rc_strategy": {
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
+        },
+        "-b_strategy": {
             "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+            "explanation": "Deprecated, does nothing (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 3) (default 0)"
         }
     },
     "gif": {
@@ -1379,22 +1380,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -1481,10 +1466,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -1501,23 +1482,29 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
         "-a53cc": {
             "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
+            "explanation": "Deprecated, does nothing (default true)"
         },
-        "-rc_strategy": {
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
+        },
+        "-b_strategy": {
             "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+            "explanation": "Deprecated, does nothing (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 3) (default 0)"
         }
     },
     "h263": {
@@ -1637,22 +1624,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -1739,10 +1710,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -1759,23 +1726,29 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
         "-a53cc": {
             "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
+            "explanation": "Deprecated, does nothing (default true)"
         },
-        "-rc_strategy": {
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
+        },
+        "-b_strategy": {
             "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+            "explanation": "Deprecated, does nothing (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 3) (default 0)"
         }
     },
     "h263p": {
@@ -1903,22 +1876,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -2005,10 +1962,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -2025,23 +1978,29 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
         "-a53cc": {
             "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
+            "explanation": "Deprecated, does nothing (default true)"
         },
-        "-rc_strategy": {
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
+        },
+        "-b_strategy": {
             "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+            "explanation": "Deprecated, does nothing (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 3) (default 0)"
         }
     },
     "libx264": {
@@ -2269,7 +2228,7 @@
         },
         "-avcintra-class": {
             "valueType": "int",
-            "explanation": "AVC-Intra class 50/100/200 (from -1 to 200) (default -1)"
+            "explanation": "AVC-Intra class 50/100/200/300/480 (from -1 to 480) (default -1)"
         },
         "-me_method": {
             "valueType": "int",
@@ -2368,6 +2327,10 @@
         "-noise_reduction": {
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default -1)"
+        },
+        "-udu_sei": {
+            "valueType": "boolean",
+            "explanation": "Use user data unregistered SEI if available (default false)"
         },
         "-x264-params": {
             "valueType": "dictionary",
@@ -2599,7 +2562,7 @@
         },
         "-avcintra-class": {
             "valueType": "int",
-            "explanation": "AVC-Intra class 50/100/200 (from -1 to 200) (default -1)"
+            "explanation": "AVC-Intra class 50/100/200/300/480 (from -1 to 480) (default -1)"
         },
         "-me_method": {
             "valueType": "int",
@@ -2698,6 +2661,10 @@
         "-noise_reduction": {
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default -1)"
+        },
+        "-udu_sei": {
+            "valueType": "boolean",
+            "explanation": "Use user data unregistered SEI if available (default false)"
         },
         "-x264-params": {
             "valueType": "dictionary",
@@ -2964,6 +2931,88 @@
         "-log_to_dbg": {
             "valueType": "boolean",
             "explanation": "Enable AMF logging to debug output (default false)"
+        }
+    },
+    "h264_mf": {
+        "-rate_control": {
+            "valueType": "int",
+            "explanation": "Select rate control mode (from -1 to INT_MAX) (default default)",
+            "subValues": {
+                "default": {
+                    "value": "-1",
+                    "explanation": "Default mode"
+                },
+                "cbr": {
+                    "value": "0",
+                    "explanation": "CBR mode"
+                },
+                "pc_vbr": {
+                    "value": "1",
+                    "explanation": "Peak constrained VBR mode"
+                },
+                "u_vbr": {
+                    "value": "2",
+                    "explanation": "Unconstrained VBR mode"
+                },
+                "quality": {
+                    "value": "3",
+                    "explanation": "Quality mode"
+                },
+                "ld_vbr": {
+                    "value": "4",
+                    "explanation": "Low delay VBR mode"
+                },
+                "g_vbr": {
+                    "value": "5",
+                    "explanation": "Global VBR mode"
+                },
+                "gld_vbr": {
+                    "value": "6",
+                    "explanation": "Global low delay VBR mode"
+                }
+            }
+        },
+        "-scenario": {
+            "valueType": "int",
+            "explanation": "Select usage scenario (from -1 to INT_MAX) (default default)",
+            "subValues": {
+                "default": {
+                    "value": "-1",
+                    "explanation": "Default scenario"
+                },
+                "display_remoting": {
+                    "value": "1",
+                    "explanation": "Display remoting"
+                },
+                "video_conference": {
+                    "value": "2",
+                    "explanation": "Video conference"
+                },
+                "archive": {
+                    "value": "3",
+                    "explanation": "Archive"
+                },
+                "live_streaming": {
+                    "value": "4",
+                    "explanation": "Live streaming"
+                },
+                "camera_record": {
+                    "value": "5",
+                    "explanation": "Camera record"
+                },
+                "display_remoting_with_feature_map": {
+                    "value": "6",
+                    "explanation": "Display remoting with feature map"
+                }
+            }
+        },
+        "-quality": {
+            "valueType": "int",
+            "explanation": "Quality (from -1 to 100) (default -1)"
+        },
+        "-hw_encoding": {
+            "valueType": "boolean",
+            "explanation": "Force hardware encoding (default false)"
         }
     },
     "h264_nvenc": {
@@ -3359,6 +3408,14 @@
             "valueType": "int",
             "explanation": "Constant quantization parameter rate control method (from -1 to 51) (default -1)"
         },
+        "-qp_cb_offset": {
+            "valueType": "int",
+            "explanation": "Quantization parameter offset for cb channel (from -12 to 12) (default 0)"
+        },
+        "-qp_cr_offset": {
+            "valueType": "int",
+            "explanation": "Quantization parameter offset for cr channel (from -12 to 12) (default 0)"
+        },
         "-weighted_pred": {
             "valueType": "int",
             "explanation": "Set 1 to enable weighted prediction (from 0 to 1) (default 0)"
@@ -3440,6 +3497,26 @@
         "-ldkfs": {
             "valueType": "int",
             "explanation": "Low delay key frame scale; Specifies the Scene Change frame size increase allowed in case of single frame VBV and CBR (from 0 to 255) (default 0)"
+        },
+        "-extra_sei": {
+            "valueType": "boolean",
+            "explanation": "Pass on extra SEI data (e.g. a53 cc) to be included in the bitstream (default true)"
+        },
+        "-udu_sei": {
+            "valueType": "boolean",
+            "explanation": "Pass on user data unregistered SEI if available (default false)"
+        },
+        "-intra-refresh": {
+            "valueType": "boolean",
+            "explanation": "Use Periodic Intra Refresh instead of IDR frames (default false)"
+        },
+        "-single-slice-intra-refresh": {
+            "valueType": "boolean",
+            "explanation": "Use single slice intra refresh (default false)"
+        },
+        "-constrained-encoding": {
+            "valueType": "boolean",
+            "explanation": "Enable constrainedFrame encoding where each slice in the constrained picture is independent of other slices (default false)"
         }
     },
     "h264_qsv": {
@@ -3449,11 +3526,11 @@
         },
         "-avbr_accuracy": {
             "valueType": "int",
-            "explanation": "Accuracy of the AVBR ratecontrol (from 0 to INT_MAX) (default 0)"
+            "explanation": "Accuracy of the AVBR ratecontrol (unit of tenth of percent) (from 1 to 65535) (default 1)"
         },
         "-avbr_convergence": {
             "valueType": "int",
-            "explanation": "Convergence of the AVBR ratecontrol (from 0 to INT_MAX) (default 0)"
+            "explanation": "Convergence of the AVBR ratecontrol (unit of 100 frames) (from 1 to 65535) (default 1)"
         },
         "-preset": {
             "valueType": "int",
@@ -3495,11 +3572,19 @@
         },
         "-max_frame_size": {
             "valueType": "int",
-            "explanation": "Maximum encoded frame size in bytes (from -1 to 65535) (default -1)"
+            "explanation": "Maximum encoded frame size in bytes (from -1 to INT_MAX) (default -1)"
+        },
+        "-max_frame_size_i": {
+            "valueType": "int",
+            "explanation": "Maximum encoded I frame size in bytes (from -1 to INT_MAX) (default -1)"
+        },
+        "-max_frame_size_p": {
+            "valueType": "int",
+            "explanation": "Maximum encoded P frame size in bytes (from -1 to INT_MAX) (default -1)"
         },
         "-max_slice_size": {
             "valueType": "int",
-            "explanation": "Maximum encoded slice size in bytes (from -1 to 65535) (default -1)"
+            "explanation": "Maximum encoded slice size in bytes (from -1 to INT_MAX) (default -1)"
         },
         "-bitrate_limit": {
             "valueType": "int",
@@ -3521,6 +3606,10 @@
             "valueType": "int",
             "explanation": "Adaptive B-frame placement (from -1 to 1) (default -1)"
         },
+        "-p_strategy": {
+            "valueType": "int",
+            "explanation": "Enable P-pyramid: 0-default 1-simple 2-pyramid(bf need to be set to 0). (from 0 to 2) (default 0)"
+        },
         "-b_strategy": {
             "valueType": "int",
             "explanation": "Strategy to choose between I/P/B-frames (from -1 to 1) (default -1)"
@@ -3531,23 +3620,31 @@
         },
         "-low_power": {
             "valueType": "boolean",
-            "explanation": "enable low power mode(experimental: many limitations by mfx version, BRC modes, etc.) (default false)"
+            "explanation": "enable low power mode(experimental: many limitations by mfx version, BRC modes, etc.) (default auto)"
+        },
+        "-dblk_idc": {
+            "valueType": "int",
+            "explanation": "This option disable deblocking. It has value in range 0~2. (from 0 to 2) (default 0)"
+        },
+        "-low_delay_brc": {
+            "valueType": "boolean",
+            "explanation": "Allow to strictly obey avg frame size (default auto)"
         },
         "-cavlc": {
-            "valueType": "int",
-            "explanation": "Enable CAVLC (from 0 to 1) (default 0)"
+            "valueType": "boolean",
+            "explanation": "Enable CAVLC (default false)"
         },
         "-vcm": {
-            "valueType": "int",
-            "explanation": "Use the video conferencing mode ratecontrol (from 0 to 1) (default 0)"
+            "valueType": "boolean",
+            "explanation": "Use the video conferencing mode ratecontrol (default false)"
         },
         "-idr_interval": {
             "valueType": "int",
             "explanation": "Distance (in I-frames) between IDR frames (from 0 to INT_MAX) (default 0)"
         },
         "-pic_timing_sei": {
-            "valueType": "int",
-            "explanation": "Insert picture timing SEI with pic_struct_syntax element (from 0 to 1) (default 1)"
+            "valueType": "boolean",
+            "explanation": "Insert picture timing SEI with pic_struct_syntax element (default true)"
         },
         "-single_sei_nal_unit": {
             "valueType": "int",
@@ -3558,8 +3655,8 @@
             "explanation": "Maximum number of frames buffered in the DPB (from 0 to 65535) (default 0)"
         },
         "-look_ahead": {
-            "valueType": "int",
-            "explanation": "Use VBR algorithm with look ahead (from 0 to 1) (default 0)"
+            "valueType": "boolean",
+            "explanation": "Use VBR algorithm with look ahead (default false)"
         },
         "-look_ahead_depth": {
             "valueType": "int",
@@ -3593,7 +3690,7 @@
         },
         "-int_ref_type": {
             "valueType": "int",
-            "explanation": "Intra refresh type (from -1 to 65535) (default -1)",
+            "explanation": "Intra refresh type. B frames should be set to 0. (from -1 to 65535) (default -1)",
             "subValues": {
                 "none": {
                     "value": "0",
@@ -3601,6 +3698,10 @@
                 },
                 "vertical": {
                     "value": "1",
+                    "explanation": null
+                },
+                "horizontal": {
+                    "value": "2",
                     "explanation": null
                 }
             }
@@ -3616,6 +3717,10 @@
         "-recovery_point_sei": {
             "valueType": "int",
             "explanation": "Insert recovery point SEI messages (from -1 to 1) (default -1)"
+        },
+        "-int_ref_cycle_dist": {
+            "valueType": "int",
+            "explanation": "Distance between the beginnings of the intra-refresh cycles in frames (from -1 to 32767) (default -1)"
         },
         "-profile": {
             "valueType": "int",
@@ -3640,968 +3745,16 @@
             }
         },
         "-a53cc": {
-            "valueType": "int",
-            "explanation": "Use A53 Closed Captions (if available) (from 0 to 1) (default 1)"
+            "valueType": "boolean",
+            "explanation": "Use A53 Closed Captions (if available) (default true)"
         },
         "-aud": {
-            "valueType": "int",
-            "explanation": "Insert the Access Unit Delimiter NAL (from 0 to 1) (default 0)"
+            "valueType": "boolean",
+            "explanation": "Insert the Access Unit Delimiter NAL (default false)"
         },
         "-repeat_pps": {
             "valueType": "boolean",
             "explanation": "repeat pps for every frame (default false)"
-        }
-    },
-    "nvenc": {
-        "-preset": {
-            "valueType": "int",
-            "explanation": "Set the encoding preset (from 0 to 18) (default p4)",
-            "subValues": {
-                "default": {
-                    "value": "0",
-                    "explanation": null
-                },
-                "slow": {
-                    "value": "1",
-                    "explanation": "hq 2 passes"
-                },
-                "medium": {
-                    "value": "2",
-                    "explanation": "hq 1 pass"
-                },
-                "fast": {
-                    "value": "3",
-                    "explanation": "hp 1 pass"
-                },
-                "hp": {
-                    "value": "4",
-                    "explanation": null
-                },
-                "hq": {
-                    "value": "5",
-                    "explanation": null
-                },
-                "bd": {
-                    "value": "6",
-                    "explanation": null
-                },
-                "ll": {
-                    "value": "7",
-                    "explanation": "low latency"
-                },
-                "llhq": {
-                    "value": "8",
-                    "explanation": "low latency hq"
-                },
-                "llhp": {
-                    "value": "9",
-                    "explanation": "low latency hp"
-                },
-                "lossless": {
-                    "value": "10",
-                    "explanation": null
-                },
-                "losslesshp": {
-                    "value": "11",
-                    "explanation": null
-                },
-                "p1": {
-                    "value": "12",
-                    "explanation": "fastest (lowest quality)"
-                },
-                "p2": {
-                    "value": "13",
-                    "explanation": "faster (lower quality)"
-                },
-                "p3": {
-                    "value": "14",
-                    "explanation": "fast (low quality)"
-                },
-                "p4": {
-                    "value": "15",
-                    "explanation": "medium (default)"
-                },
-                "p5": {
-                    "value": "16",
-                    "explanation": "slow (good quality)"
-                },
-                "p6": {
-                    "value": "17",
-                    "explanation": "slower (better quality)"
-                },
-                "p7": {
-                    "value": "18",
-                    "explanation": "slowest (best quality)"
-                }
-            }
-        },
-        "-tune": {
-            "valueType": "int",
-            "explanation": "Set the encoding tuning info (from 1 to 4) (default hq)",
-            "subValues": {
-                "hq": {
-                    "value": "1",
-                    "explanation": "High quality"
-                },
-                "ll": {
-                    "value": "2",
-                    "explanation": "Low latency"
-                },
-                "ull": {
-                    "value": "3",
-                    "explanation": "Ultra low latency"
-                },
-                "lossless": {
-                    "value": "4",
-                    "explanation": "Lossless"
-                }
-            }
-        },
-        "-profile": {
-            "valueType": "int",
-            "explanation": "Set the encoding profile (from 0 to 3) (default main)",
-            "subValues": {
-                "baseline": {
-                    "value": "0",
-                    "explanation": null
-                },
-                "main": {
-                    "value": "1",
-                    "explanation": null
-                },
-                "high": {
-                    "value": "2",
-                    "explanation": null
-                },
-                "high444p": {
-                    "value": "3",
-                    "explanation": null
-                }
-            }
-        },
-        "-level": {
-            "valueType": "int",
-            "explanation": "Set the encoding level restriction (from 0 to 62) (default auto)",
-            "subValues": {
-                "auto": {
-                    "value": "0",
-                    "explanation": null
-                },
-                "1": {
-                    "value": "10",
-                    "explanation": null
-                },
-                "1.0": {
-                    "value": "10",
-                    "explanation": null
-                },
-                "1b": {
-                    "value": "9",
-                    "explanation": null
-                },
-                "1.0b": {
-                    "value": "9",
-                    "explanation": null
-                },
-                "1.1": {
-                    "value": "11",
-                    "explanation": null
-                },
-                "1.2": {
-                    "value": "12",
-                    "explanation": null
-                },
-                "1.3": {
-                    "value": "13",
-                    "explanation": null
-                },
-                "2": {
-                    "value": "20",
-                    "explanation": null
-                },
-                "2.0": {
-                    "value": "20",
-                    "explanation": null
-                },
-                "2.1": {
-                    "value": "21",
-                    "explanation": null
-                },
-                "2.2": {
-                    "value": "22",
-                    "explanation": null
-                },
-                "3": {
-                    "value": "30",
-                    "explanation": null
-                },
-                "3.0": {
-                    "value": "30",
-                    "explanation": null
-                },
-                "3.1": {
-                    "value": "31",
-                    "explanation": null
-                },
-                "3.2": {
-                    "value": "32",
-                    "explanation": null
-                },
-                "4": {
-                    "value": "40",
-                    "explanation": null
-                },
-                "4.0": {
-                    "value": "40",
-                    "explanation": null
-                },
-                "4.1": {
-                    "value": "41",
-                    "explanation": null
-                },
-                "4.2": {
-                    "value": "42",
-                    "explanation": null
-                },
-                "5": {
-                    "value": "50",
-                    "explanation": null
-                },
-                "5.0": {
-                    "value": "50",
-                    "explanation": null
-                },
-                "5.1": {
-                    "value": "51",
-                    "explanation": null
-                },
-                "5.2": {
-                    "value": "52",
-                    "explanation": null
-                },
-                "6.0": {
-                    "value": "60",
-                    "explanation": null
-                },
-                "6.1": {
-                    "value": "61",
-                    "explanation": null
-                },
-                "6.2": {
-                    "value": "62",
-                    "explanation": null
-                }
-            }
-        },
-        "-rc": {
-            "valueType": "int",
-            "explanation": "Override the preset rate-control (from -1 to INT_MAX) (default -1)",
-            "subValues": {
-                "constqp": {
-                    "value": "0",
-                    "explanation": "Constant QP mode"
-                },
-                "vbr": {
-                    "value": "1",
-                    "explanation": "Variable bitrate mode"
-                },
-                "cbr": {
-                    "value": "2",
-                    "explanation": "Constant bitrate mode"
-                },
-                "vbr_minqp": {
-                    "value": "8388612",
-                    "explanation": "Variable bitrate mode with MinQP (deprecated)"
-                },
-                "ll_2pass_quality": {
-                    "value": "8388616",
-                    "explanation": "Multi-pass optimized for image quality (deprecated)"
-                },
-                "ll_2pass_size": {
-                    "value": "8388624",
-                    "explanation": "Multi-pass optimized for constant frame size (deprecated)"
-                },
-                "vbr_2pass": {
-                    "value": "8388640",
-                    "explanation": "Multi-pass variable bitrate mode (deprecated)"
-                },
-                "cbr_ld_hq": {
-                    "value": "8388616",
-                    "explanation": "Constant bitrate low delay high quality mode"
-                },
-                "cbr_hq": {
-                    "value": "8388624",
-                    "explanation": "Constant bitrate high quality mode"
-                },
-                "vbr_hq": {
-                    "value": "8388640",
-                    "explanation": "Variable bitrate high quality mode"
-                }
-            }
-        },
-        "-rc-lookahead": {
-            "valueType": "int",
-            "explanation": "Number of frames to look ahead for rate-control (from 0 to INT_MAX) (default 0)"
-        },
-        "-surfaces": {
-            "valueType": "int",
-            "explanation": "Number of concurrent surfaces (from 0 to 64) (default 0)"
-        },
-        "-cbr": {
-            "valueType": "boolean",
-            "explanation": "Use cbr encoding mode (default false)"
-        },
-        "-2pass": {
-            "valueType": "boolean",
-            "explanation": "Use 2pass encoding mode (default auto)"
-        },
-        "-gpu": {
-            "valueType": "int",
-            "explanation": "Selects which NVENC capable GPU to use. First GPU is 0, second is 1, and so on. (from -2 to INT_MAX) (default any)",
-            "subValues": {
-                "any": {
-                    "value": "-1",
-                    "explanation": "Pick the first device available"
-                },
-                "list": {
-                    "value": "-2",
-                    "explanation": "List the available devices"
-                }
-            }
-        },
-        "-delay": {
-            "valueType": "int",
-            "explanation": "Delay frame output by the given amount of frames (from 0 to INT_MAX) (default INT_MAX)"
-        },
-        "-no-scenecut": {
-            "valueType": "boolean",
-            "explanation": "When lookahead is enabled, set this to 1 to disable adaptive I-frame insertion at scene cuts (default false)"
-        },
-        "-forced-idr": {
-            "valueType": "boolean",
-            "explanation": "If forcing keyframes, force them as IDR frames. (default false)"
-        },
-        "-b_adapt": {
-            "valueType": "boolean",
-            "explanation": "When lookahead is enabled, set this to 0 to disable adaptive B-frame decision (default true)"
-        },
-        "-spatial-aq": {
-            "valueType": "boolean",
-            "explanation": "set to 1 to enable Spatial AQ (default false)"
-        },
-        "-spatial_aq": {
-            "valueType": "boolean",
-            "explanation": "set to 1 to enable Spatial AQ (default false)"
-        },
-        "-temporal-aq": {
-            "valueType": "boolean",
-            "explanation": "set to 1 to enable Temporal AQ (default false)"
-        },
-        "-temporal_aq": {
-            "valueType": "boolean",
-            "explanation": "set to 1 to enable Temporal AQ (default false)"
-        },
-        "-zerolatency": {
-            "valueType": "boolean",
-            "explanation": "Set 1 to indicate zero latency operation (no reordering delay) (default false)"
-        },
-        "-nonref_p": {
-            "valueType": "boolean",
-            "explanation": "Set this to 1 to enable automatic insertion of non-reference P-frames (default false)"
-        },
-        "-strict_gop": {
-            "valueType": "boolean",
-            "explanation": "Set 1 to minimize GOP-to-GOP rate fluctuations (default false)"
-        },
-        "-aq-strength": {
-            "valueType": "int",
-            "explanation": "When Spatial AQ is enabled, this field is used to specify AQ strength. AQ strength scale is from 1 (low) - 15 (aggressive) (from 1 to 15) (default 8)"
-        },
-        "-cq": {
-            "valueType": "float",
-            "explanation": "Set target quality level (0 to 51, 0 means automatic) for constant quality mode in VBR rate control (from 0 to 51) (default 0)"
-        },
-        "-aud": {
-            "valueType": "boolean",
-            "explanation": "Use access unit delimiters (default false)"
-        },
-        "-bluray-compat": {
-            "valueType": "boolean",
-            "explanation": "Bluray compatibility workarounds (default false)"
-        },
-        "-init_qpP": {
-            "valueType": "int",
-            "explanation": "Initial QP value for P frame (from -1 to 51) (default -1)"
-        },
-        "-init_qpB": {
-            "valueType": "int",
-            "explanation": "Initial QP value for B frame (from -1 to 51) (default -1)"
-        },
-        "-init_qpI": {
-            "valueType": "int",
-            "explanation": "Initial QP value for I frame (from -1 to 51) (default -1)"
-        },
-        "-qp": {
-            "valueType": "int",
-            "explanation": "Constant quantization parameter rate control method (from -1 to 51) (default -1)"
-        },
-        "-weighted_pred": {
-            "valueType": "int",
-            "explanation": "Set 1 to enable weighted prediction (from 0 to 1) (default 0)"
-        },
-        "-coder": {
-            "valueType": "int",
-            "explanation": "Coder type (from -1 to 2) (default default)",
-            "subValues": {
-                "default": {
-                    "value": "-1",
-                    "explanation": null
-                },
-                "auto": {
-                    "value": "0",
-                    "explanation": null
-                },
-                "cabac": {
-                    "value": "1",
-                    "explanation": null
-                },
-                "cavlc": {
-                    "value": "2",
-                    "explanation": null
-                },
-                "ac": {
-                    "value": "1",
-                    "explanation": null
-                },
-                "vlc": {
-                    "value": "2",
-                    "explanation": null
-                }
-            }
-        },
-        "-b_ref_mode": {
-            "valueType": "int",
-            "explanation": "Use B frames as references (from 0 to 2) (default disabled)",
-            "subValues": {
-                "disabled": {
-                    "value": "0",
-                    "explanation": "B frames will not be used for reference"
-                },
-                "each": {
-                    "value": "1",
-                    "explanation": "Each B frame will be used for reference"
-                },
-                "middle": {
-                    "value": "2",
-                    "explanation": "Only (number of B frames)/2 will be used for reference"
-                }
-            }
-        },
-        "-a53cc": {
-            "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
-        },
-        "-dpb_size": {
-            "valueType": "int",
-            "explanation": "Specifies the DPB size used for encoding (0 means automatic) (from 0 to INT_MAX) (default 0)"
-        },
-        "-multipass": {
-            "valueType": "int",
-            "explanation": "Set the multipass encoding (from 0 to 2) (default disabled)",
-            "subValues": {
-                "disabled": {
-                    "value": "0",
-                    "explanation": "Single Pass"
-                },
-                "qres": {
-                    "value": "1",
-                    "explanation": "Two Pass encoding is enabled where first Pass is quarter resolution"
-                },
-                "fullres": {
-                    "value": "2",
-                    "explanation": "Two Pass encoding is enabled where first Pass is full resolution"
-                }
-            }
-        },
-        "-ldkfs": {
-            "valueType": "int",
-            "explanation": "Low delay key frame scale; Specifies the Scene Change frame size increase allowed in case of single frame VBV and CBR (from 0 to 255) (default 0)"
-        }
-    },
-    "nvenc_h264": {
-        "-preset": {
-            "valueType": "int",
-            "explanation": "Set the encoding preset (from 0 to 18) (default p4)",
-            "subValues": {
-                "default": {
-                    "value": "0",
-                    "explanation": null
-                },
-                "slow": {
-                    "value": "1",
-                    "explanation": "hq 2 passes"
-                },
-                "medium": {
-                    "value": "2",
-                    "explanation": "hq 1 pass"
-                },
-                "fast": {
-                    "value": "3",
-                    "explanation": "hp 1 pass"
-                },
-                "hp": {
-                    "value": "4",
-                    "explanation": null
-                },
-                "hq": {
-                    "value": "5",
-                    "explanation": null
-                },
-                "bd": {
-                    "value": "6",
-                    "explanation": null
-                },
-                "ll": {
-                    "value": "7",
-                    "explanation": "low latency"
-                },
-                "llhq": {
-                    "value": "8",
-                    "explanation": "low latency hq"
-                },
-                "llhp": {
-                    "value": "9",
-                    "explanation": "low latency hp"
-                },
-                "lossless": {
-                    "value": "10",
-                    "explanation": null
-                },
-                "losslesshp": {
-                    "value": "11",
-                    "explanation": null
-                },
-                "p1": {
-                    "value": "12",
-                    "explanation": "fastest (lowest quality)"
-                },
-                "p2": {
-                    "value": "13",
-                    "explanation": "faster (lower quality)"
-                },
-                "p3": {
-                    "value": "14",
-                    "explanation": "fast (low quality)"
-                },
-                "p4": {
-                    "value": "15",
-                    "explanation": "medium (default)"
-                },
-                "p5": {
-                    "value": "16",
-                    "explanation": "slow (good quality)"
-                },
-                "p6": {
-                    "value": "17",
-                    "explanation": "slower (better quality)"
-                },
-                "p7": {
-                    "value": "18",
-                    "explanation": "slowest (best quality)"
-                }
-            }
-        },
-        "-tune": {
-            "valueType": "int",
-            "explanation": "Set the encoding tuning info (from 1 to 4) (default hq)",
-            "subValues": {
-                "hq": {
-                    "value": "1",
-                    "explanation": "High quality"
-                },
-                "ll": {
-                    "value": "2",
-                    "explanation": "Low latency"
-                },
-                "ull": {
-                    "value": "3",
-                    "explanation": "Ultra low latency"
-                },
-                "lossless": {
-                    "value": "4",
-                    "explanation": "Lossless"
-                }
-            }
-        },
-        "-profile": {
-            "valueType": "int",
-            "explanation": "Set the encoding profile (from 0 to 3) (default main)",
-            "subValues": {
-                "baseline": {
-                    "value": "0",
-                    "explanation": null
-                },
-                "main": {
-                    "value": "1",
-                    "explanation": null
-                },
-                "high": {
-                    "value": "2",
-                    "explanation": null
-                },
-                "high444p": {
-                    "value": "3",
-                    "explanation": null
-                }
-            }
-        },
-        "-level": {
-            "valueType": "int",
-            "explanation": "Set the encoding level restriction (from 0 to 62) (default auto)",
-            "subValues": {
-                "auto": {
-                    "value": "0",
-                    "explanation": null
-                },
-                "1": {
-                    "value": "10",
-                    "explanation": null
-                },
-                "1.0": {
-                    "value": "10",
-                    "explanation": null
-                },
-                "1b": {
-                    "value": "9",
-                    "explanation": null
-                },
-                "1.0b": {
-                    "value": "9",
-                    "explanation": null
-                },
-                "1.1": {
-                    "value": "11",
-                    "explanation": null
-                },
-                "1.2": {
-                    "value": "12",
-                    "explanation": null
-                },
-                "1.3": {
-                    "value": "13",
-                    "explanation": null
-                },
-                "2": {
-                    "value": "20",
-                    "explanation": null
-                },
-                "2.0": {
-                    "value": "20",
-                    "explanation": null
-                },
-                "2.1": {
-                    "value": "21",
-                    "explanation": null
-                },
-                "2.2": {
-                    "value": "22",
-                    "explanation": null
-                },
-                "3": {
-                    "value": "30",
-                    "explanation": null
-                },
-                "3.0": {
-                    "value": "30",
-                    "explanation": null
-                },
-                "3.1": {
-                    "value": "31",
-                    "explanation": null
-                },
-                "3.2": {
-                    "value": "32",
-                    "explanation": null
-                },
-                "4": {
-                    "value": "40",
-                    "explanation": null
-                },
-                "4.0": {
-                    "value": "40",
-                    "explanation": null
-                },
-                "4.1": {
-                    "value": "41",
-                    "explanation": null
-                },
-                "4.2": {
-                    "value": "42",
-                    "explanation": null
-                },
-                "5": {
-                    "value": "50",
-                    "explanation": null
-                },
-                "5.0": {
-                    "value": "50",
-                    "explanation": null
-                },
-                "5.1": {
-                    "value": "51",
-                    "explanation": null
-                },
-                "5.2": {
-                    "value": "52",
-                    "explanation": null
-                },
-                "6.0": {
-                    "value": "60",
-                    "explanation": null
-                },
-                "6.1": {
-                    "value": "61",
-                    "explanation": null
-                },
-                "6.2": {
-                    "value": "62",
-                    "explanation": null
-                }
-            }
-        },
-        "-rc": {
-            "valueType": "int",
-            "explanation": "Override the preset rate-control (from -1 to INT_MAX) (default -1)",
-            "subValues": {
-                "constqp": {
-                    "value": "0",
-                    "explanation": "Constant QP mode"
-                },
-                "vbr": {
-                    "value": "1",
-                    "explanation": "Variable bitrate mode"
-                },
-                "cbr": {
-                    "value": "2",
-                    "explanation": "Constant bitrate mode"
-                },
-                "vbr_minqp": {
-                    "value": "8388612",
-                    "explanation": "Variable bitrate mode with MinQP (deprecated)"
-                },
-                "ll_2pass_quality": {
-                    "value": "8388616",
-                    "explanation": "Multi-pass optimized for image quality (deprecated)"
-                },
-                "ll_2pass_size": {
-                    "value": "8388624",
-                    "explanation": "Multi-pass optimized for constant frame size (deprecated)"
-                },
-                "vbr_2pass": {
-                    "value": "8388640",
-                    "explanation": "Multi-pass variable bitrate mode (deprecated)"
-                },
-                "cbr_ld_hq": {
-                    "value": "8388616",
-                    "explanation": "Constant bitrate low delay high quality mode"
-                },
-                "cbr_hq": {
-                    "value": "8388624",
-                    "explanation": "Constant bitrate high quality mode"
-                },
-                "vbr_hq": {
-                    "value": "8388640",
-                    "explanation": "Variable bitrate high quality mode"
-                }
-            }
-        },
-        "-rc-lookahead": {
-            "valueType": "int",
-            "explanation": "Number of frames to look ahead for rate-control (from 0 to INT_MAX) (default 0)"
-        },
-        "-surfaces": {
-            "valueType": "int",
-            "explanation": "Number of concurrent surfaces (from 0 to 64) (default 0)"
-        },
-        "-cbr": {
-            "valueType": "boolean",
-            "explanation": "Use cbr encoding mode (default false)"
-        },
-        "-2pass": {
-            "valueType": "boolean",
-            "explanation": "Use 2pass encoding mode (default auto)"
-        },
-        "-gpu": {
-            "valueType": "int",
-            "explanation": "Selects which NVENC capable GPU to use. First GPU is 0, second is 1, and so on. (from -2 to INT_MAX) (default any)",
-            "subValues": {
-                "any": {
-                    "value": "-1",
-                    "explanation": "Pick the first device available"
-                },
-                "list": {
-                    "value": "-2",
-                    "explanation": "List the available devices"
-                }
-            }
-        },
-        "-delay": {
-            "valueType": "int",
-            "explanation": "Delay frame output by the given amount of frames (from 0 to INT_MAX) (default INT_MAX)"
-        },
-        "-no-scenecut": {
-            "valueType": "boolean",
-            "explanation": "When lookahead is enabled, set this to 1 to disable adaptive I-frame insertion at scene cuts (default false)"
-        },
-        "-forced-idr": {
-            "valueType": "boolean",
-            "explanation": "If forcing keyframes, force them as IDR frames. (default false)"
-        },
-        "-b_adapt": {
-            "valueType": "boolean",
-            "explanation": "When lookahead is enabled, set this to 0 to disable adaptive B-frame decision (default true)"
-        },
-        "-spatial-aq": {
-            "valueType": "boolean",
-            "explanation": "set to 1 to enable Spatial AQ (default false)"
-        },
-        "-spatial_aq": {
-            "valueType": "boolean",
-            "explanation": "set to 1 to enable Spatial AQ (default false)"
-        },
-        "-temporal-aq": {
-            "valueType": "boolean",
-            "explanation": "set to 1 to enable Temporal AQ (default false)"
-        },
-        "-temporal_aq": {
-            "valueType": "boolean",
-            "explanation": "set to 1 to enable Temporal AQ (default false)"
-        },
-        "-zerolatency": {
-            "valueType": "boolean",
-            "explanation": "Set 1 to indicate zero latency operation (no reordering delay) (default false)"
-        },
-        "-nonref_p": {
-            "valueType": "boolean",
-            "explanation": "Set this to 1 to enable automatic insertion of non-reference P-frames (default false)"
-        },
-        "-strict_gop": {
-            "valueType": "boolean",
-            "explanation": "Set 1 to minimize GOP-to-GOP rate fluctuations (default false)"
-        },
-        "-aq-strength": {
-            "valueType": "int",
-            "explanation": "When Spatial AQ is enabled, this field is used to specify AQ strength. AQ strength scale is from 1 (low) - 15 (aggressive) (from 1 to 15) (default 8)"
-        },
-        "-cq": {
-            "valueType": "float",
-            "explanation": "Set target quality level (0 to 51, 0 means automatic) for constant quality mode in VBR rate control (from 0 to 51) (default 0)"
-        },
-        "-aud": {
-            "valueType": "boolean",
-            "explanation": "Use access unit delimiters (default false)"
-        },
-        "-bluray-compat": {
-            "valueType": "boolean",
-            "explanation": "Bluray compatibility workarounds (default false)"
-        },
-        "-init_qpP": {
-            "valueType": "int",
-            "explanation": "Initial QP value for P frame (from -1 to 51) (default -1)"
-        },
-        "-init_qpB": {
-            "valueType": "int",
-            "explanation": "Initial QP value for B frame (from -1 to 51) (default -1)"
-        },
-        "-init_qpI": {
-            "valueType": "int",
-            "explanation": "Initial QP value for I frame (from -1 to 51) (default -1)"
-        },
-        "-qp": {
-            "valueType": "int",
-            "explanation": "Constant quantization parameter rate control method (from -1 to 51) (default -1)"
-        },
-        "-weighted_pred": {
-            "valueType": "int",
-            "explanation": "Set 1 to enable weighted prediction (from 0 to 1) (default 0)"
-        },
-        "-coder": {
-            "valueType": "int",
-            "explanation": "Coder type (from -1 to 2) (default default)",
-            "subValues": {
-                "default": {
-                    "value": "-1",
-                    "explanation": null
-                },
-                "auto": {
-                    "value": "0",
-                    "explanation": null
-                },
-                "cabac": {
-                    "value": "1",
-                    "explanation": null
-                },
-                "cavlc": {
-                    "value": "2",
-                    "explanation": null
-                },
-                "ac": {
-                    "value": "1",
-                    "explanation": null
-                },
-                "vlc": {
-                    "value": "2",
-                    "explanation": null
-                }
-            }
-        },
-        "-b_ref_mode": {
-            "valueType": "int",
-            "explanation": "Use B frames as references (from 0 to 2) (default disabled)",
-            "subValues": {
-                "disabled": {
-                    "value": "0",
-                    "explanation": "B frames will not be used for reference"
-                },
-                "each": {
-                    "value": "1",
-                    "explanation": "Each B frame will be used for reference"
-                },
-                "middle": {
-                    "value": "2",
-                    "explanation": "Only (number of B frames)/2 will be used for reference"
-                }
-            }
-        },
-        "-a53cc": {
-            "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
-        },
-        "-dpb_size": {
-            "valueType": "int",
-            "explanation": "Specifies the DPB size used for encoding (0 means automatic) (from 0 to INT_MAX) (default 0)"
-        },
-        "-multipass": {
-            "valueType": "int",
-            "explanation": "Set the multipass encoding (from 0 to 2) (default disabled)",
-            "subValues": {
-                "disabled": {
-                    "value": "0",
-                    "explanation": "Single Pass"
-                },
-                "qres": {
-                    "value": "1",
-                    "explanation": "Two Pass encoding is enabled where first Pass is quarter resolution"
-                },
-                "fullres": {
-                    "value": "2",
-                    "explanation": "Two Pass encoding is enabled where first Pass is full resolution"
-                }
-            }
-        },
-        "-ldkfs": {
-            "valueType": "int",
-            "explanation": "Low delay key frame scale; Specifies the Scene Change frame size increase allowed in case of single frame VBV and CBR (from 0 to 255) (default 0)"
         }
     },
     "hap": {
@@ -4667,437 +3820,13 @@
             "valueType": "string",
             "explanation": "set the x265 profile"
         },
+        "-udu_sei": {
+            "valueType": "boolean",
+            "explanation": "Use user data unregistered SEI if available (default false)"
+        },
         "-x265-params": {
             "valueType": "dictionary",
             "explanation": "set the x265 configuration using a :-separated list of key=value parameters"
-        }
-    },
-    "nvenc_hevc": {
-        "-preset": {
-            "valueType": "int",
-            "explanation": "Set the encoding preset (from 0 to 18) (default p4)",
-            "subValues": {
-                "default": {
-                    "value": "0",
-                    "explanation": null
-                },
-                "slow": {
-                    "value": "1",
-                    "explanation": "hq 2 passes"
-                },
-                "medium": {
-                    "value": "2",
-                    "explanation": "hq 1 pass"
-                },
-                "fast": {
-                    "value": "3",
-                    "explanation": "hp 1 pass"
-                },
-                "hp": {
-                    "value": "4",
-                    "explanation": null
-                },
-                "hq": {
-                    "value": "5",
-                    "explanation": null
-                },
-                "bd": {
-                    "value": "6",
-                    "explanation": null
-                },
-                "ll": {
-                    "value": "7",
-                    "explanation": "low latency"
-                },
-                "llhq": {
-                    "value": "8",
-                    "explanation": "low latency hq"
-                },
-                "llhp": {
-                    "value": "9",
-                    "explanation": "low latency hp"
-                },
-                "lossless": {
-                    "value": "10",
-                    "explanation": "lossless"
-                },
-                "losslesshp": {
-                    "value": "11",
-                    "explanation": "lossless hp"
-                },
-                "p1": {
-                    "value": "12",
-                    "explanation": "fastest (lowest quality)"
-                },
-                "p2": {
-                    "value": "13",
-                    "explanation": "faster (lower quality)"
-                },
-                "p3": {
-                    "value": "14",
-                    "explanation": "fast (low quality)"
-                },
-                "p4": {
-                    "value": "15",
-                    "explanation": "medium (default)"
-                },
-                "p5": {
-                    "value": "16",
-                    "explanation": "slow (good quality)"
-                },
-                "p6": {
-                    "value": "17",
-                    "explanation": "slower (better quality)"
-                },
-                "p7": {
-                    "value": "18",
-                    "explanation": "slowest (best quality)"
-                }
-            }
-        },
-        "-tune": {
-            "valueType": "int",
-            "explanation": "Set the encoding tuning info (from 1 to 4) (default hq)",
-            "subValues": {
-                "hq": {
-                    "value": "1",
-                    "explanation": "High quality"
-                },
-                "ll": {
-                    "value": "2",
-                    "explanation": "Low latency"
-                },
-                "ull": {
-                    "value": "3",
-                    "explanation": "Ultra low latency"
-                },
-                "lossless": {
-                    "value": "4",
-                    "explanation": "Lossless"
-                }
-            }
-        },
-        "-profile": {
-            "valueType": "int",
-            "explanation": "Set the encoding profile (from 0 to 4) (default main)",
-            "subValues": {
-                "main": {
-                    "value": "0",
-                    "explanation": null
-                },
-                "main10": {
-                    "value": "1",
-                    "explanation": null
-                },
-                "rext": {
-                    "value": "2",
-                    "explanation": null
-                }
-            }
-        },
-        "-level": {
-            "valueType": "int",
-            "explanation": "Set the encoding level restriction (from 0 to 186) (default auto)",
-            "subValues": {
-                "auto": {
-                    "value": "0",
-                    "explanation": null
-                },
-                "1": {
-                    "value": "30",
-                    "explanation": null
-                },
-                "1.0": {
-                    "value": "30",
-                    "explanation": null
-                },
-                "2": {
-                    "value": "60",
-                    "explanation": null
-                },
-                "2.0": {
-                    "value": "60",
-                    "explanation": null
-                },
-                "2.1": {
-                    "value": "63",
-                    "explanation": null
-                },
-                "3": {
-                    "value": "90",
-                    "explanation": null
-                },
-                "3.0": {
-                    "value": "90",
-                    "explanation": null
-                },
-                "3.1": {
-                    "value": "93",
-                    "explanation": null
-                },
-                "4": {
-                    "value": "120",
-                    "explanation": null
-                },
-                "4.0": {
-                    "value": "120",
-                    "explanation": null
-                },
-                "4.1": {
-                    "value": "123",
-                    "explanation": null
-                },
-                "5": {
-                    "value": "150",
-                    "explanation": null
-                },
-                "5.0": {
-                    "value": "150",
-                    "explanation": null
-                },
-                "5.1": {
-                    "value": "153",
-                    "explanation": null
-                },
-                "5.2": {
-                    "value": "156",
-                    "explanation": null
-                },
-                "6": {
-                    "value": "180",
-                    "explanation": null
-                },
-                "6.0": {
-                    "value": "180",
-                    "explanation": null
-                },
-                "6.1": {
-                    "value": "183",
-                    "explanation": null
-                },
-                "6.2": {
-                    "value": "186",
-                    "explanation": null
-                }
-            }
-        },
-        "-tier": {
-            "valueType": "int",
-            "explanation": "Set the encoding tier (from 0 to 1) (default main)",
-            "subValues": {
-                "main": {
-                    "value": "0",
-                    "explanation": null
-                },
-                "high": {
-                    "value": "1",
-                    "explanation": null
-                }
-            }
-        },
-        "-rc": {
-            "valueType": "int",
-            "explanation": "Override the preset rate-control (from -1 to INT_MAX) (default -1)",
-            "subValues": {
-                "constqp": {
-                    "value": "0",
-                    "explanation": "Constant QP mode"
-                },
-                "vbr": {
-                    "value": "1",
-                    "explanation": "Variable bitrate mode"
-                },
-                "cbr": {
-                    "value": "2",
-                    "explanation": "Constant bitrate mode"
-                },
-                "vbr_minqp": {
-                    "value": "8388612",
-                    "explanation": "Variable bitrate mode with MinQP (deprecated)"
-                },
-                "ll_2pass_quality": {
-                    "value": "8388616",
-                    "explanation": "Multi-pass optimized for image quality (deprecated)"
-                },
-                "ll_2pass_size": {
-                    "value": "8388624",
-                    "explanation": "Multi-pass optimized for constant frame size (deprecated)"
-                },
-                "vbr_2pass": {
-                    "value": "8388640",
-                    "explanation": "Multi-pass variable bitrate mode (deprecated)"
-                },
-                "cbr_ld_hq": {
-                    "value": "8388616",
-                    "explanation": "Constant bitrate low delay high quality mode"
-                },
-                "cbr_hq": {
-                    "value": "8388624",
-                    "explanation": "Constant bitrate high quality mode"
-                },
-                "vbr_hq": {
-                    "value": "8388640",
-                    "explanation": "Variable bitrate high quality mode"
-                }
-            }
-        },
-        "-rc-lookahead": {
-            "valueType": "int",
-            "explanation": "Number of frames to look ahead for rate-control (from 0 to INT_MAX) (default 0)"
-        },
-        "-surfaces": {
-            "valueType": "int",
-            "explanation": "Number of concurrent surfaces (from 0 to 64) (default 0)"
-        },
-        "-cbr": {
-            "valueType": "boolean",
-            "explanation": "Use cbr encoding mode (default false)"
-        },
-        "-2pass": {
-            "valueType": "boolean",
-            "explanation": "Use 2pass encoding mode (default auto)"
-        },
-        "-gpu": {
-            "valueType": "int",
-            "explanation": "Selects which NVENC capable GPU to use. First GPU is 0, second is 1, and so on. (from -2 to INT_MAX) (default any)",
-            "subValues": {
-                "any": {
-                    "value": "-1",
-                    "explanation": "Pick the first device available"
-                },
-                "list": {
-                    "value": "-2",
-                    "explanation": "List the available devices"
-                }
-            }
-        },
-        "-delay": {
-            "valueType": "int",
-            "explanation": "Delay frame output by the given amount of frames (from 0 to INT_MAX) (default INT_MAX)"
-        },
-        "-no-scenecut": {
-            "valueType": "boolean",
-            "explanation": "When lookahead is enabled, set this to 1 to disable adaptive I-frame insertion at scene cuts (default false)"
-        },
-        "-forced-idr": {
-            "valueType": "boolean",
-            "explanation": "If forcing keyframes, force them as IDR frames. (default false)"
-        },
-        "-spatial_aq": {
-            "valueType": "boolean",
-            "explanation": "set to 1 to enable Spatial AQ (default false)"
-        },
-        "-spatial-aq": {
-            "valueType": "boolean",
-            "explanation": "set to 1 to enable Spatial AQ (default false)"
-        },
-        "-temporal_aq": {
-            "valueType": "boolean",
-            "explanation": "set to 1 to enable Temporal AQ (default false)"
-        },
-        "-temporal-aq": {
-            "valueType": "boolean",
-            "explanation": "set to 1 to enable Temporal AQ (default false)"
-        },
-        "-zerolatency": {
-            "valueType": "boolean",
-            "explanation": "Set 1 to indicate zero latency operation (no reordering delay) (default false)"
-        },
-        "-nonref_p": {
-            "valueType": "boolean",
-            "explanation": "Set this to 1 to enable automatic insertion of non-reference P-frames (default false)"
-        },
-        "-strict_gop": {
-            "valueType": "boolean",
-            "explanation": "Set 1 to minimize GOP-to-GOP rate fluctuations (default false)"
-        },
-        "-aq-strength": {
-            "valueType": "int",
-            "explanation": "When Spatial AQ is enabled, this field is used to specify AQ strength. AQ strength scale is from 1 (low) - 15 (aggressive) (from 1 to 15) (default 8)"
-        },
-        "-cq": {
-            "valueType": "float",
-            "explanation": "Set target quality level (0 to 51, 0 means automatic) for constant quality mode in VBR rate control (from 0 to 51) (default 0)"
-        },
-        "-aud": {
-            "valueType": "boolean",
-            "explanation": "Use access unit delimiters (default false)"
-        },
-        "-bluray-compat": {
-            "valueType": "boolean",
-            "explanation": "Bluray compatibility workarounds (default false)"
-        },
-        "-init_qpP": {
-            "valueType": "int",
-            "explanation": "Initial QP value for P frame (from -1 to 51) (default -1)"
-        },
-        "-init_qpB": {
-            "valueType": "int",
-            "explanation": "Initial QP value for B frame (from -1 to 51) (default -1)"
-        },
-        "-init_qpI": {
-            "valueType": "int",
-            "explanation": "Initial QP value for I frame (from -1 to 51) (default -1)"
-        },
-        "-qp": {
-            "valueType": "int",
-            "explanation": "Constant quantization parameter rate control method (from -1 to 51) (default -1)"
-        },
-        "-weighted_pred": {
-            "valueType": "int",
-            "explanation": "Set 1 to enable weighted prediction (from 0 to 1) (default 0)"
-        },
-        "-b_ref_mode": {
-            "valueType": "int",
-            "explanation": "Use B frames as references (from 0 to 2) (default disabled)",
-            "subValues": {
-                "disabled": {
-                    "value": "0",
-                    "explanation": "B frames will not be used for reference"
-                },
-                "each": {
-                    "value": "1",
-                    "explanation": "Each B frame will be used for reference"
-                },
-                "middle": {
-                    "value": "2",
-                    "explanation": "Only (number of B frames)/2 will be used for reference"
-                }
-            }
-        },
-        "-a53cc": {
-            "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
-        },
-        "-s12m_tc": {
-            "valueType": "boolean",
-            "explanation": "Use timecode (if available) (default true)"
-        },
-        "-dpb_size": {
-            "valueType": "int",
-            "explanation": "Specifies the DPB size used for encoding (0 means automatic) (from 0 to INT_MAX) (default 0)"
-        },
-        "-multipass": {
-            "valueType": "int",
-            "explanation": "Set the multipass encoding (from 0 to 2) (default disabled)",
-            "subValues": {
-                "disabled": {
-                    "value": "0",
-                    "explanation": "Single Pass"
-                },
-                "qres": {
-                    "value": "1",
-                    "explanation": "Two Pass encoding is enabled where first Pass is quarter resolution"
-                },
-                "fullres": {
-                    "value": "2",
-                    "explanation": "Two Pass encoding is enabled where first Pass is full resolution"
-                }
-            }
-        },
-        "-ldkfs": {
-            "valueType": "int",
-            "explanation": "Low delay key frame scale; Specifies the Scene Change frame size increase allowed in case of single frame VBV and CBR (from 0 to 255) (default 0)"
         }
     },
     "hevc_amf": {
@@ -5334,6 +4063,88 @@
         "-log_to_dbg": {
             "valueType": "boolean",
             "explanation": "Enable AMF logging to debug output (default false)"
+        }
+    },
+    "hevc_mf": {
+        "-rate_control": {
+            "valueType": "int",
+            "explanation": "Select rate control mode (from -1 to INT_MAX) (default default)",
+            "subValues": {
+                "default": {
+                    "value": "-1",
+                    "explanation": "Default mode"
+                },
+                "cbr": {
+                    "value": "0",
+                    "explanation": "CBR mode"
+                },
+                "pc_vbr": {
+                    "value": "1",
+                    "explanation": "Peak constrained VBR mode"
+                },
+                "u_vbr": {
+                    "value": "2",
+                    "explanation": "Unconstrained VBR mode"
+                },
+                "quality": {
+                    "value": "3",
+                    "explanation": "Quality mode"
+                },
+                "ld_vbr": {
+                    "value": "4",
+                    "explanation": "Low delay VBR mode"
+                },
+                "g_vbr": {
+                    "value": "5",
+                    "explanation": "Global VBR mode"
+                },
+                "gld_vbr": {
+                    "value": "6",
+                    "explanation": "Global low delay VBR mode"
+                }
+            }
+        },
+        "-scenario": {
+            "valueType": "int",
+            "explanation": "Select usage scenario (from -1 to INT_MAX) (default default)",
+            "subValues": {
+                "default": {
+                    "value": "-1",
+                    "explanation": "Default scenario"
+                },
+                "display_remoting": {
+                    "value": "1",
+                    "explanation": "Display remoting"
+                },
+                "video_conference": {
+                    "value": "2",
+                    "explanation": "Video conference"
+                },
+                "archive": {
+                    "value": "3",
+                    "explanation": "Archive"
+                },
+                "live_streaming": {
+                    "value": "4",
+                    "explanation": "Live streaming"
+                },
+                "camera_record": {
+                    "value": "5",
+                    "explanation": "Camera record"
+                },
+                "display_remoting_with_feature_map": {
+                    "value": "6",
+                    "explanation": "Display remoting with feature map"
+                }
+            }
+        },
+        "-quality": {
+            "valueType": "int",
+            "explanation": "Quality (from -1 to 100) (default -1)"
+        },
+        "-hw_encoding": {
+            "valueType": "boolean",
+            "explanation": "Force hardware encoding (default false)"
         }
     },
     "hevc_nvenc": {
@@ -5707,6 +4518,14 @@
             "valueType": "int",
             "explanation": "Constant quantization parameter rate control method (from -1 to 51) (default -1)"
         },
+        "-qp_cb_offset": {
+            "valueType": "int",
+            "explanation": "Quantization parameter offset for cb channel (from -12 to 12) (default 0)"
+        },
+        "-qp_cr_offset": {
+            "valueType": "int",
+            "explanation": "Quantization parameter offset for cr channel (from -12 to 12) (default 0)"
+        },
         "-weighted_pred": {
             "valueType": "int",
             "explanation": "Set 1 to enable weighted prediction (from 0 to 1) (default 0)"
@@ -5762,6 +4581,26 @@
         "-ldkfs": {
             "valueType": "int",
             "explanation": "Low delay key frame scale; Specifies the Scene Change frame size increase allowed in case of single frame VBV and CBR (from 0 to 255) (default 0)"
+        },
+        "-extra_sei": {
+            "valueType": "boolean",
+            "explanation": "Pass on extra SEI data (e.g. a53 cc) to be included in the bitstream (default true)"
+        },
+        "-udu_sei": {
+            "valueType": "boolean",
+            "explanation": "Pass on user data unregistered SEI if available (default false)"
+        },
+        "-intra-refresh": {
+            "valueType": "boolean",
+            "explanation": "Use Periodic Intra Refresh instead of IDR frames (default false)"
+        },
+        "-single-slice-intra-refresh": {
+            "valueType": "boolean",
+            "explanation": "Use single slice intra refresh (default false)"
+        },
+        "-constrained-encoding": {
+            "valueType": "boolean",
+            "explanation": "Enable constrainedFrame encoding where each slice in the constrained picture is independent of other slices (default false)"
         }
     },
     "hevc_qsv": {
@@ -5771,11 +4610,11 @@
         },
         "-avbr_accuracy": {
             "valueType": "int",
-            "explanation": "Accuracy of the AVBR ratecontrol (from 0 to INT_MAX) (default 0)"
+            "explanation": "Accuracy of the AVBR ratecontrol (unit of tenth of percent) (from 1 to 65535) (default 1)"
         },
         "-avbr_convergence": {
             "valueType": "int",
-            "explanation": "Convergence of the AVBR ratecontrol (from 0 to INT_MAX) (default 0)"
+            "explanation": "Convergence of the AVBR ratecontrol (unit of 100 frames) (from 1 to 65535) (default 1)"
         },
         "-preset": {
             "valueType": "int",
@@ -5817,11 +4656,19 @@
         },
         "-max_frame_size": {
             "valueType": "int",
-            "explanation": "Maximum encoded frame size in bytes (from -1 to 65535) (default -1)"
+            "explanation": "Maximum encoded frame size in bytes (from -1 to INT_MAX) (default -1)"
+        },
+        "-max_frame_size_i": {
+            "valueType": "int",
+            "explanation": "Maximum encoded I frame size in bytes (from -1 to INT_MAX) (default -1)"
+        },
+        "-max_frame_size_p": {
+            "valueType": "int",
+            "explanation": "Maximum encoded P frame size in bytes (from -1 to INT_MAX) (default -1)"
         },
         "-max_slice_size": {
             "valueType": "int",
-            "explanation": "Maximum encoded slice size in bytes (from -1 to 65535) (default -1)"
+            "explanation": "Maximum encoded slice size in bytes (from -1 to INT_MAX) (default -1)"
         },
         "-bitrate_limit": {
             "valueType": "int",
@@ -5843,6 +4690,10 @@
             "valueType": "int",
             "explanation": "Adaptive B-frame placement (from -1 to 1) (default -1)"
         },
+        "-p_strategy": {
+            "valueType": "int",
+            "explanation": "Enable P-pyramid: 0-default 1-simple 2-pyramid(bf need to be set to 0). (from 0 to 2) (default 0)"
+        },
         "-b_strategy": {
             "valueType": "int",
             "explanation": "Strategy to choose between I/P/B-frames (from -1 to 1) (default -1)"
@@ -5853,7 +4704,15 @@
         },
         "-low_power": {
             "valueType": "boolean",
-            "explanation": "enable low power mode(experimental: many limitations by mfx version, BRC modes, etc.) (default false)"
+            "explanation": "enable low power mode(experimental: many limitations by mfx version, BRC modes, etc.) (default auto)"
+        },
+        "-dblk_idc": {
+            "valueType": "int",
+            "explanation": "This option disable deblocking. It has value in range 0~2. (from 0 to 2) (default 0)"
+        },
+        "-low_delay_brc": {
+            "valueType": "boolean",
+            "explanation": "Allow to strictly obey avg frame size (default auto)"
         },
         "-idr_interval": {
             "valueType": "int",
@@ -5887,6 +4746,10 @@
             "valueType": "string",
             "explanation": "A :-separate list of hexadecimal plugin UIDs to load in an internal session (default \"\")"
         },
+        "-look_ahead_depth": {
+            "valueType": "int",
+            "explanation": "Depth of look ahead in number frames, available when extbrc option is enabled (from 0 to 100) (default 0)"
+        },
         "-profile": {
             "valueType": "int",
             "explanation": "(from 0 to INT_MAX) (default unknown)",
@@ -5910,6 +4773,10 @@
                 "rext": {
                     "value": "4",
                     "explanation": null
+                },
+                "scc": {
+                    "value": "9",
+                    "explanation": null
                 }
             }
         },
@@ -5924,12 +4791,58 @@
         "-tile_rows": {
             "valueType": "int",
             "explanation": "Number of rows for tiled encoding (from 0 to 65535) (default 0)"
+        },
+        "-recovery_point_sei": {
+            "valueType": "int",
+            "explanation": "Insert recovery point SEI messages (from -1 to 1) (default -1)"
+        },
+        "-aud": {
+            "valueType": "boolean",
+            "explanation": "Insert the Access Unit Delimiter NAL (default false)"
+        },
+        "-pic_timing_sei": {
+            "valueType": "boolean",
+            "explanation": "Insert picture timing SEI with pic_struct_syntax element (default true)"
+        },
+        "-transform_skip": {
+            "valueType": "int",
+            "explanation": "Turn this option ON to enable transformskip (from -1 to 1) (default -1)"
+        },
+        "-int_ref_type": {
+            "valueType": "int",
+            "explanation": "Intra refresh type. B frames should be set to 0 (from -1 to 65535) (default -1)",
+            "subValues": {
+                "none": {
+                    "value": "0",
+                    "explanation": null
+                },
+                "vertical": {
+                    "value": "1",
+                    "explanation": null
+                },
+                "horizontal": {
+                    "value": "2",
+                    "explanation": null
+                }
+            }
+        },
+        "-int_ref_cycle_size": {
+            "valueType": "int",
+            "explanation": "Number of frames in the intra refresh cycle (from -1 to 65535) (default -1)"
+        },
+        "-int_ref_qp_delta": {
+            "valueType": "int",
+            "explanation": "QP difference for the refresh MBs (from -32768 to 32767) (default -32768)"
+        },
+        "-int_ref_cycle_dist": {
+            "valueType": "int",
+            "explanation": "Distance between the beginnings of the intra-refresh cycles in frames (from -1 to 32767) (default -1)"
         }
     },
     "huffyuv": {
         "-non_deterministic": {
             "valueType": "boolean",
-            "explanation": "Allow multithreading for e.g. context=1 at the expense of determinism (default true)"
+            "explanation": "Allow multithreading for e.g. context=1 at the expense of determinism (default false)"
         },
         "-pred": {
             "valueType": "int",
@@ -6144,6 +5057,20 @@
             }
         }
     },
+    "libjxl": {
+        "-effort": {
+            "valueType": "int",
+            "explanation": "Encoding effort (from 1 to 9) (default 7)"
+        },
+        "-distance": {
+            "valueType": "float",
+            "explanation": "Maximum Butteraugli distance (quality setting, lower = better, zero = lossless, default 1.0) (from -1 to 15) (default -1)"
+        },
+        "-modular": {
+            "valueType": "int",
+            "explanation": "Force modular mode (from 0 to 1) (default 0)"
+        }
+    },
     "ljpeg": {
         "-pred": {
             "valueType": "int",
@@ -6293,22 +5220,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -6395,10 +5306,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -6415,27 +5322,9 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
-        "-a53cc": {
-            "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
-        },
-        "-rc_strategy": {
-            "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
-        },
         "-pred": {
             "valueType": "int",
-            "explanation": "Prediction method (from 1 to 3) (default left)",
+            "explanation": "Deprecated, does nothing (from 1 to 3) (default left)",
             "subValues": {
                 "left": {
                     "value": "1",
@@ -6464,6 +5353,30 @@
                     "explanation": null
                 }
             }
+        },
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
+        },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
+        "-a53cc": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default true)"
+        },
+        "-b_strategy": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 3) (default 0)"
         }
     },
     "mjpeg_qsv": {
@@ -6488,6 +5401,18 @@
         "-timecode_frame_start": {
             "valueType": "int64",
             "explanation": "GOP timecode frame start number, in non-drop-frame format (from -1 to I64_MAX) (default -1)"
+        },
+        "-b_strategy": {
+            "valueType": "int",
+            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
         },
         "-mpv_flags": {
             "valueType": "flags",
@@ -6597,22 +5522,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -6699,10 +5608,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -6719,23 +5624,17 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
         "-a53cc": {
             "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
+            "explanation": "Deprecated, does nothing (default true)"
         },
-        "-rc_strategy": {
-            "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
         }
     },
     "mpeg2video": {
@@ -6755,6 +5654,18 @@
             "valueType": "int64",
             "explanation": "GOP timecode frame start number, in non-drop-frame format (from -1 to I64_MAX) (default -1)"
         },
+        "-b_strategy": {
+            "valueType": "int",
+            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
+        },
         "-intra_vlc": {
             "valueType": "boolean",
             "explanation": "Use MPEG-2 intra VLC table. (default false)"
@@ -6766,6 +5677,10 @@
         "-alternate_scan": {
             "valueType": "boolean",
             "explanation": "Enable alternate scantable. (default false)"
+        },
+        "-a53cc": {
+            "valueType": "boolean",
+            "explanation": "Use A53 Closed Captions (if available) (default true)"
         },
         "-seq_disp_ext": {
             "valueType": "int",
@@ -6923,22 +5838,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -7025,10 +5924,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -7045,23 +5940,13 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
-        "-a53cc": {
-            "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
-        },
-        "-rc_strategy": {
+        "-mpeg_quant": {
             "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+            "explanation": "Deprecated, does nothing (from 0 to 1) (default 1)"
+        },
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
         }
     },
     "mpeg2_qsv": {
@@ -7071,11 +5956,11 @@
         },
         "-avbr_accuracy": {
             "valueType": "int",
-            "explanation": "Accuracy of the AVBR ratecontrol (from 0 to INT_MAX) (default 0)"
+            "explanation": "Accuracy of the AVBR ratecontrol (unit of tenth of percent) (from 1 to 65535) (default 1)"
         },
         "-avbr_convergence": {
             "valueType": "int",
-            "explanation": "Convergence of the AVBR ratecontrol (from 0 to INT_MAX) (default 0)"
+            "explanation": "Convergence of the AVBR ratecontrol (unit of 100 frames) (from 1 to 65535) (default 1)"
         },
         "-preset": {
             "valueType": "int",
@@ -7117,11 +6002,19 @@
         },
         "-max_frame_size": {
             "valueType": "int",
-            "explanation": "Maximum encoded frame size in bytes (from -1 to 65535) (default -1)"
+            "explanation": "Maximum encoded frame size in bytes (from -1 to INT_MAX) (default -1)"
+        },
+        "-max_frame_size_i": {
+            "valueType": "int",
+            "explanation": "Maximum encoded I frame size in bytes (from -1 to INT_MAX) (default -1)"
+        },
+        "-max_frame_size_p": {
+            "valueType": "int",
+            "explanation": "Maximum encoded P frame size in bytes (from -1 to INT_MAX) (default -1)"
         },
         "-max_slice_size": {
             "valueType": "int",
-            "explanation": "Maximum encoded slice size in bytes (from -1 to 65535) (default -1)"
+            "explanation": "Maximum encoded slice size in bytes (from -1 to INT_MAX) (default -1)"
         },
         "-bitrate_limit": {
             "valueType": "int",
@@ -7143,6 +6036,10 @@
             "valueType": "int",
             "explanation": "Adaptive B-frame placement (from -1 to 1) (default -1)"
         },
+        "-p_strategy": {
+            "valueType": "int",
+            "explanation": "Enable P-pyramid: 0-default 1-simple 2-pyramid(bf need to be set to 0). (from 0 to 2) (default 0)"
+        },
         "-b_strategy": {
             "valueType": "int",
             "explanation": "Strategy to choose between I/P/B-frames (from -1 to 1) (default -1)"
@@ -7153,7 +6050,15 @@
         },
         "-low_power": {
             "valueType": "boolean",
-            "explanation": "enable low power mode(experimental: many limitations by mfx version, BRC modes, etc.) (default false)"
+            "explanation": "enable low power mode(experimental: many limitations by mfx version, BRC modes, etc.) (default auto)"
+        },
+        "-dblk_idc": {
+            "valueType": "int",
+            "explanation": "This option disable deblocking. It has value in range 0~2. (from 0 to 2) (default 0)"
+        },
+        "-low_delay_brc": {
+            "valueType": "boolean",
+            "explanation": "Allow to strictly obey avg frame size (default auto)"
         },
         "-profile": {
             "valueType": "int",
@@ -7186,6 +6091,22 @@
         "-alternate_scan": {
             "valueType": "boolean",
             "explanation": "Enable alternate scantable. (default false)"
+        },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
+        },
+        "-b_strategy": {
+            "valueType": "int",
+            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
         },
         "-mpv_flags": {
             "valueType": "flags",
@@ -7295,22 +6216,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -7397,10 +6302,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -7419,21 +6320,11 @@
         },
         "-a53cc": {
             "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
+            "explanation": "Deprecated, does nothing (default true)"
         },
-        "-rc_strategy": {
-            "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
         }
     },
     "libxvid": {
@@ -7589,22 +6480,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -7691,10 +6566,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -7711,23 +6582,29 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
         "-a53cc": {
             "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
+            "explanation": "Deprecated, does nothing (default true)"
         },
-        "-rc_strategy": {
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
+        },
+        "-b_strategy": {
             "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+            "explanation": "Deprecated, does nothing (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 3) (default 0)"
         }
     },
     "msmpeg4": {
@@ -7839,22 +6716,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -7941,10 +6802,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -7961,23 +6818,29 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
         "-a53cc": {
             "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
+            "explanation": "Deprecated, does nothing (default true)"
         },
-        "-rc_strategy": {
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
+        },
+        "-b_strategy": {
             "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+            "explanation": "Deprecated, does nothing (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 3) (default 0)"
         }
     },
     "msvideo1": {},
@@ -8259,22 +7122,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -8361,10 +7208,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -8381,23 +7224,29 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
         "-a53cc": {
             "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
+            "explanation": "Deprecated, does nothing (default true)"
         },
-        "-rc_strategy": {
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
+        },
+        "-b_strategy": {
             "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+            "explanation": "Deprecated, does nothing (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 3) (default 0)"
         }
     },
     "rv20": {
@@ -8509,22 +7358,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -8611,10 +7444,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -8631,23 +7460,29 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
         "-a53cc": {
             "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
+            "explanation": "Deprecated, does nothing (default true)"
         },
-        "-rc_strategy": {
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
+        },
+        "-b_strategy": {
             "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+            "explanation": "Deprecated, does nothing (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 3) (default 0)"
         }
     },
     "sgi": {
@@ -8656,6 +7491,7 @@
             "explanation": "Use run-length compression (from 0 to 1) (default 1)"
         }
     },
+    "smc": {},
     "snow": {
         "-motion_est": {
             "valueType": "int",
@@ -8827,22 +7663,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -8929,10 +7749,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -8949,23 +7765,29 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
         "-a53cc": {
             "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
+            "explanation": "Deprecated, does nothing (default true)"
         },
-        "-rc_strategy": {
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
+        },
+        "-b_strategy": {
             "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+            "explanation": "Deprecated, does nothing (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 3) (default 0)"
         }
     },
     "sunrast": {
@@ -9057,6 +7879,26 @@
     "v308": {},
     "v408": {},
     "v410": {},
+    "vbn": {
+        "-format": {
+            "valueType": "int",
+            "explanation": "Texture format (from 0 to 3) (default dxt5)",
+            "subValues": {
+                "raw": {
+                    "value": "0",
+                    "explanation": "RAW texture"
+                },
+                "dxt1": {
+                    "value": "2",
+                    "explanation": "DXT1 texture"
+                },
+                "dxt5": {
+                    "value": "3",
+                    "explanation": "DXT5 texture"
+                }
+            }
+        }
+    },
     "libvpx": {
         "-lag-in-frames": {
             "valueType": "int",
@@ -9488,11 +8330,11 @@
         },
         "-avbr_accuracy": {
             "valueType": "int",
-            "explanation": "Accuracy of the AVBR ratecontrol (from 0 to INT_MAX) (default 0)"
+            "explanation": "Accuracy of the AVBR ratecontrol (unit of tenth of percent) (from 1 to 65535) (default 1)"
         },
         "-avbr_convergence": {
             "valueType": "int",
-            "explanation": "Convergence of the AVBR ratecontrol (from 0 to INT_MAX) (default 0)"
+            "explanation": "Convergence of the AVBR ratecontrol (unit of 100 frames) (from 1 to 65535) (default 1)"
         },
         "-preset": {
             "valueType": "int",
@@ -9534,11 +8376,19 @@
         },
         "-max_frame_size": {
             "valueType": "int",
-            "explanation": "Maximum encoded frame size in bytes (from -1 to 65535) (default -1)"
+            "explanation": "Maximum encoded frame size in bytes (from -1 to INT_MAX) (default -1)"
+        },
+        "-max_frame_size_i": {
+            "valueType": "int",
+            "explanation": "Maximum encoded I frame size in bytes (from -1 to INT_MAX) (default -1)"
+        },
+        "-max_frame_size_p": {
+            "valueType": "int",
+            "explanation": "Maximum encoded P frame size in bytes (from -1 to INT_MAX) (default -1)"
         },
         "-max_slice_size": {
             "valueType": "int",
-            "explanation": "Maximum encoded slice size in bytes (from -1 to 65535) (default -1)"
+            "explanation": "Maximum encoded slice size in bytes (from -1 to INT_MAX) (default -1)"
         },
         "-bitrate_limit": {
             "valueType": "int",
@@ -9560,6 +8410,10 @@
             "valueType": "int",
             "explanation": "Adaptive B-frame placement (from -1 to 1) (default -1)"
         },
+        "-p_strategy": {
+            "valueType": "int",
+            "explanation": "Enable P-pyramid: 0-default 1-simple 2-pyramid(bf need to be set to 0). (from 0 to 2) (default 0)"
+        },
         "-b_strategy": {
             "valueType": "int",
             "explanation": "Strategy to choose between I/P/B-frames (from -1 to 1) (default -1)"
@@ -9570,7 +8424,15 @@
         },
         "-low_power": {
             "valueType": "boolean",
-            "explanation": "enable low power mode(experimental: many limitations by mfx version, BRC modes, etc.) (default false)"
+            "explanation": "enable low power mode(experimental: many limitations by mfx version, BRC modes, etc.) (default auto)"
+        },
+        "-dblk_idc": {
+            "valueType": "int",
+            "explanation": "This option disable deblocking. It has value in range 0~2. (from 0 to 2) (default 0)"
+        },
+        "-low_delay_brc": {
+            "valueType": "boolean",
+            "explanation": "Allow to strictly obey avg frame size (default auto)"
         },
         "-profile": {
             "valueType": "int",
@@ -9597,6 +8459,14 @@
                     "explanation": null
                 }
             }
+        },
+        "-tile_cols": {
+            "valueType": "int",
+            "explanation": "Number of columns for tiled encoding (from 0 to 32) (default 0)"
+        },
+        "-tile_rows": {
+            "valueType": "int",
+            "explanation": "Number of rows for tiled encoding (from 0 to 4) (default 0)"
         }
     },
     "libwebp_anim": {
@@ -9812,22 +8682,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -9914,10 +8768,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -9934,23 +8784,29 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
         "-a53cc": {
             "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
+            "explanation": "Deprecated, does nothing (default true)"
         },
-        "-rc_strategy": {
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
+        },
+        "-b_strategy": {
             "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+            "explanation": "Deprecated, does nothing (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 3) (default 0)"
         }
     },
     "wmv2": {
@@ -10062,22 +8918,6 @@
                 }
             }
         },
-        "-force_duplicated_matrix": {
-            "valueType": "boolean",
-            "explanation": "Always write luma and chroma matrix for mjpeg, useful for rtp streaming. (default false)"
-        },
-        "-b_strategy": {
-            "valueType": "int",
-            "explanation": "Strategy to choose between I/P/B-frames (from 0 to 2) (default 0)"
-        },
-        "-b_sensitivity": {
-            "valueType": "int",
-            "explanation": "Adjust sensitivity of b_frame_strategy 1 (from 1 to INT_MAX) (default 40)"
-        },
-        "-brd_scale": {
-            "valueType": "int",
-            "explanation": "Downscale frames for dynamic B-frame decision (from 0 to 3) (default 0)"
-        },
         "-skip_threshold": {
             "valueType": "int",
             "explanation": "Frame skip threshold (from INT_MIN to INT_MAX) (default 0)"
@@ -10164,10 +9004,6 @@
             "valueType": "int",
             "explanation": "Noise reduction (from INT_MIN to INT_MAX) (default 0)"
         },
-        "-mpeg_quant": {
-            "valueType": "int",
-            "explanation": "Use MPEG quantizers instead of H.263 (from 0 to 1) (default 0)"
-        },
         "-ps": {
             "valueType": "int",
             "explanation": "RTP payload size in bytes (from INT_MIN to INT_MAX) (default 0)"
@@ -10184,23 +9020,29 @@
             "valueType": "int",
             "explanation": "Penalty for intra blocks in block decision (from 0 to 1.07374e+09) (default 0)"
         },
+        "-mpeg_quant": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 0) (default 0)"
+        },
         "-a53cc": {
             "valueType": "boolean",
-            "explanation": "Use A53 Closed Captions (if available) (default true)"
+            "explanation": "Deprecated, does nothing (default true)"
         },
-        "-rc_strategy": {
+        "-force_duplicated_matrix": {
+            "valueType": "boolean",
+            "explanation": "Deprecated, does nothing (default false)"
+        },
+        "-b_strategy": {
             "valueType": "int",
-            "explanation": "ratecontrol method (from 0 to 1) (default ffmpeg)",
-            "subValues": {
-                "ffmpeg": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                },
-                "xvid": {
-                    "value": "0",
-                    "explanation": "deprecated, does nothing"
-                }
-            }
+            "explanation": "Deprecated, does nothing (from 0 to 2) (default 0)"
+        },
+        "-b_sensitivity": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 1 to INT_MAX) (default 40)"
+        },
+        "-brd_scale": {
+            "valueType": "int",
+            "explanation": "Deprecated, does nothing (from 0 to 3) (default 0)"
         }
     },
     "wrapped_avframe": {},
@@ -10214,7 +9056,7 @@
     "aac": {
         "-aac_coder": {
             "valueType": "int",
-            "explanation": "Coding algorithm (from 0 to 2) (default fast)",
+            "explanation": "Coding algorithm (from 0 to 2) (default twoloop)",
             "subValues": {
                 "anmr": {
                     "value": "0",
@@ -10259,6 +9101,7 @@
             "explanation": "Forces the use of PCEs (default false)"
         }
     },
+    "aac_mf": {},
     "ac3": {
         "-center_mixlev": {
             "valueType": "float",
@@ -10623,6 +9466,7 @@
             }
         }
     },
+    "ac3_mf": {},
     "adpcm_adx": {},
     "adpcm_argo": {
         "-block_size": {
@@ -10679,6 +9523,12 @@
             "explanation": "set the block size (from 32 to 8192) (default 1024)"
         }
     },
+    "adpcm_ima_ws": {
+        "-block_size": {
+            "valueType": "int",
+            "explanation": "set the block size (from 32 to 8192) (default 1024)"
+        }
+    },
     "adpcm_ms": {
         "-block_size": {
             "valueType": "int",
@@ -10722,6 +9572,7 @@
     "aptx": {},
     "aptx_hd": {},
     "comfortnoise": {},
+    "dfpwm": {},
     "dca": {
         "-dca_adpcm": {
             "valueType": "boolean",
@@ -11093,6 +9944,7 @@
         }
     },
     "libshine": {},
+    "mp3_mf": {},
     "nellymoser": {},
     "opus": {
         "-opus_delay": {
@@ -11163,6 +10015,7 @@
         }
     },
     "pcm_alaw": {},
+    "pcm_bluray": {},
     "pcm_dvd": {},
     "pcm_f32be": {},
     "pcm_f32le": {},

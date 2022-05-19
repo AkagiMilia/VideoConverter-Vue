@@ -100,11 +100,11 @@ def getSampleFormats():
 if __name__ == '__main__':
 
     encoders = getEncoders()
-    fEncoder = open('public/data/Encoders.json','x',encoding='utf-8')
+    fEncoder = open('public/data/Encoders.json','w',encoding='utf-8')
     fEncoder.write(json.dumps(encoders, indent=4))
     fEncoder.close()
 
-    f = open('public/data/Guidance.json','x',encoding='utf-8')
+    f = open('public/data/Guidance.json','w',encoding='utf-8')
     guidance = {}
     for key, value in encoders.items():
         for encoder in value.keys():
